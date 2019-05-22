@@ -1,0 +1,212 @@
+{
+  const vars = {};
+
+  const signature = (argTypes, returnType) => ({argTypes, returnType});
+
+  const ButtonSignature = {
+    argTypes: [
+      'SwitchSensor'
+    ],
+    returnType: 'EventSource'
+  }
+
+  const HandleSignature = {
+    argTypes: [
+      'EventSource',
+      'DimmerEventType',
+      'Handler',
+    ],
+    returnType: 'void'
+  };
+
+  const fns = {
+    button1: ButtonSignature,
+    button2: ButtonSignature,
+    button3: ButtonSignature,
+    button4: ButtonSignature,
+    handle: HandleSignature,
+    short_release: signature([], 'DimmerEventType'),
+    long_release: signature([], 'DimmerEventType'),
+    initial_press: signature([], 'DimmerEventType'),
+    repeat: signature([], 'DimmerEventType'),
+    dim: {
+      argTypes: [
+        'number'
+      ],
+      returnType: 'SwitchSensor'
+    },
+    dim: {
+      argTypes: [
+        'number'
+      ],
+      returnType: 'SwitchSensor'
+    },
+    group: {
+      argTypes: [
+        'number'
+      ],
+      returnType: 'Group'
+    },
+    light: {
+      argTypes: [
+        'number'
+      ],
+      returnType: 'Light'
+    },
+    on: {
+      argTypes: [
+        'Group'
+      ],
+      returnType: 'Group'
+    },
+    off: {
+      argTypes: [
+        'Group'
+      ],
+      returnType: 'Group'
+    },
+    alert: {
+      argTypes: [
+        'Group'
+      ],
+      returnType: 'Group'
+    }
+  };
+
+  const reduce = (fn, seed, array) => Array.prototype.reduce.call(array, fn, seed);
+  const map = (fn, array) => Array.prototype.map.call(array, fn);
+
+  const toCall = (name, args, location) => {
+    if (!fns[name] && !vars[name]) {
+      error(`unknown identifier ${name}`);
+    }
+
+    return {
+      type: 'call',
+      name,
+      args,
+      cls: fns[name] && fns[name].returnType, // todo
+      location
+    };
+  };
+
+  const isMemberCall = x => x.args && x.args.length > 0 && x.args[0].type === 'mcall';
+
+  const checkArgs = (c, x) => x.args && x.args.length === c;
+  const requiredArgs = (c, x) => isMemberCall(x) ? c - 1 : c;
+  const checkArgType = (t, idx, x) => console.log('a', x) || x.args && x.args[idx].cls === t;
+
+  const orderDict = ['first', 'second', 'third'];
+
+  const validateCall = c => {
+    if (fns[c.name]) {
+      if (isMemberCall(c)) {
+        if (!checkArgType(fns[c.name].argTypes[0], 0, c)) {
+          console.log('ee', c);
+          error(`${c.args[0].name} has no member ${c.name}`); //
+        }
+      }
+
+      if (!checkArgs(fns[c.name].argTypes.length, c)) {
+        error(`${c.name} expects ${requiredArgs(fns[c.name].argTypes.length, c)} arguments, ${requiredArgs(c.args.length, c)} given`, c.location);
+      }
+
+      for (let i = 0; i < fns[c.name].argTypes.length; i++) {
+        if (!c.args[i].cls) {
+          console.log(c.args[i], vars);
+          error(`unknown parameter ${c.args[i].name}`, c.args[i].location);
+        }
+        if (c.args[i].cls !== fns[c.name].argTypes[i]) {
+          error(`wrong type of the ${orderDict[i - (isMemberCall(c) ? 1 : 0)]} parameter, ${fns[c.name].argTypes[i]} expected, ${c.args[i].cls} given`, c.args[i].location);
+        }
+      }
+    }
+    return c;
+  }
+
+  const toMCall = xs => map(x => ({...x, type: 'mcall'}), xs);
+}
+
+start
+  = s:statements _ {return s;}
+
+statements
+  = s:statement _ ss:statements {return [s, ...ss];}
+  / s:statement {return [s];}
+
+statement
+  = _ c:fme _ ";" {return c;}
+  / _ "const" _ x:identifier _ "=" _ c:fme _ ";"
+  {
+    vars[x] = c;
+
+    return {
+      type: 'const',
+      value: c,
+      cls: c.cls
+    };
+  }
+
+args
+  = a:arg _ "," _ as:args {return [a, ...as];}
+  / a:arg {return [a];}
+
+arg
+  = fme
+  / a:identifier {return toCall(a);}
+  / n:number {return {type: 'literal', cls: 'number', value: n, location: location()};}
+  / a:literal {return {type: 'literal', cls: 'string', value: a, location: location()};}
+  / h:handler {return {type: 'handler', cls: 'Handler', value: h, location: location()};}
+
+handler
+  = "(" _ ")" _ "=>" _ "{" _ s:statements _ "}"
+  {
+    return s;
+  }
+
+fme
+  = x:memberExpression
+  {
+    return reduce(
+      (p, c) =>
+        [validateCall({type: 'call', name: c.name, args: [...toMCall(p), ...(c.args || [])], cls: c.cls, location: c.location})],
+        [],
+        x)[0];
+    }
+
+memberExpression
+  = i:f _ "." _ e:memberExpression { return [i, ...e]; }
+  / i:f {return [i];}
+
+f
+  = i:identifier _ "(" _ a:args? _ ")" {return toCall(i, a, location());}
+  / i:identifier {return toCall(i, [], location());}
+
+identifier "Identifier"
+  = !(keywords / [0-9] ) x:namechar+ {return x.join('');}
+
+literal "Literal"
+  = "'" s:([^\']*) "'"
+  {
+    return s.join('');
+  }
+
+keywords
+  = IF / CONST
+
+IF
+  = "if"i
+
+CONST
+  = "const"i
+
+namechar
+  = [a-zA-Z0-9_$]
+
+number "Number"
+  = n:([0-9]+) {return parseInt(n.join(''), 10);}
+
+_ "whitespace"
+  = [ \t\n\r]*
+
+//handle(button1(dim(1)), 'sdf', () => { group(7).on; });
