@@ -1,0 +1,2504 @@
+{
+	"1": {
+		"name": "hs:dimStudio button1 short_relea",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:17",
+		"lasttriggered": "2019-06-02T19:41:09",
+		"timestriggered": 53,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1002"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			}
+		]
+	},
+	"2": {
+		"name": "hs:dimStudio button4 short_relea",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:17",
+		"lasttriggered": "2019-06-02T19:47:05",
+		"timestriggered": 63,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "4002"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			}
+		]
+	},
+	"3": {
+		"name": "hs:dimStudio button4 long_releas",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:17",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "4003"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/0/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			}
+		]
+	},
+	"4": {
+		"name": "hs:dimStudio button2 short_relea",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:17",
+		"lasttriggered": "2019-06-02T19:47:00",
+		"timestriggered": 14,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "2002"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/1",
+				"method": "PUT",
+				"body": {
+					"status": "enabled"
+				}
+			},
+			{
+				"address": "/schedules/3",
+				"method": "PUT",
+				"body": {
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"5": {
+		"name": "hs:dimMikrofala button1 long_rel",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:18",
+		"lasttriggered": "2019-05-28T17:07:17",
+		"timestriggered": 11,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1003"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			}
+		]
+	},
+	"6": {
+		"name": "MotionSensor 12.day-on",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "2019-05-26T10:03:06",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/config/localtime",
+				"operator": "in",
+				"value": "T07:00:00/T22:00:00"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "eq",
+				"value": "true"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"7": {
+		"name": "hs:dimMikrofala button4 long_rel",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-12T20:00:18",
+		"lasttriggered": "2019-05-22T18:16:40",
+		"timestriggered": 2,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "4003"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/0/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			}
+		]
+	},
+	"8": {
+		"name": "Dimmer Switch 8 on0",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "2019-06-02T19:35:44",
+		"timestriggered": 17,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/29/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"9": {
+		"name": "Dimmer Switch 8 on1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "2019-06-02T19:35:46",
+		"timestriggered": 5,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/29/state/status",
+				"operator": "eq",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"scene": "UdYGlmBcG0mFzNs"
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"10": {
+		"name": "Dimmer Switch 8 on2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "2019-06-02T19:35:46",
+		"timestriggered": 4,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/29/state/status",
+				"operator": "eq",
+				"value": "2"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"scene": "Q3KJ5c7d6QA1ozj"
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 3
+				}
+			}
+		]
+	},
+	"11": {
+		"name": "Dimmer Switch 8 on3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/29/state/status",
+				"operator": "eq",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"scene": "z5AIFa3at7bOOJl"
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 4
+				}
+			}
+		]
+	},
+	"12": {
+		"name": "Dimmer Switch 8 on4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/29/state/status",
+				"operator": "gt",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"scene": "Ete5gFZ1C5QVVcO"
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"13": {
+		"name": "Dimmer 8.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "3000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -30
+				}
+			}
+		]
+	},
+	"14": {
+		"name": "Dimmer 8.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "3001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -56
+				}
+			}
+		]
+	},
+	"15": {
+		"name": "Dimmer 8.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "3003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"16": {
+		"name": "Dimmer 8.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "2000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 30
+				}
+			}
+		]
+	},
+	"17": {
+		"name": "Dimmer 8.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "2001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 56
+				}
+			}
+		]
+	},
+	"18": {
+		"name": "Dimmer 8.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "2003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"19": {
+		"name": "Dimmer 8.4 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:52",
+		"lasttriggered": "2019-06-01T23:56:10",
+		"timestriggered": 10,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/8/state/buttonevent",
+				"operator": "eq",
+				"value": "4000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/2/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/sensors/29/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"20": {
+		"name": "Dimmer Switch 8 reset timer",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-05-24T20:56:52",
+		"lasttriggered": "2019-06-02T19:35:47",
+		"timestriggered": 72,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/8/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/4",
+				"method": "PUT",
+				"body": {
+					"localtime": "PT00:00:10",
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"21": {
+		"name": "MotionSensor 12.day-dark-on",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/config/localtime",
+				"operator": "in",
+				"value": "T07:00:00/T22:00:00"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "lt",
+				"value": "1"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"22": {
+		"name": "MotionSensor 12.night-on",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/config/localtime",
+				"operator": "in",
+				"value": "T22:00:00/T07:00:00"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "eq",
+				"value": "true"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "Fkk819b8v7X81j2"
+				}
+			},
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"23": {
+		"name": "MotionSensor 12.night-dark-on",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/config/localtime",
+				"operator": "in",
+				"value": "T22:00:00/T07:00:00"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/13/state/dark",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "lt",
+				"value": "1"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "Fkk819b8v7X81j2"
+				}
+			},
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"24": {
+		"name": "MotionSensor 12.dim",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "2019-05-26T11:02:31",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "false"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "ddx",
+				"value": "PT00:59:15"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"25": {
+		"name": "MotionSensor 12.recover",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "true"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "gt",
+				"value": "1"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"26": {
+		"name": "MotionSensor 12.off",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "2019-05-26T11:03:01",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "false"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "ddx",
+				"value": "PT00:00:30"
+			},
+			{
+				"address": "/sensors/14/state/status",
+				"operator": "gt",
+				"value": "1"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"27": {
+		"name": "MotionSensor 12.arm",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-11T18:11:21",
+		"lasttriggered": "2019-06-02T19:47:05",
+		"timestriggered": 160,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/groups/5/state/any_on",
+				"operator": "eq",
+				"value": "false"
+			},
+			{
+				"address": "/sensors/12/state/presence",
+				"operator": "eq",
+				"value": "false"
+			}
+		],
+		"actions": [
+			{
+				"address": "/sensors/14/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"28": {
+		"name": "Dimmer Switch 19 on0",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-06-02T19:06:32",
+		"timestriggered": 56,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/20/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"29": {
+		"name": "Dimmer Switch 19 on1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-06-02T19:06:33",
+		"timestriggered": 18,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/20/state/status",
+				"operator": "eq",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "7WEeWb6FYt9dbqW"
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"30": {
+		"name": "Dimmer Switch 16 on0",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "2019-06-01T20:14:36",
+		"timestriggered": 99,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/17/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"31": {
+		"name": "Dimmer Switch 16 on1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "2019-05-22T12:39:41",
+		"timestriggered": 7,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/17/state/status",
+				"operator": "eq",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "5c8yrWtZ42fP5s0"
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"32": {
+		"name": "Dimmer Switch 16 on2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "2019-05-22T12:39:42",
+		"timestriggered": 5,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/17/state/status",
+				"operator": "eq",
+				"value": "2"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "mWNGohYU7AhozNa"
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 3
+				}
+			}
+		]
+	},
+	"33": {
+		"name": "Dimmer Switch 16 on3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "2019-05-22T10:22:01",
+		"timestriggered": 2,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/17/state/status",
+				"operator": "eq",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "j8c76GNmqd-eieZ"
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 4
+				}
+			}
+		]
+	},
+	"34": {
+		"name": "Dimmer Switch 16 on4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "2019-05-20T11:59:14",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/17/state/status",
+				"operator": "gt",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "hj8LAmUABRIwjBv"
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"35": {
+		"name": "Dimmer 16.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "3000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -30
+				}
+			}
+		]
+	},
+	"36": {
+		"name": "Dimmer 16.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:50",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "3001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -56
+				}
+			}
+		]
+	},
+	"37": {
+		"name": "Dimmer 16.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "3003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"38": {
+		"name": "Dimmer 16.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "2019-05-11T22:04:11",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "2000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 30
+				}
+			}
+		]
+	},
+	"39": {
+		"name": "Dimmer 16.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "2001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 56
+				}
+			}
+		]
+	},
+	"40": {
+		"name": "Dimmer 16.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "2003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"41": {
+		"name": "Dimmer 16.4 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "2019-06-01T20:15:01",
+		"timestriggered": 86,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/16/state/buttonevent",
+				"operator": "eq",
+				"value": "4000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/sensors/17/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"42": {
+		"name": "Dimmer Switch 16 reset timer",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-06T20:32:51",
+		"lasttriggered": "2019-06-01T20:15:02",
+		"timestriggered": 405,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/16/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/7",
+				"method": "PUT",
+				"body": {
+					"localtime": "PT00:00:10",
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"43": {
+		"name": "Dimmer Switch 19 on2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-06-02T19:06:34",
+		"timestriggered": 9,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/20/state/status",
+				"operator": "eq",
+				"value": "2"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "DtBN89eufJvaEC7"
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 3
+				}
+			}
+		]
+	},
+	"44": {
+		"name": "Dimmer Switch 19 on3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-06-02T19:06:34",
+		"timestriggered": 7,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/20/state/status",
+				"operator": "eq",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "QV50YFxvP7wwZFs"
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 4
+				}
+			}
+		]
+	},
+	"45": {
+		"name": "Dimmer Switch 19 on4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-08T18:24:04",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/20/state/status",
+				"operator": "gt",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "vwEkUP1FH9KAEps"
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"46": {
+		"name": "Dimmer 19.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-25T07:19:24",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "3000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -30
+				}
+			}
+		]
+	},
+	"47": {
+		"name": "Dimmer 19.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-25T07:19:26",
+		"timestriggered": 2,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "3001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -56
+				}
+			}
+		]
+	},
+	"48": {
+		"name": "Dimmer 19.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-25T07:19:26",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "3003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"49": {
+		"name": "Dimmer 19.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-12T19:54:24",
+		"timestriggered": 4,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "2000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 30
+				}
+			}
+		]
+	},
+	"50": {
+		"name": "Dimmer 19.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "2001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 56
+				}
+			}
+		]
+	},
+	"51": {
+		"name": "Dimmer 19.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "2003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"52": {
+		"name": "Dimmer 19.4 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-05-31T20:03:54",
+		"timestriggered": 26,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/19/state/buttonevent",
+				"operator": "eq",
+				"value": "4000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/sensors/20/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"53": {
+		"name": "Dimmer Switch 19 reset timer",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-15T20:25:06",
+		"lasttriggered": "2019-06-02T19:06:35",
+		"timestriggered": 282,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/19/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/2",
+				"method": "PUT",
+				"body": {
+					"localtime": "PT00:00:10",
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"54": {
+		"name": "Dimmer Switch 21 on0",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:46",
+		"lasttriggered": "2019-06-02T19:41:00",
+		"timestriggered": 54,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/22/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"55": {
+		"name": "Dimmer Switch 21 on1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-30T20:29:50",
+		"timestriggered": 24,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/22/state/status",
+				"operator": "eq",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "7WEeWb6FYt9dbqW"
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"56": {
+		"name": "Dimmer Switch 21 on2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-30T20:29:47",
+		"timestriggered": 13,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/22/state/status",
+				"operator": "eq",
+				"value": "2"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "DtBN89eufJvaEC7"
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 3
+				}
+			}
+		]
+	},
+	"57": {
+		"name": "Dimmer Switch 21 on3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-30T20:29:48",
+		"timestriggered": 10,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/22/state/status",
+				"operator": "eq",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "QV50YFxvP7wwZFs"
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 4
+				}
+			}
+		]
+	},
+	"58": {
+		"name": "Dimmer Switch 21 on4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-30T20:29:49",
+		"timestriggered": 4,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/22/state/status",
+				"operator": "gt",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"scene": "vwEkUP1FH9KAEps"
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"59": {
+		"name": "Dimmer 21.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-12T10:36:30",
+		"timestriggered": 4,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "3000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -30
+				}
+			}
+		]
+	},
+	"60": {
+		"name": "Dimmer 21.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-12T10:36:28",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "3001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": -56
+				}
+			}
+		]
+	},
+	"61": {
+		"name": "Dimmer 21.3 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-05-12T10:36:29",
+		"timestriggered": 1,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "3003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"62": {
+		"name": "Dimmer 21.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "2000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 30
+				}
+			}
+		]
+	},
+	"63": {
+		"name": "Dimmer 21.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "2001"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"transitiontime": 9,
+					"bri_inc": 56
+				}
+			}
+		]
+	},
+	"64": {
+		"name": "Dimmer 21.2 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "2003"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"bri_inc": 0
+				}
+			}
+		]
+	},
+	"65": {
+		"name": "Dimmer 21.4 Lights",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-06-02T19:38:05",
+		"timestriggered": 54,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/21/state/buttonevent",
+				"operator": "eq",
+				"value": "4000"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/6/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			},
+			{
+				"address": "/sensors/22/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	},
+	"66": {
+		"name": "Dimmer Switch 21 reset timer",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2018-11-23T20:02:47",
+		"lasttriggered": "2019-06-02T19:41:00",
+		"timestriggered": 328,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/21/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/6",
+				"method": "PUT",
+				"body": {
+					"localtime": "PT00:00:10",
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"70": {
+		"name": "Dimmer Switch 25 on0",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-03-28T16:19:53",
+		"lasttriggered": "2019-05-31T22:08:22",
+		"timestriggered": 24,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/26/state/status",
+				"operator": "lt",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"on": true
+				}
+			},
+			{
+				"address": "/sensors/26/state",
+				"method": "PUT",
+				"body": {
+					"status": 1
+				}
+			}
+		]
+	},
+	"71": {
+		"name": "Dimmer Switch 25 on1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-03-28T16:19:53",
+		"lasttriggered": "2019-06-02T19:41:09",
+		"timestriggered": 21,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/26/state/status",
+				"operator": "eq",
+				"value": "1"
+			},
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"scene": "ANXyOuuqetQLPyz"
+				}
+			},
+			{
+				"address": "/sensors/26/state",
+				"method": "PUT",
+				"body": {
+					"status": 2
+				}
+			}
+		]
+	},
+	"72": {
+		"name": "Dimmer Switch 25 on2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-03-28T16:19:53",
+		"lasttriggered": "2019-05-29T21:10:31",
+		"timestriggered": 20,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/26/state/status",
+				"operator": "eq",
+				"value": "2"
+			},
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"scene": "jTQaGdX42bXuN0V"
+				}
+			},
+			{
+				"address": "/sensors/26/state",
+				"method": "PUT",
+				"body": {
+					"status": 3
+				}
+			}
+		]
+	},
+	"73": {
+		"name": "Dimmer Switch 25 on3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-03-28T16:19:53",
+		"lasttriggered": "2019-05-30T20:39:36",
+		"timestriggered": 20,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/26/state/status",
+				"operator": "eq",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"scene": "0Rb6VCwaqAaVAo8"
+				}
+			},
+			{
+				"address": "/sensors/26/state",
+				"method": "PUT",
+				"body": {
+					"status": 4
+				}
+			}
+		]
+	},
+	"74": {
+		"name": "Dimmer Switch 25 on4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-03-28T16:19:53",
+		"lasttriggered": "2019-05-30T20:42:19",
+		"timestriggered": 20,
+		"status": "enabled",
+		"recycle": true,
+		"conditions": [
+			{
+				"address": "/sensors/26/state/status",
+				"operator": "gt",
+				"value": "3"
+			},
+			{
+				"address": "/sensors/25/state/buttonevent",
+				"operator": "eq",
+				"value": "1000"
+			},
+			{
+				"address": "/sensors/25/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/7/action",
+				"method": "PUT",
+				"body": {
+					"scene": "7DIFIONmtq79efE"
+				}
+			},
+			{
+				"address": "/sensors/26/state",
+				"method": "PUT",
+				"body": {
+					"status": 0
+				}
+			}
+		]
+	}
+}

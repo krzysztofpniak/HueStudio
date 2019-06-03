@@ -1,0 +1,900 @@
+{
+	"1": {
+		"state": {
+			"on": false,
+			"bri": 25,
+			"hue": 15000,
+			"sat": 254,
+			"effect": "none",
+			"xy": [
+				0.561,
+				0.4042
+			],
+			"ct": 367,
+			"alert": "select",
+			"colormode": "xy",
+			"mode": "homeautomation",
+			"reachable": false
+		},
+		"swupdate": {
+			"state": "transferring",
+			"lastinstall": "2018-05-19T08:21:46"
+		},
+		"type": "Extended color light",
+		"name": "Góra 2",
+		"modelid": "LCT010",
+		"manufacturername": "Philips",
+		"productname": "Hue color lamp",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 806,
+				"colorgamuttype": "C",
+				"colorgamut": [
+					[
+						0.6915,
+						0.3083
+					],
+					[
+						0.17,
+						0.7
+					],
+					[
+						0.1532,
+						0.0475
+					]
+				],
+				"ct": {
+					"min": 153,
+					"max": 500
+				}
+			},
+			"streaming": {
+				"renderer": true,
+				"proxy": true
+			}
+		},
+		"config": {
+			"archetype": "sultanbulb",
+			"function": "mixed",
+			"direction": "omnidirectional"
+		},
+		"uniqueid": "00:17:88:01:02:7d:f2:a5-0b",
+		"swversion": "1.29.0_r21169",
+		"swconfigid": "6A139B19",
+		"productid": "Philips-LCT010-1-A19ECLv4"
+	},
+	"2": {
+		"state": {
+			"on": false,
+			"bri": 25,
+			"hue": 6291,
+			"sat": 251,
+			"effect": "none",
+			"xy": [
+				0.5612,
+				0.4042
+			],
+			"ct": 500,
+			"alert": "select",
+			"colormode": "xy",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:40:03"
+		},
+		"type": "Extended color light",
+		"name": "Góra",
+		"modelid": "LCT010",
+		"manufacturername": "Philips",
+		"productname": "Hue color lamp",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 806,
+				"colorgamuttype": "C",
+				"colorgamut": [
+					[
+						0.6915,
+						0.3083
+					],
+					[
+						0.17,
+						0.7
+					],
+					[
+						0.1532,
+						0.0475
+					]
+				],
+				"ct": {
+					"min": 153,
+					"max": 500
+				}
+			},
+			"streaming": {
+				"renderer": true,
+				"proxy": true
+			}
+		},
+		"config": {
+			"archetype": "sultanbulb",
+			"function": "mixed",
+			"direction": "omnidirectional",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:02:7d:f4:82-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "0CE67A8F",
+		"productid": "Philips-LCT010-1-A19ECLv4"
+	},
+	"3": {
+		"state": {
+			"on": false,
+			"bri": 25,
+			"hue": 6291,
+			"sat": 251,
+			"effect": "none",
+			"xy": [
+				0.5612,
+				0.4042
+			],
+			"ct": 500,
+			"alert": "select",
+			"colormode": "xy",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:22"
+		},
+		"type": "Extended color light",
+		"name": "Kąt",
+		"modelid": "LCT010",
+		"manufacturername": "Philips",
+		"productname": "Hue color lamp",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 806,
+				"colorgamuttype": "C",
+				"colorgamut": [
+					[
+						0.6915,
+						0.3083
+					],
+					[
+						0.17,
+						0.7
+					],
+					[
+						0.1532,
+						0.0475
+					]
+				],
+				"ct": {
+					"min": 153,
+					"max": 500
+				}
+			},
+			"streaming": {
+				"renderer": true,
+				"proxy": true
+			}
+		},
+		"config": {
+			"archetype": "sultanbulb",
+			"function": "mixed",
+			"direction": "omnidirectional",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:02:7d:f6:73-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "0CE67A8F",
+		"productid": "Philips-LCT010-1-A19ECLv4"
+	},
+	"4": {
+		"state": {
+			"on": false,
+			"bri": 25,
+			"hue": 6291,
+			"sat": 251,
+			"effect": "none",
+			"xy": [
+				0.5612,
+				0.4042
+			],
+			"ct": 500,
+			"alert": "select",
+			"colormode": "xy",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:35"
+		},
+		"type": "Extended color light",
+		"name": "Szafa",
+		"modelid": "LST002",
+		"manufacturername": "Philips",
+		"productname": "Hue lightstrip plus",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 25,
+				"maxlumen": 1600,
+				"colorgamuttype": "C",
+				"colorgamut": [
+					[
+						0.6915,
+						0.3083
+					],
+					[
+						0.17,
+						0.7
+					],
+					[
+						0.1532,
+						0.0475
+					]
+				],
+				"ct": {
+					"min": 153,
+					"max": 500
+				}
+			},
+			"streaming": {
+				"renderer": true,
+				"proxy": true
+			}
+		},
+		"config": {
+			"archetype": "huelightstrip",
+			"function": "mixed",
+			"direction": "omnidirectional",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:02:17:d5:9d-0b",
+		"swversion": "5.127.1.26420"
+	},
+	"5": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 343,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:12"
+		},
+		"type": "Color temperature light",
+		"name": "Przedpokój 1",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:6d:d1:2e-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"6": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 343,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:18"
+		},
+		"type": "Color temperature light",
+		"name": "Przedpokój 2",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:6d:d0:8a-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"7": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 343,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:28"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance lamp 1",
+		"modelid": "LTW010",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance lamp",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 806,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "sultanbulb",
+			"function": "functional",
+			"direction": "omnidirectional",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:03:01:2b:e8-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "7A2E82CC",
+		"productid": "Philips-LTW010-1-A19CTv2"
+	},
+	"8": {
+		"state": {
+			"on": false,
+			"bri": 35,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:07"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance pendant 1",
+		"modelid": "LTP001",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance pendant",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 3000,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "pendantround",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:03:34:5c:bd-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "A987DFF5",
+		"productid": "ENA_LTP001_1_CherPendant_v1"
+	},
+	"9": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:03:57"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance kuchnia 1",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:47:bf:fb-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"10": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:03:49"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance spot 2",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:47:b5:eb-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"11": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:03:53"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance kuchnia 2",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:47:b5:68-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"12": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-02-15T18:04:02"
+		},
+		"type": "Color temperature light",
+		"name": "Hue ambiance spot 4",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:47:c3:08-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"13": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 156,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:39:52"
+		},
+		"type": "Color temperature light",
+		"name": "studio 1",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:27:86:79-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"14": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 156,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:39:57"
+		},
+		"type": "Color temperature light",
+		"name": "studio 2",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:a8:22:2b-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"15": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 156,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:39:41"
+		},
+		"type": "Color temperature light",
+		"name": "studio 4",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:27:85:95-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"16": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 156,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:39:36"
+		},
+		"type": "Color temperature light",
+		"name": "studio 3",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:30:f2:e4-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	},
+	"17": {
+		"state": {
+			"on": false,
+			"bri": 254,
+			"ct": 417,
+			"alert": "select",
+			"colormode": "ct",
+			"mode": "homeautomation",
+			"reachable": true
+		},
+		"swupdate": {
+			"state": "noupdates",
+			"lastinstall": "2019-03-31T12:40:37"
+		},
+		"type": "Color temperature light",
+		"name": "Salon spot prawy",
+		"modelid": "LTW013",
+		"manufacturername": "Philips",
+		"productname": "Hue ambiance spot",
+		"capabilities": {
+			"certified": true,
+			"control": {
+				"mindimlevel": 1000,
+				"maxlumen": 250,
+				"ct": {
+					"min": 153,
+					"max": 454
+				}
+			},
+			"streaming": {
+				"renderer": false,
+				"proxy": false
+			}
+		},
+		"config": {
+			"archetype": "spotbulb",
+			"function": "functional",
+			"direction": "downwards",
+			"startup": {
+				"mode": "safety",
+				"configured": true
+			}
+		},
+		"uniqueid": "00:17:88:01:04:27:7e:95-0b",
+		"swversion": "1.46.13_r26312",
+		"swconfigid": "1742FA88",
+		"productid": "Philips-LTW013-1-GU10CTv1"
+	}
+}
