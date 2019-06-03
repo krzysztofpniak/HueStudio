@@ -26,7 +26,9 @@ export default {
         exclude: /node_modules/,
         use: {
           loader: 'pegjs-loader',
-          options: {}
+          options: {
+            dependencies: '{ "R": "ramda", "P": "./parserHelpers" }'
+          }
         }
       }
     ]
