@@ -23,6 +23,9 @@ const styles = {
   menuButton: {
     marginLeft: -18,
     marginRight: 10
+  },
+  tabs: {
+    maxWidth: 'calc(100% - 230px)'
   }
 };
 
@@ -50,6 +53,7 @@ const DenseAppBar = ({
             value={activeTab}
             onChange={(e, value) => onTabClick(value)}
             variant="scrollable"
+            className={classes.tabs}
             scrollButtons="auto"
           >
             {mapWithKey(
