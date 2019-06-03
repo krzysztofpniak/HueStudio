@@ -11,8 +11,6 @@ import {
   propEq,
   when
 } from 'ramda';
-import Immutable from 'seamless-immutable';
-import { convertFromRaw } from 'draft-js';
 
 const isNewLine = c => c === '\r' || c === '\n';
 
@@ -238,15 +236,6 @@ const addContext = compose(
   )
 );
 
-const getPlainText = value =>
-  convertFromRaw(
-    Immutable.asMutable(value.content, { deep: true })
-  ).getPlainText();
-
-const wrapText = text => `\`${text}\``;
-
-const escapeColumn = when(contains(' '), wrapText);
-
 const getTokenEnd = token => token.pos + token.value.length;
 
 const getTokenAt = (pos, tokens) =>
@@ -258,4 +247,4 @@ const getTokenAt = (pos, tokens) =>
     tokens
   );
 
-export { tokenizeBuilder, addContext, getPlainText, escapeColumn, getTokenAt };
+export { tokenizeBuilder, addContext, getTokenAt };
