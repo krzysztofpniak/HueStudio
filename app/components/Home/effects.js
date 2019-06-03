@@ -10,12 +10,20 @@ import {
   take,
   call
 } from 'redux-saga/effects';
+import { asyncAction } from '@k-frame/sagas';
 import { propEq, propOr, find } from 'ramda';
+import { formatWithCursor } from 'prettier';
 import { readFile, writeFile, existsSync } from 'fs';
 import { join } from 'path';
-import { getPlainText } from '../codeEditor';
 import { getHuePreferencesPath } from '../../HuePreferences';
 import store from '../../appSettings';
+import { handle } from '../../hueTranslator';
+import lights from '../../../resources/responses/lights.json';
+import scenes from '../../../resources/responses/scenes.json';
+import groups from '../../../resources/responses/groups.json';
+import schedules from '../../../resources/responses/schedules.json';
+import rules from '../../../resources/responses/rules.json';
+import sensors from '../../../resources/responses/sensors.json';
 
 const { remote } = require('electron');
 
@@ -28,16 +36,21 @@ function* newFile({ payload }) {
 }
 
 function* openFile({ payload: fileName }) {
-  const content = yield cps(readFile, fileName, 'utf8');
-  yield put({ type: 'fileLoaded', payload: { content, fileName } });
+  try {
+    console.log('openFile', fileName);
+    const content = yield cps(readFile, fileName, 'utf8');
+    yield put({ type: 'fileLoaded', payload: { content, fileName } });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-function* saveFileAs(prevFileName) {
-  const { openedResources } = yield select(s => s);
+function* saveFileAs() {
+  const { openedResources, activeTabId } = yield select(s => s);
   const defaultPath = propOr(
     'Script',
     'name',
-    find(propEq('ref', prevFileName), openedResources)
+    find(propEq('ref', activeTabId), openedResources)
   );
 
   const fileName = dialog.showSaveDialog(getCurrentWindow(), {
@@ -47,13 +60,17 @@ function* saveFileAs(prevFileName) {
 
   if (fileName) {
     const { codeEditorStates, activeTabId } = yield select(s => s);
-    const content = getPlainText(codeEditorStates[activeTabId]);
+    const content = codeEditorStates[activeTabId];
     yield cps(writeFile, fileName, content);
-    yield put({ type: 'fileSaved', payload: { fileName, prevFileName } });
+    yield put({
+      type: 'fileSaved',
+      payload: { fileName, prevFileName: activeTabId }
+    });
   }
 }
 
-function* saveFile() {
+function* saveFile(editorRef) {
+  const [selectionStart] = editorRef.current.getSelection();
   const { codeEditorStates, activeTabId, openedResources } = yield select(
     s => s
   );
@@ -63,14 +80,23 @@ function* saveFile() {
     find(propEq('ref', activeTabId), openedResources)
   );
   if (!temp && existsSync(activeTabId)) {
-    const content = getPlainText(codeEditorStates[activeTabId]);
-    yield cps(writeFile, activeTabId, content);
+    const content = codeEditorStates[activeTabId];
+    const { formatted, cursorOffset } = formatWithCursor(content, {
+      cursorOffset: selectionStart
+    });
+    yield put({
+      type: 'setCodeEditorState',
+      payload: { tabId: activeTabId, state: formatted }
+    });
+    yield delay(100);
+    editorRef.current.focus(cursorOffset);
+    yield cps(writeFile, activeTabId, formatted);
     yield put({
       type: 'fileSaved',
       payload: { fileName: activeTabId, prevFileName: activeTabId }
     });
   } else {
-    yield saveFileAs(activeTabId);
+    yield saveFileAs();
   }
 }
 
@@ -93,10 +119,15 @@ function* persistence() {
   const openedResources = store.get('openedResources');
   for (let i = 0; i < openedResources.length; i += 1) {
     const f = openedResources[i];
-    yield put({ type: 'openFile', payload: f.ref });
-    yield take('fileLoaded');
+    if (f.type === 'file') {
+      yield put({ type: 'openFile', payload: f.ref });
+      yield take('fileLoaded');
+    }
   }
   yield put({ type: 'setOpenedResources', payload: openedResources });
+  if (openedResources.length > 0) {
+    yield put({ type: 'setActiveTabId', payload: openedResources[0].ref });
+  }
   yield takeEvery(
     ['fileSaved', 'fileCreated', 'fileLoaded', 'setOpenedResources'],
     function*() {
@@ -104,19 +135,67 @@ function* persistence() {
       store.set('openedResources', openedResources);
     }
   );
-  yield debounceBy(5000, 'setCodeEditorState', a => a.payload.tabId, function*(
+  yield debounceBy(3000, 'setCodeEditorState', a => a.payload.tabId, function*(
     a
   ) {
-    yield cps(writeFile, a.payload.tabId, getPlainText(a.payload.state));
+    const { openedResources, activeTabId } = yield select(s => s);
+    const temp = propOr(
+      false,
+      'temp',
+      find(propEq('ref', activeTabId), openedResources)
+    );
+    if (temp) {
+      yield cps(writeFile, a.payload.tabId, a.payload.state);
+    }
   });
 }
 
-function* saga() {
+const delayedPromise = data =>
+  new Promise(resolve => setTimeout(() => resolve(data), 300));
+
+const getLights = () => delayedPromise(lights);
+const getGroups = () => delayedPromise(groups);
+const getScenes = () => delayedPromise(scenes);
+const getRules = () => delayedPromise(rules);
+const getSchedules = () => delayedPromise(schedules);
+const getSensors = () => delayedPromise(sensors);
+
+function* loadResources() {
+  yield* asyncAction('lights', getLights);
+  yield* asyncAction('groups', getGroups);
+  yield* asyncAction('scenes', getScenes);
+  yield* asyncAction('rules', getRules);
+  yield* asyncAction('schedules', getSchedules);
+  yield* asyncAction('sensors', getSensors);
+}
+
+function* saga(editorRef) {
   yield takeEvery('newFile', newFile);
   yield takeEvery('openFile', openFile);
-  yield takeEvery('saveFile', saveFile);
+  yield takeEvery('saveFile', saveFile, editorRef);
   yield takeEvery('saveFileAs', saveFileAs);
   yield fork(persistence);
+  yield loadResources();
+}
+
+function* deploySaga(data) {
+  const { statements } = data;
+  yield put({ type: 'terminal.addLine', payload: 'start' });
+  const vars = {};
+
+  for (let i = 0; i < statements.length; i += 1) {
+    const d = statements[i];
+    if (d.type === 'const') {
+      vars[d.name] = d.value;
+    }
+    if (d.name === 'handle') {
+      handle(d, vars);
+    }
+
+    yield put({ type: 'terminal.addLine', payload: d.name });
+  }
 }
 
 export default saga;
+
+export { deploySaga };
