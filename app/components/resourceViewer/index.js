@@ -218,8 +218,8 @@ const dfs = (hueData, v, onVisitNode, onVisitEdge) => {
 const Graph = ({ transform, data }) => (
   <g>
     {mapWithKey(
-      ({ x, y, width, height, name }) => (
-        <g transform={`translate(${x},${y})`}>
+      ({ x, y, width, height, name }, key) => (
+        <g transform={`translate(${x},${y})`} key={key}>
           <rect
             x={0}
             y={0}
@@ -239,8 +239,15 @@ const Graph = ({ transform, data }) => (
       data.nodes
     )}
     {mapWithKey(
-      e => (
-        <Edge sX={e.sX} sY={e.sY} tX={e.tX} tY={e.tY} color="orange" />
+      (e, key) => (
+        <Edge
+          key={key}
+          sX={e.sX}
+          sY={e.sY}
+          tX={e.tX}
+          tY={e.tY}
+          color="orange"
+        />
       ),
       data.edges
     )}
