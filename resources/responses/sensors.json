@@ -1,8 +1,8 @@
 {
 	"1": {
 		"state": {
-			"daylight": false,
-			"lastupdated": "2019-05-12T18:00:00"
+			"daylight": true,
+			"lastupdated": "2019-06-11T03:07:00"
 		},
 		"config": {
 			"on": true,
@@ -36,7 +36,7 @@
 	"8": {
 		"state": {
 			"buttonevent": 4002,
-			"lastupdated": "2019-05-12T18:41:50"
+			"lastupdated": "2019-06-10T20:54:23"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -44,7 +44,7 @@
 		},
 		"config": {
 			"on": true,
-			"battery": 83,
+			"battery": 99,
 			"reachable": true,
 			"pending": []
 		},
@@ -58,6 +58,7 @@
 		"uniqueid": "00:17:88:01:02:e2:00:33-02-fc00",
 		"capabilities": {
 			"certified": true,
+			"primary": true,
 			"inputs": [
 				{
 					"repeatintervals": [
@@ -156,8 +157,8 @@
 	},
 	"11": {
 		"state": {
-			"temperature": 2154,
-			"lastupdated": "2019-05-12T19:51:47"
+			"temperature": 2704,
+			"lastupdated": "2019-06-11T17:46:36"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -180,13 +181,14 @@
 		"swversion": "6.1.1.27575",
 		"uniqueid": "00:17:88:01:03:28:b6:67-02-0402",
 		"capabilities": {
-			"certified": true
+			"certified": true,
+			"primary": false
 		}
 	},
 	"12": {
 		"state": {
 			"presence": false,
-			"lastupdated": "2019-04-09T09:28:28"
+			"lastupdated": "2019-05-26T10:03:16"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -211,7 +213,8 @@
 		"swversion": "6.1.1.27575",
 		"uniqueid": "00:17:88:01:03:28:b6:67-02-0406",
 		"capabilities": {
-			"certified": true
+			"certified": true,
+			"primary": true
 		}
 	},
 	"13": {
@@ -219,7 +222,7 @@
 			"lightlevel": 0,
 			"dark": true,
 			"daylight": false,
-			"lastupdated": "2019-05-12T19:54:14"
+			"lastupdated": "2019-06-11T17:44:59"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -244,13 +247,14 @@
 		"swversion": "6.1.1.27575",
 		"uniqueid": "00:17:88:01:03:28:b6:67-02-0400",
 		"capabilities": {
-			"certified": true
+			"certified": true,
+			"primary": false
 		}
 	},
 	"14": {
 		"state": {
 			"status": 0,
-			"lastupdated": "2019-05-12T19:54:16"
+			"lastupdated": "2019-06-11T15:07:56"
 		},
 		"config": {
 			"on": true,
@@ -264,27 +268,10 @@
 		"uniqueid": "MotionSensor 12.Companion",
 		"recycle": true
 	},
-	"15": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-05-12T18:51:22"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 8 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
 	"16": {
 		"state": {
 			"buttonevent": 4002,
-			"lastupdated": "2019-05-12T19:54:16"
+			"lastupdated": "2019-06-09T18:47:51"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -306,6 +293,7 @@
 		"uniqueid": "00:17:88:01:03:c9:3a:04-02-fc00",
 		"capabilities": {
 			"certified": true,
+			"primary": true,
 			"inputs": [
 				{
 					"repeatintervals": [
@@ -405,7 +393,7 @@
 	"17": {
 		"state": {
 			"status": 0,
-			"lastupdated": "2019-05-12T19:54:26"
+			"lastupdated": "2019-06-09T18:48:01"
 		},
 		"config": {
 			"on": true,
@@ -421,8 +409,8 @@
 	},
 	"19": {
 		"state": {
-			"buttonevent": 2002,
-			"lastupdated": "2019-05-12T19:54:24"
+			"buttonevent": 4002,
+			"lastupdated": "2019-06-11T17:36:30"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -444,6 +432,7 @@
 		"uniqueid": "00:17:88:01:02:1a:40:b9-02-fc00",
 		"capabilities": {
 			"certified": true,
+			"primary": true,
 			"inputs": [
 				{
 					"repeatintervals": [
@@ -543,7 +532,7 @@
 	"20": {
 		"state": {
 			"status": 0,
-			"lastupdated": "2019-05-12T19:54:34"
+			"lastupdated": "2019-06-11T17:36:40"
 		},
 		"config": {
 			"on": true,
@@ -559,8 +548,8 @@
 	},
 	"21": {
 		"state": {
-			"buttonevent": 1002,
-			"lastupdated": "2019-05-12T19:38:18"
+			"buttonevent": 3002,
+			"lastupdated": "2019-06-11T17:34:09"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -582,6 +571,7 @@
 		"uniqueid": "00:17:88:01:04:e4:72:a5-02-fc00",
 		"capabilities": {
 			"certified": true,
+			"primary": true,
 			"inputs": [
 				{
 					"repeatintervals": [
@@ -681,7 +671,7 @@
 	"22": {
 		"state": {
 			"status": 0,
-			"lastupdated": "2019-05-12T19:38:28"
+			"lastupdated": "2019-06-11T17:34:19"
 		},
 		"config": {
 			"on": true,
@@ -697,8 +687,8 @@
 	},
 	"25": {
 		"state": {
-			"buttonevent": 1002,
-			"lastupdated": "2019-05-12T19:46:32"
+			"buttonevent": 4002,
+			"lastupdated": "2019-06-10T20:50:33"
 		},
 		"swupdate": {
 			"state": "noupdates",
@@ -720,6 +710,7 @@
 		"uniqueid": "00:17:88:01:04:e4:73:c8-02-fc00",
 		"capabilities": {
 			"certified": true,
+			"primary": true,
 			"inputs": [
 				{
 					"repeatintervals": [
@@ -818,8 +809,8 @@
 	},
 	"26": {
 		"state": {
-			"status": 3,
-			"lastupdated": "2019-05-12T19:46:32"
+			"status": 0,
+			"lastupdated": "2019-06-10T20:46:34"
 		},
 		"config": {
 			"on": true,
@@ -850,21 +841,83 @@
 		"uniqueid": "4c:61:70:41:70:70:73-HL-00-00",
 		"recycle": false
 	},
-	"28": {
+	"29": {
 		"state": {
-			"status": 5,
-			"lastupdated": "2019-05-12T18:11:19"
+			"status": 0,
+			"lastupdated": "2019-06-10T20:54:33"
 		},
 		"config": {
 			"on": true,
 			"reachable": true
 		},
-		"name": "hs:var",
+		"name": "Dimmer Switch 8 SceneCycle",
 		"type": "CLIPGenericStatus",
 		"modelid": "PHWA01",
 		"manufacturername": "Philips",
 		"swversion": "1.0",
 		"uniqueid": "WA0001",
 		"recycle": true
+	},
+	"30": {
+		"state": {
+			"buttonevent": 34,
+			"lastupdated": "2019-06-11T15:07:56"
+		},
+		"swupdate": {
+			"state": "notupdatable",
+			"lastinstall": null
+		},
+		"config": {
+			"on": true
+		},
+		"name": "przełącznik Przedpokój",
+		"type": "ZGPSwitch",
+		"modelid": "ZGPSWITCH",
+		"manufacturername": "Philips",
+		"productname": "Hue tap switch",
+		"diversityid": "d8cde5d5-0eef-4b95-b0f0-71ddd2952af4",
+		"uniqueid": "00:00:00:00:00:44:a1:2f-f2",
+		"capabilities": {
+			"certified": true,
+			"primary": true,
+			"inputs": [
+				{
+					"repeatintervals": [],
+					"events": [
+						{
+							"buttonevent": 34,
+							"eventtype": "initial_press"
+						}
+					]
+				},
+				{
+					"repeatintervals": [],
+					"events": [
+						{
+							"buttonevent": 16,
+							"eventtype": "initial_press"
+						}
+					]
+				},
+				{
+					"repeatintervals": [],
+					"events": [
+						{
+							"buttonevent": 17,
+							"eventtype": "initial_press"
+						}
+					]
+				},
+				{
+					"repeatintervals": [],
+					"events": [
+						{
+							"buttonevent": 18,
+							"eventtype": "initial_press"
+						}
+					]
+				}
+			]
+		}
 	}
 }

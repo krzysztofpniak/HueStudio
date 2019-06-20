@@ -3,8 +3,8 @@
 		"name": "hs:dimStudio button1 short_relea",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-12T20:00:17",
-		"lasttriggered": "2019-06-02T19:41:09",
-		"timestriggered": 53,
+		"lasttriggered": "2019-06-11T21:30:13",
+		"timestriggered": 6,
 		"status": "enabled",
 		"recycle": false,
 		"conditions": [
@@ -39,8 +39,8 @@
 		"name": "hs:dimStudio button4 short_relea",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-12T20:00:17",
-		"lasttriggered": "2019-06-02T19:47:05",
-		"timestriggered": 63,
+		"lasttriggered": "2019-06-11T21:30:38",
+		"timestriggered": 6,
 		"status": "enabled",
 		"recycle": false,
 		"conditions": [
@@ -104,8 +104,8 @@
 		"name": "hs:dimStudio button2 short_relea",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-12T20:00:17",
-		"lasttriggered": "2019-06-02T19:47:00",
-		"timestriggered": 14,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": false,
 		"conditions": [
@@ -140,8 +140,8 @@
 		"name": "hs:dimMikrofala button1 long_rel",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-12T20:00:18",
-		"lasttriggered": "2019-05-28T17:07:17",
-		"timestriggered": 11,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": false,
 		"conditions": [
@@ -176,8 +176,8 @@
 		"name": "MotionSensor 12.day-on",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-11T18:11:21",
-		"lasttriggered": "2019-05-26T10:03:06",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -220,8 +220,8 @@
 		"name": "hs:dimMikrofala button4 long_rel",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-12T20:00:18",
-		"lasttriggered": "2019-05-22T18:16:40",
-		"timestriggered": 2,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": false,
 		"conditions": [
@@ -249,8 +249,8 @@
 		"name": "Dimmer Switch 8 on0",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-24T20:56:51",
-		"lasttriggered": "2019-06-02T19:35:44",
-		"timestriggered": 17,
+		"lasttriggered": "2019-06-11T19:34:47",
+		"timestriggered": 6,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -290,8 +290,8 @@
 		"name": "Dimmer Switch 8 on1",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-24T20:56:51",
-		"lasttriggered": "2019-06-02T19:35:46",
-		"timestriggered": 5,
+		"lasttriggered": "2019-06-10T19:39:43",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -331,8 +331,8 @@
 		"name": "Dimmer Switch 8 on2",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-24T20:56:51",
-		"lasttriggered": "2019-06-02T19:35:46",
-		"timestriggered": 4,
+		"lasttriggered": "2019-06-10T19:39:44",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -632,8 +632,8 @@
 		"name": "Dimmer 8.4 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-24T20:56:52",
-		"lasttriggered": "2019-06-01T23:56:10",
-		"timestriggered": 10,
+		"lasttriggered": "2019-06-10T20:54:23",
+		"timestriggered": 3,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -668,8 +668,8 @@
 		"name": "Dimmer Switch 8 reset timer",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-05-24T20:56:52",
-		"lasttriggered": "2019-06-02T19:35:47",
-		"timestriggered": 72,
+		"lasttriggered": "2019-06-11T19:34:47",
+		"timestriggered": 26,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -839,8 +839,8 @@
 		"name": "MotionSensor 12.dim",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-11T18:11:21",
-		"lasttriggered": "2019-05-26T11:02:31",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -903,8 +903,8 @@
 		"name": "MotionSensor 12.off",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-11T18:11:21",
-		"lasttriggered": "2019-05-26T11:03:01",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -938,8 +938,8 @@
 		"name": "MotionSensor 12.arm",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-11T18:11:21",
-		"lasttriggered": "2019-06-02T19:47:05",
-		"timestriggered": 160,
+		"lasttriggered": "2019-06-11T21:30:38",
+		"timestriggered": 15,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -968,8 +968,8 @@
 		"name": "Dimmer Switch 19 on0",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-06-02T19:06:32",
-		"timestriggered": 56,
+		"lasttriggered": "2019-06-11T19:18:43",
+		"timestriggered": 4,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1009,8 +1009,8 @@
 		"name": "Dimmer Switch 19 on1",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-06-02T19:06:33",
-		"timestriggered": 18,
+		"lasttriggered": "2019-06-11T19:18:44",
+		"timestriggered": 3,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1050,8 +1050,8 @@
 		"name": "Dimmer Switch 16 on0",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:50",
-		"lasttriggered": "2019-06-01T20:14:36",
-		"timestriggered": 99,
+		"lasttriggered": "2019-06-09T18:47:48",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1091,8 +1091,8 @@
 		"name": "Dimmer Switch 16 on1",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:50",
-		"lasttriggered": "2019-05-22T12:39:41",
-		"timestriggered": 7,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1132,8 +1132,8 @@
 		"name": "Dimmer Switch 16 on2",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:50",
-		"lasttriggered": "2019-05-22T12:39:42",
-		"timestriggered": 5,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1173,8 +1173,8 @@
 		"name": "Dimmer Switch 16 on3",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:50",
-		"lasttriggered": "2019-05-22T10:22:01",
-		"timestriggered": 2,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1214,8 +1214,8 @@
 		"name": "Dimmer Switch 16 on4",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:50",
-		"lasttriggered": "2019-05-20T11:59:14",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1344,8 +1344,8 @@
 		"name": "Dimmer 16.2 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:51",
-		"lasttriggered": "2019-05-11T22:04:11",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1433,8 +1433,8 @@
 		"name": "Dimmer 16.4 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:51",
-		"lasttriggered": "2019-06-01T20:15:01",
-		"timestriggered": 86,
+		"lasttriggered": "2019-06-09T18:47:51",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1469,8 +1469,8 @@
 		"name": "Dimmer Switch 16 reset timer",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-06T20:32:51",
-		"lasttriggered": "2019-06-01T20:15:02",
-		"timestriggered": 405,
+		"lasttriggered": "2019-06-09T18:47:51",
+		"timestriggered": 4,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1494,8 +1494,8 @@
 		"name": "Dimmer Switch 19 on2",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-06-02T19:06:34",
-		"timestriggered": 9,
+		"lasttriggered": "2019-06-11T15:03:24",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1535,8 +1535,8 @@
 		"name": "Dimmer Switch 19 on3",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-06-02T19:06:34",
-		"timestriggered": 7,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1576,8 +1576,8 @@
 		"name": "Dimmer Switch 19 on4",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-08T18:24:04",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1617,8 +1617,8 @@
 		"name": "Dimmer 19.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-25T07:19:24",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1647,8 +1647,8 @@
 		"name": "Dimmer 19.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-25T07:19:26",
-		"timestriggered": 2,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1677,8 +1677,8 @@
 		"name": "Dimmer 19.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-25T07:19:26",
-		"timestriggered": 1,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1706,8 +1706,8 @@
 		"name": "Dimmer 19.2 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-12T19:54:24",
-		"timestriggered": 4,
+		"lasttriggered": "none",
+		"timestriggered": 0,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1795,8 +1795,8 @@
 		"name": "Dimmer 19.4 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-05-31T20:03:54",
-		"timestriggered": 26,
+		"lasttriggered": "2019-06-11T17:36:30",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1831,8 +1831,8 @@
 		"name": "Dimmer Switch 19 reset timer",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-15T20:25:06",
-		"lasttriggered": "2019-06-02T19:06:35",
-		"timestriggered": 282,
+		"lasttriggered": "2019-06-11T19:18:44",
+		"timestriggered": 20,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1856,8 +1856,8 @@
 		"name": "Dimmer Switch 21 on0",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:46",
-		"lasttriggered": "2019-06-02T19:41:00",
-		"timestriggered": 54,
+		"lasttriggered": "2019-06-11T21:58:39",
+		"timestriggered": 13,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1897,8 +1897,8 @@
 		"name": "Dimmer Switch 21 on1",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-30T20:29:50",
-		"timestriggered": 24,
+		"lasttriggered": "2019-06-10T20:19:54",
+		"timestriggered": 4,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1938,8 +1938,8 @@
 		"name": "Dimmer Switch 21 on2",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-30T20:29:47",
-		"timestriggered": 13,
+		"lasttriggered": "2019-06-10T20:19:52",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -1979,8 +1979,8 @@
 		"name": "Dimmer Switch 21 on3",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-30T20:29:48",
-		"timestriggered": 10,
+		"lasttriggered": "2019-06-10T20:19:53",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2020,8 +2020,8 @@
 		"name": "Dimmer Switch 21 on4",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-30T20:29:49",
-		"timestriggered": 4,
+		"lasttriggered": "2019-06-10T20:19:53",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2061,8 +2061,8 @@
 		"name": "Dimmer 21.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-12T10:36:30",
-		"timestriggered": 4,
+		"lasttriggered": "2019-06-11T17:34:09",
+		"timestriggered": 3,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2091,8 +2091,8 @@
 		"name": "Dimmer 21.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-12T10:36:28",
-		"timestriggered": 1,
+		"lasttriggered": "2019-06-10T21:10:47",
+		"timestriggered": 4,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2121,8 +2121,8 @@
 		"name": "Dimmer 21.3 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-05-12T10:36:29",
-		"timestriggered": 1,
+		"lasttriggered": "2019-06-10T21:10:47",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2150,8 +2150,8 @@
 		"name": "Dimmer 21.2 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "none",
-		"timestriggered": 0,
+		"lasttriggered": "2019-06-10T21:10:43",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2239,8 +2239,8 @@
 		"name": "Dimmer 21.4 Lights",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-06-02T19:38:05",
-		"timestriggered": 54,
+		"lasttriggered": "2019-06-11T21:43:04",
+		"timestriggered": 12,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2275,8 +2275,8 @@
 		"name": "Dimmer Switch 21 reset timer",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2018-11-23T20:02:47",
-		"lasttriggered": "2019-06-02T19:41:00",
-		"timestriggered": 328,
+		"lasttriggered": "2019-06-11T21:58:39",
+		"timestriggered": 82,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2296,12 +2296,106 @@
 			}
 		]
 	},
+	"67": {
+		"name": "hs:test",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-06-02T19:52:26",
+		"lasttriggered": "none",
+		"timestriggered": 0,
+		"status": "resourcedeleted",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/28/state/status",
+				"operator": "eq",
+				"value": "5"
+			},
+			{
+				"address": "/sensors/28/state/lastupdated",
+				"operator": "dx"
+			}
+		],
+		"actions": [
+			{
+				"address": "/schedules/1",
+				"method": "PUT",
+				"body": {
+					"status": "enabled"
+				}
+			},
+			{
+				"address": "/schedules/3",
+				"method": "PUT",
+				"body": {
+					"status": "enabled"
+				}
+			}
+		]
+	},
+	"68": {
+		"name": "Tap 30.3",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-06-11T15:01:36",
+		"lasttriggered": "2019-06-11T15:03:22",
+		"timestriggered": 3,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/30/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/30/state/buttonevent",
+				"operator": "eq",
+				"value": "17"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "Fkk819b8v7X81j2"
+				}
+			}
+		]
+	},
+	"69": {
+		"name": "Tap 30.1",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-06-11T15:01:36",
+		"lasttriggered": "2019-06-11T15:07:56",
+		"timestriggered": 14,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/30/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/30/state/buttonevent",
+				"operator": "eq",
+				"value": "34"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"on": false
+				}
+			}
+		]
+	},
 	"70": {
 		"name": "Dimmer Switch 25 on0",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-03-28T16:19:53",
-		"lasttriggered": "2019-05-31T22:08:22",
-		"timestriggered": 24,
+		"lasttriggered": "2019-06-11T21:30:13",
+		"timestriggered": 2,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2341,8 +2435,8 @@
 		"name": "Dimmer Switch 25 on1",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-03-28T16:19:53",
-		"lasttriggered": "2019-06-02T19:41:09",
-		"timestriggered": 21,
+		"lasttriggered": "2019-06-09T20:43:44",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2382,8 +2476,8 @@
 		"name": "Dimmer Switch 25 on2",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-03-28T16:19:53",
-		"lasttriggered": "2019-05-29T21:10:31",
-		"timestriggered": 20,
+		"lasttriggered": "2019-06-09T20:55:08",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2423,8 +2517,8 @@
 		"name": "Dimmer Switch 25 on3",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-03-28T16:19:53",
-		"lasttriggered": "2019-05-30T20:39:36",
-		"timestriggered": 20,
+		"lasttriggered": "2019-06-10T19:39:50",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2464,8 +2558,8 @@
 		"name": "Dimmer Switch 25 on4",
 		"owner": "YOUR_BRIDGE_USERNAME",
 		"created": "2019-03-28T16:19:53",
-		"lasttriggered": "2019-05-30T20:42:19",
-		"timestriggered": 20,
+		"lasttriggered": "2019-06-10T20:46:34",
+		"timestriggered": 1,
 		"status": "enabled",
 		"recycle": true,
 		"conditions": [
@@ -2497,6 +2591,64 @@
 				"method": "PUT",
 				"body": {
 					"status": 0
+				}
+			}
+		]
+	},
+	"75": {
+		"name": "Tap 30.2",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-06-11T15:01:36",
+		"lasttriggered": "2019-06-11T15:03:31",
+		"timestriggered": 5,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/30/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/30/state/buttonevent",
+				"operator": "eq",
+				"value": "16"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "llKNbWONRfaKKtW"
+				}
+			}
+		]
+	},
+	"76": {
+		"name": "Tap 30.4",
+		"owner": "YOUR_BRIDGE_USERNAME",
+		"created": "2019-06-11T15:01:36",
+		"lasttriggered": "2019-06-11T15:07:53",
+		"timestriggered": 5,
+		"status": "enabled",
+		"recycle": false,
+		"conditions": [
+			{
+				"address": "/sensors/30/state/lastupdated",
+				"operator": "dx"
+			},
+			{
+				"address": "/sensors/30/state/buttonevent",
+				"operator": "eq",
+				"value": "18"
+			}
+		],
+		"actions": [
+			{
+				"address": "/groups/5/action",
+				"method": "PUT",
+				"body": {
+					"scene": "k9eQauxDfFW0MSE"
 				}
 			}
 		]
