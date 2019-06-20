@@ -151,10 +151,12 @@
     "moduleFileExtensions": [
       "js",
       "jsx",
-      "json"
+      "json",
+      "peg"
     ],
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
+      "^.+\\.jsx?$": "babel-jest",
+      "\\.peg$": "<rootDir>/pegTransformer.js"
     },
     "setupFiles": [
       "./internals/scripts/CheckBuiltsExist.js"
