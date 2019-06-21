@@ -48,6 +48,15 @@ const getTemplate = store => {
           }
         },
         {
+          label: 'Import from bridge',
+          click: () => {
+            store.dispatch({
+              type: 'home.importBridgeState',
+              payload: { id: getId() }
+            });
+          }
+        },
+        {
           label: 'Save',
           accelerator: 'CmdOrCtrl+S',
           click() {

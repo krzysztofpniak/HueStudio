@@ -8,11 +8,12 @@ import {
   cancel,
   delay,
   take,
-  call
+  call,
+  getContext
 } from 'redux-saga/effects';
 import { asyncAction } from '@k-frame/sagas';
-import { propEq, propOr, find } from 'ramda';
-import { formatWithCursor } from 'prettier';
+import { propEq, propOr, find, values, map, dissoc } from 'ramda';
+import { format, formatWithCursor } from 'prettier';
 import { readFile, writeFile, existsSync } from 'fs';
 import { join } from 'path';
 import { getHuePreferencesPath } from '../../HuePreferences';
@@ -24,6 +25,10 @@ import groups from '../../../resources/responses/groups.json';
 import schedules from '../../../resources/responses/schedules.json';
 import rules from '../../../resources/responses/rules.json';
 import sensors from '../../../resources/responses/sensors.json';
+import ruleToAst from '../../hueScript/ruleToAst';
+import { useEffect } from 'react';
+import scheduleToAst from '../../hueScript/scheduleToAst';
+import { toSource } from '../../hueScript';
 
 const { remote } = require('electron');
 
@@ -39,7 +44,42 @@ function* openFile({ payload: fileName }) {
   try {
     console.log('openFile', fileName);
     const content = yield cps(readFile, fileName, 'utf8');
-    yield put({ type: 'fileLoaded', payload: { content, fileName } });
+    yield put({
+      type: 'fileLoaded',
+      payload: { content, fileName, temp: false }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function* importBridgeState() {
+  try {
+    const hueDataRef = yield getContext('hueDataRef');
+    const hueData = hueDataRef.current;
+
+    const rules = values(hueData.rules);
+    const schedules = values(hueData.schedules);
+    if (rules.length > 0 && schedules.length > 0) {
+      const schedulesAst = map(scheduleToAst, schedules);
+      const rulesAst = map(ruleToAst, rules);
+      const content = format(
+        toSource(
+          { type: 'program', statements: [...schedulesAst, ...rulesAst] },
+          { style: 'object' }
+        )
+      );
+      const fileName = join(
+        getHuePreferencesPath(),
+        `${new Date().valueOf()}.hue`
+      );
+      yield cps(writeFile, fileName, content);
+      //const fileName = 'dupa';
+      yield put({
+        type: 'fileLoaded',
+        payload: { content, fileName, temp: true }
+      });
+    }
   } catch (e) {
     console.error(e);
   }
@@ -132,7 +172,10 @@ function* persistence() {
     ['fileSaved', 'fileCreated', 'fileLoaded', 'setOpenedResources'],
     function*() {
       const { openedResources } = yield select(s => s);
-      store.set('openedResources', openedResources);
+      store.set(
+        'openedResources',
+        map(dissoc('savedContent'), openedResources)
+      );
     }
   );
   yield debounceBy(3000, 'setCodeEditorState', a => a.payload.tabId, function*(
@@ -172,6 +215,7 @@ function* loadResources() {
 function* saga(editorRef) {
   yield takeEvery('newFile', newFile);
   yield takeEvery('openFile', openFile);
+  yield takeEvery('importBridgeState', importBridgeState);
   yield takeEvery('saveFile', saveFile, editorRef);
   yield takeEvery('saveFileAs', saveFileAs);
   yield fork(persistence);

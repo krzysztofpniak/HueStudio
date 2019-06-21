@@ -38,7 +38,7 @@ const reducer = createReducer(
     createPayloadReducer(actions2.setCodeEditorState, ({ tabId, state }) =>
       assocPath(['codeEditorStates', tabId], state)
     ),
-    createPayloadReducer(actions2.fileLoaded, ({ content, fileName }) =>
+    createPayloadReducer(actions2.fileLoaded, ({ content, fileName, temp }) =>
       evolve({
         codeEditorStates: assoc(fileName, content),
         openedResources: compose(
@@ -46,8 +46,8 @@ const reducer = createReducer(
             type: 'file',
             ref: fileName,
             name: basename(fileName),
-            temp: false,
-            savedContent: content
+            temp,
+            savedContent: !temp ? content : ''
           }),
           reject(propEq('ref', fileName))
         ),

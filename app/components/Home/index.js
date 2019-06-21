@@ -7,13 +7,16 @@ import {
   assoc,
   compose,
   cond,
+  evolve,
   filter,
   fromPairs,
   hasPath,
   head,
+  identity,
   ifElse,
   includes,
   indexBy,
+  join,
   map,
   none,
   objOf,
@@ -26,16 +29,18 @@ import {
   reject,
   T,
   toPairs,
-  tryCatch
+  tryCatch,
+  values
 } from 'ramda';
 import NestedList from '../NestedList';
 import AppBar from '../AppBar';
 import styles from '../Home.css';
 import '../splitter.global.css';
-import hueParser from '../../huejs.peg';
+import { parseHue, toSource } from '../../hueScript';
 import store from '../../appSettings';
 import Terminal, { addLine } from '../terminal';
 import ResourceViewer from '../resourceViewer';
+import { format } from 'prettier';
 import {
   createAction,
   createPayloadReducer,
@@ -47,7 +52,7 @@ import {
   usePrevious,
   withScope
 } from '@k-frame/core';
-import { useSaga, useSagaRunner } from '@k-frame/sagas';
+import { useSagaRunner } from '@k-frame/sagas';
 import HSEditor from '../hueScriptEditor';
 import saga, { deploySaga } from './effects';
 import { withStyles } from '@material-ui/core';
@@ -56,6 +61,8 @@ import useDebounce from '../../helpers/useDebounce';
 import getSideBarItems from './getSideBarItems';
 import actions from './actions';
 import reducer from './reducer';
+import ruleToAst from '../../hueScript/ruleToAst';
+import scheduleToAst from '../../hueScript/scheduleToAst';
 
 const filterWithKey = addIndex(filter);
 const mapWithKey = addIndex(map);
@@ -94,12 +101,6 @@ const put = async (url, data) => {
   return r.json();
 };
 
-try {
-  console.log(hueParser.parse('const group = group(2);'));
-} catch (e) {
-  console.error(e);
-}
-
 const baseApiPath = 'api/YOUR_BRIDGE_USERNAME';
 
 const baseApiUrl = `http://192.168.0.13/${baseApiPath}`;
@@ -126,6 +127,7 @@ const RuleEditor = ({
       split="vertical"
       defaultSize={defaultSize}
       onChange={onPanesChange}
+      pane1Style={{ overflow: 'scroll' }}
     >
       <HSEditor
         value={text}
@@ -140,16 +142,6 @@ const RuleEditor = ({
     </SplitPane>
   );
 };
-
-const { parse } = hueParser;
-
-const parseHue = tryCatch(
-  compose(
-    objOf('data'),
-    parse
-  ),
-  objOf('error')
-);
 
 const toErrors = ifElse(
   hasPath(['error', 'location']),
@@ -174,13 +166,35 @@ const Editor = cond([
   [T, always('Open a file or resource')]
 ]);
 
-const normalize = (resourceName, data) =>
+const normalize = (resourceName, data, transform) =>
   fromPairs(
     map(
-      ([id, e]) => [id, assoc('ref', `/${resourceName}/${id}`, e)],
+      ([id, e]) => [
+        id,
+        (transform || identity)(assoc('ref', `/${resourceName}/${id}`, e))
+      ],
       toPairs(data)
     )
   );
+
+const transformRule = r => {
+  const code = {};
+
+  return { ...r, code };
+};
+
+const transformSchedule = s => {
+  const [, , , ...rest] = s.command.address.split('/');
+
+  return evolve(
+    {
+      command: {
+        address: always(`/${join('/', rest)}`)
+      }
+    },
+    s
+  );
+};
 
 const Home = withStaticScope('home')(() => {
   const {
@@ -197,9 +211,6 @@ const Home = withStaticScope('home')(() => {
   } = useKReducer(reducer, actions);
   const editorRef = useRef();
 
-  useSaga(saga, [editorRef]);
-  const { fork } = useSagaRunner();
-
   const text = useMemo(
     () => (codeEditorStates[activeTabId] ? codeEditorStates[activeTabId] : ''),
     [codeEditorStates, activeTabId]
@@ -215,15 +226,27 @@ const Home = withStaticScope('home')(() => {
 
   const hueData = useMemo(
     () => ({
-      rules: normalize('rules', rules.result),
+      rules: normalize('rules', rules.result, transformRule),
       groups: normalize('groups', groups.result),
       scenes: normalize('scenes', scenes.result),
       lights: normalize('lights', lights.result),
-      schedules: normalize('schedules', schedules.result),
+      schedules: normalize('schedules', schedules.result, transformSchedule),
       sensors: normalize('sensors', sensors.result)
     }),
     [rules, groups, scenes, lights, schedules, sensors]
   );
+
+  const hueDataRef = useRef(hueData);
+
+  useEffect(() => {
+    hueDataRef.current = hueData;
+  });
+
+  const { fork } = useSagaRunner({ hueDataRef });
+
+  useEffect(() => {
+    fork(saga, editorRef);
+  }, []);
 
   const sideBarItems = useMemo(() => getSideBarItems(hueData), [hueData]);
 
