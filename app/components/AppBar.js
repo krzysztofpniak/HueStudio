@@ -66,6 +66,7 @@ const DenseAppBar = ({
                     <div style={{ color: t.modified ? 'aqua' : 'white' }}>
                       {t.name.substring(0, 10)}
                       <Button
+                        style={{ minWidth: '30px' }}
                         size="small"
                         onClick={e => {
                           e.stopPropagation();
@@ -82,7 +83,7 @@ const DenseAppBar = ({
             )}
           </Tabs>
           <div style={{ flex: '1' }} />
-          <IconButton to={routes.COUNTER} component={Link} color="inherit">
+          <IconButton to={routes.SETTINGS} component={Link} color="inherit">
             <SettingsIcon />
           </IconButton>
         </Toolbar>

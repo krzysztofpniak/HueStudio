@@ -3,11 +3,11 @@ import { Route } from 'react-router';
 import routes from './constants/routes';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
-import CounterPage from './containers/CounterPage';
+import SettingsPage from './containers/SettingsPage';
 
 export default () => (
   <App>
     <Route path={routes.HOME} exact component={HomePage} />
-    <Route path={routes.COUNTER} component={CounterPage} />
+    <Route path={routes.SETTINGS} component={SettingsPage} />
   </App>
 );
