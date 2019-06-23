@@ -12,10 +12,12 @@ import {
   any,
   prop,
   sortBy,
-  none
+  none,
+  chain,
+  head,
+  nth
 } from 'ramda';
 import SplitPane from 'react-split-pane';
-import styles from '../Home.css';
 import Select from '@material-ui/core/Select/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import Button from '@material-ui/core/Button/Button';
@@ -24,9 +26,13 @@ import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import styles from '../Home.css';
 import Edge from './edge';
 import ScalableGraph from '../scalableGraph';
+import Toolbar from '@material-ui/core/Toolbar';
+
 const ELK = require('elkjs');
+
 const elk = new ELK();
 const mapWithKey = addIndex(map);
 
@@ -288,7 +294,7 @@ const dfs2 = (hueData, v, onVisitNode, onVisitEdge) => {
 const Graph = ({ transform, data }) => (
   <g>
     {mapWithKey(
-      ({ x, y, width, height, name }, key) => (
+      ({ x, y, width, height, name, hasError }, key) => (
         <g transform={`translate(${x},${y})`} key={key}>
           <rect
             x={0}
@@ -297,10 +303,14 @@ const Graph = ({ transform, data }) => (
             height={height}
             rx={4}
             ry={4}
-            style={{ stroke: '#f87d42', strokeWidth: 1, fill: '#fff' }}
+            style={
+              hasError
+                ? { fill: '#f00' }
+                : { stroke: '#f87d42', strokeWidth: 1, fill: '#fff' }
+            }
           />
           <g transform={`scale(${transform.k})`}>
-            <text x={5} y={10} fontSize={8}>
+            <text x={5} y={10} fontSize={8} fill={hasError ? 'white' : 'black'}>
               {name}
             </text>
           </g>
@@ -372,13 +382,23 @@ const sortResources = (a, b) => {
   const [, typeB] = b.ref.split('/');
   if (typeA === 'lights' && typeB === 'groups') {
     return [b, a];
-  } else if (typeA === 'lights' && typeB === 'rules') {
+  }
+  if (typeA === 'lights' && typeB === 'rules') {
     return [b, a];
-  } else if (typeA === 'groups' && typeB === 'rules') {
+  }
+  if (typeA === 'groups' && typeB === 'rules') {
     return [b, a];
-  } else if (typeA === 'sensors' && typeB === 'rules') {
+  }
+  if (typeA === 'sensors' && typeB === 'rules') {
     return [a, b];
-  } else if (typeA === 'rules' && typeB === 'sensors') {
+  }
+  if (typeA === 'rules' && typeB === 'sensors') {
+    return [b, a];
+  }
+  if (typeA === 'schedules' && typeB === 'sensors') {
+    return [a, b];
+  }
+  if (typeA === 'sensors' && typeB === 'schedules') {
     return [b, a];
   }
 
@@ -403,7 +423,7 @@ const ResourceViewer = ({
 
   const [graph, setGraph] = useState(getEmptyGraph());
 
-  const [action, setAction] = useState(null);
+  const [actionIdx, setActionIdx] = useState(0);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -413,15 +433,13 @@ const ResourceViewer = ({
     if (resource) {
       const children = [];
       const edges = [];
-      dfs(
+      dfs2(
         hueData,
         resource,
         a => {
-          console.log(`visiting node ${a.name}`);
           children.push({ ...a, ...tileSize, id: a.ref });
         },
         (a, b) => {
-          console.log(`visiting edge ${a.name} -> ${b.name}`);
           const [x, y] = sortResources(a, b);
           const key = `${x.ref}-${y.ref}`;
           if (none(propEq('id', key), edges)) {
@@ -440,19 +458,23 @@ const ResourceViewer = ({
     }
   }, [hueData]);
 
-  const currentResourceAction = null;
-  useMemo(() => {
-    const a = find(propEq('id', action), actions[resourceType] || []);
+  const currentResourceAction = useMemo(() => {
+    const a = nth(actionIdx, actions[resourceType] || []);
     return a
       ? {
           rest: a.requestCreator(resourceId, resource),
           hs: a.codeCreator(resourceId, resource)
         }
       : null;
-  }, [resourceId, resourceType]);
+  }, [resourceId, resourceType, actionIdx]);
 
   return (
     <div className={classes.root}>
+      {resource && resource.errors.length > 0 && (
+        <AppBar position="static" style={{ color: 'white', background: 'red' }}>
+          <Toolbar>{resource.errors[0]}</Toolbar>
+        </AppBar>
+      )}
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Relations" />
@@ -477,10 +499,13 @@ const ResourceViewer = ({
           {currentResourceAction && (
             <div style={{ padding: '5px' }}>
               <h4>Choose action:</h4>
-              <Select value={action} onChange={e => setAction(e.target.value)}>
-                {map(
-                  a => (
-                    <MenuItem key={a.id} value={a.id}>
+              <Select
+                value={actionIdx}
+                onChange={e => setActionIdx(e.target.value)}
+              >
+                {mapWithKey(
+                  (a, idx) => (
+                    <MenuItem key={a.id} value={idx}>
                       {a.name}
                     </MenuItem>
                   ),
