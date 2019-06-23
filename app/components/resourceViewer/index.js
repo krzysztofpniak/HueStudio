@@ -169,33 +169,8 @@ const tileSize = {
   height: 30
 };
 
-const getAdjacents = (hueData, v) => {
-  const [, type, id] = v.ref.split('/');
-
-  if (type === 'lights') {
-    return filter(g => includes(id, g.lights), values(hueData.groups));
-  } else if (type === 'groups') {
-    return [
-      ...filter(
-        r => any(a => startsWith(v.ref, a.address), r.actions),
-        values(hueData.rules)
-      ),
-      ...map(lId => hueData.lights[lId], v.lights)
-    ];
-  } else if (type === 'rules') {
-    return filter(
-      s => s,
-      map(c => {
-        const [, , sId] = c.address.split('/');
-        return hueData.sensors[sId];
-      }, v.conditions)
-    );
-  }
-
-  return [];
-};
-
 const dfs = (hueData, v, onVisitNode, onVisitEdge) => {
+  const { edges, getAdjacents } = hueData;
   const s = [];
   const discovered = {};
   s.push(v);
