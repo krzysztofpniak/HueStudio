@@ -1,177 +1,110 @@
 {
-	"1": {
-		"name": "Go to sleep start",
-		"description": "Trigger go to sleep start",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/2/state",
-			"body": {
-				"flag": true
-			},
-			"method": "PUT"
-		},
-		"localtime": "2017-08-22T00:00:00",
-		"time": "2017-08-21T22:00:00",
-		"created": "2017-08-21T21:09:02",
-		"status": "disabled",
-		"autodelete": false,
-		"recycle": true
-	},
-	"2": {
-		"name": "Dimmer Switch 19 Reset",
-		"description": "Resets dimmer switch scene cycler",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/20/state",
-			"body": {
-				"status": 0
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:00:10",
-		"time": "PT00:00:10",
-		"created": "2019-05-07T20:32:54",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2019-05-07T20:32:54",
-		"recycle": true
-	},
-	"3": {
-		"name": "Pobudka 1",
-		"description": "L_04_tmH7I_start wake up",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/7/state",
-			"body": {
-				"flag": true
-			},
-			"method": "PUT"
-		},
-		"localtime": "W124/T08:50:00",
-		"time": "W124/T06:50:00",
-		"created": "2017-11-23T07:22:24",
-		"status": "disabled",
-		"recycle": true
-	},
-	"4": {
-		"name": "L_04_tmH7I",
-		"description": "L_04_tmH7I_trigger end scene",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/groups/0/action",
-			"body": {
-				"scene": "uFvs2j6Jz8WmKGd"
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:01:00",
-		"time": "PT00:01:00",
-		"created": "2017-11-23T07:22:24",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2017-11-23T07:22:24",
-		"recycle": true
-	},
-	"5": {
-		"name": "Dimmer Switch 8 Reset",
-		"description": "Resets dimmer switch scene cycler",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/15/state",
-			"body": {
-				"status": 0
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:00:10",
-		"time": "PT00:00:10",
-		"created": "2019-05-07T20:06:14",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2019-05-07T20:06:14",
-		"recycle": true
-	},
-	"6": {
-		"name": "Dimmer Switch 21 Reset",
-		"description": "Resets dimmer switch scene cycler",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/22/state",
-			"body": {
-				"status": 0
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:00:10",
-		"time": "PT00:00:10",
-		"created": "2019-05-08T02:52:27",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2019-05-08T02:52:27",
-		"recycle": true
-	},
-	"7": {
-		"name": "Dimmer Switch 16 Reset",
-		"description": "Resets dimmer switch scene cycler",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/17/state",
-			"body": {
-				"status": 0
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:00:10",
-		"time": "PT00:00:10",
-		"created": "2019-05-07T12:31:03",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2019-05-07T12:31:03",
-		"recycle": true
-	},
-	"8": {
-		"name": "Salon",
-		"description": "MyRoutine",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/23/state",
-			"body": {
-				"flag": true
-			},
-			"method": "PUT"
-		},
-		"localtime": "2019-01-22T18:00:00A00:30:00",
-		"time": "2019-01-22T17:00:00A00:30:00",
-		"created": "2019-01-21T20:13:14",
-		"status": "disabled",
-		"autodelete": false,
-		"recycle": true
-	},
-	"9": {
-		"name": "Sypialnia",
-		"description": "MyRoutine",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/24/state",
-			"body": {
-				"flag": true
-			},
-			"method": "PUT"
-		},
-		"localtime": "2019-01-22T22:01:00A00:15:00",
-		"time": "2019-01-22T21:01:00A00:15:00",
-		"created": "2019-01-21T20:13:15",
-		"status": "disabled",
-		"autodelete": false,
-		"recycle": true
-	},
-	"10": {
-		"name": "Dimmer Switch 25 Reset",
-		"description": "Resets dimmer switch scene cycler",
-		"command": {
-			"address": "/api/YOUR_BRIDGE_USERNAME/sensors/26/state",
-			"body": {
-				"status": 0
-			},
-			"method": "PUT"
-		},
-		"localtime": "PT00:00:10",
-		"time": "PT00:00:10",
-		"created": "2019-05-07T20:32:50",
-		"status": "disabled",
-		"autodelete": false,
-		"starttime": "2019-05-07T20:32:50",
-		"recycle": true
-	}
+  "2": {
+    "name": "Dimmer Switch 19 Reset",
+    "description": "Resets dimmer switch scene cycler",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/sensors/20/state",
+      "body": {
+        "status": 0
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-06-22T21:27:37",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-06-22T21:27:37",
+    "recycle": true
+  },
+  "3": {
+    "name": "hs:schedule",
+    "description": "",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/groups/5/action",
+      "body": {
+        "on": false
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-05-12T20:00:17",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-06-12T21:56:18",
+    "recycle": false
+  },
+  "4": {
+    "name": "Dimmer Switch 8 Reset",
+    "description": "Resets dimmer switch scene cycler",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/sensors/29/state",
+      "body": {
+        "status": 0
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-06-22T21:30:46",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-06-22T21:30:46",
+    "recycle": true
+  },
+  "6": {
+    "name": "Dimmer Switch 21 Reset",
+    "description": "Resets dimmer switch scene cycler",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/sensors/22/state",
+      "body": {
+        "status": 0
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-06-22T22:13:31",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-06-22T22:13:31",
+    "recycle": true
+  },
+  "7": {
+    "name": "Dimmer Switch 16 Reset",
+    "description": "Resets dimmer switch scene cycler",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/sensors/17/state",
+      "body": {
+        "status": 0
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-06-22T21:01:50",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-06-22T21:01:50",
+    "recycle": true
+  },
+  "10": {
+    "name": "Dimmer Switch 25 Reset",
+    "description": "Resets dimmer switch scene cycler",
+    "command": {
+      "address": "/api/YOUR_BRIDGE_USERNAME/sensors/26/state",
+      "body": {
+        "status": 0
+      },
+      "method": "PUT"
+    },
+    "localtime": "PT00:00:10",
+    "time": "PT00:00:10",
+    "created": "2019-05-08T17:23:34",
+    "status": "disabled",
+    "autodelete": false,
+    "starttime": "2019-05-08T17:23:34",
+    "recycle": true
+  }
 }
