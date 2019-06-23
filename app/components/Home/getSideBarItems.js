@@ -1,4 +1,4 @@
-import { keys, map, toPairs } from 'ramda';
+import { any, keys, map, toPairs, values, compose } from 'ramda';
 import LightIcon from '@material-ui/icons/WbIncandescent';
 import NoteIcon from '@material-ui/icons/Remove';
 import GroupIcon from '@material-ui/icons/GroupWork';
@@ -6,6 +6,13 @@ import SceneIcon from '@material-ui/icons/Panorama';
 import TimerIcon from '@material-ui/icons/Timer';
 import TransformIcon from '@material-ui/icons/Transform';
 import InputIcon from '@material-ui/icons/Input';
+
+const hasAnyError = r => r.errors.length > 0;
+
+const hasAnySubError = compose(
+  any(hasAnyError),
+  values
+);
 
 const getSideBarItems = ({
   lights,
@@ -59,10 +66,12 @@ const getSideBarItems = ({
     name: `Schedules (${keys(schedules).length})`,
     icon: TimerIcon,
     childIcon: NoteIcon,
+    hasError: hasAnySubError(schedules),
     items: map(
       ([a, b]) => ({
         id: `/schedules/${a}`,
-        name: `#${a} ${b.name}`
+        name: `#${a} ${b.name}`,
+        hasError: hasAnyError(b)
       }),
       toPairs(schedules)
     )
@@ -72,10 +81,12 @@ const getSideBarItems = ({
     name: `Rules (${keys(rules).length})`,
     icon: TransformIcon,
     childIcon: NoteIcon,
+    hasError: hasAnySubError(rules),
     items: map(
       ([a, b]) => ({
         id: `/rules/${a}`,
-        name: `#${a} ${b.name}`
+        name: `#${a} ${b.name}`,
+        hasError: hasAnyError(b)
       }),
       toPairs(rules)
     )

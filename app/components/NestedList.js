@@ -40,7 +40,10 @@ const NestedList = ({ classes, items, onItemDoubleClick }) => {
             <ListItemIcon>
               {i.icon ? createElement(i.icon) : <InboxIcon />}
             </ListItemIcon>
-            <ListItemText primary={i.name} />
+            <ListItemText
+              primary={i.name}
+              style={{ color: i.hasError ? 'red' : undefined }}
+            />
             {opened[i.id] ? <ExpandLess /> : <ExpandMore />}
           </ListItem>,
           <Collapse
@@ -65,7 +68,10 @@ const NestedList = ({ classes, items, onItemDoubleClick }) => {
                         <StarBorder />
                       )}
                     </ListItemIcon>
-                    <ListItemText primary={c.name} />
+                    <ListItemText
+                      primary={c.name}
+                      style={{ color: c.hasError ? 'red' : undefined }}
+                    />
                   </ListItem>
                 ),
                 i.items
