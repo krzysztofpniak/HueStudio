@@ -1,1150 +1,906 @@
 {
-	"BbDjmShiEuOd8PC": {
-		"name": "Recover room 2",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": true,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "RfRB2_r02_h01"
-		},
-		"picture": "",
-		"lastupdated": "2018-07-03T21:37:25",
-		"version": 2
-	},
-	"4oWvuZNCU1dtskT": {
-		"name": "Jezioro wiosną",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "mGaHS_r02"
-		},
-		"picture": "",
-		"lastupdated": "2018-05-31T09:03:51",
-		"version": 2
-	},
-	"5c8yrWtZ42fP5s0": {
-		"name": "Relaks",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "82jtI_r05_d01"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:28",
-		"version": 2
-	},
-	"mWNGohYU7AhozNa": {
-		"name": "Czytanie",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "xZ6GK_r05_d02"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"j8c76GNmqd-eieZ": {
-		"name": "Koncentracja",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "656gk_r05_d03"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"hj8LAmUABRIwjBv": {
-		"name": "Energia",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "YfdTc_r05_d04"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"llKNbWONRfaKKtW": {
-		"name": "Jasne",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "xQUub_r05_d05"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"Fkk819b8v7X81j2": {
-		"name": "Przyćmione",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "ZFUUY_r05_d06"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"k9eQauxDfFW0MSE": {
-		"name": "Lampka nocna",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "EodaG_r05_d07"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"axH5QEEekzLSKse": {
-		"name": "Zachód słońca na sawannie",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "8YWVo_r05_d15"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"SFFOmd1EMoXZc1f": {
-		"name": "Tropikalny zmierzch",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "UYqto_r05_d16"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:29",
-		"version": 2
-	},
-	"2bwqC-i0ogfInVI": {
-		"name": "Relaks",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "6eKok_r02_d01"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:35",
-		"version": 2
-	},
-	"z5AIFa3at7bOOJl": {
-		"name": "Czytanie",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "HYiMX_r02_d02"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:35",
-		"version": 2
-	},
-	"Ete5gFZ1C5QVVcO": {
-		"name": "Koncentracja",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "A1Zzz_r02_d03"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:29",
-		"version": 2
-	},
-	"rjPCsC0uQPpzYjP": {
-		"name": "Energia",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "4zOLo_r02_d04"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:28",
-		"version": 2
-	},
-	"37MCDOYsDbA3KAz": {
-		"name": "Jasne",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "1X78w_r02_d05"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:41",
-		"version": 2
-	},
-	"wnbUmT8sZOyQjia": {
-		"name": "Przyciemnione",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "1zt7H_r02_d06"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:34",
-		"version": 2
-	},
-	"UdYGlmBcG0mFzNs": {
-		"name": "Lampka nocna",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "JW8sb_r02_d07"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:43",
-		"version": 2
-	},
-	"0jseHfVGF0dYHjV": {
-		"name": "Zachód słońca na sawannie",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "3QHUF_r02_d15"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:40",
-		"version": 2
-	},
-	"gjlXAOo7-ziopTP": {
-		"name": "Tropikalny zmierzch",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "HwUzn_r02_d16"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:38",
-		"version": 2
-	},
-	"pAhjMlX5bPCxZRg": {
-		"name": "Zorza polarna",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "V2P72_r02_d17"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:37",
-		"version": 2
-	},
-	"2F0mSy6Ot9A9HXR": {
-		"name": "Wiosenny kwiat",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "U2JgZ_r02_d18"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:40",
-		"version": 2
-	},
-	"HNqe36iYU7GYFh6": {
-		"name": "Serial",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "6yvEn_r02_d99"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:37",
-		"version": 2
-	},
-	"KparI7HdRMF2FZu": {
-		"name": "Relaks",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "NeZa4_r06_d01"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:25",
-		"version": 2
-	},
-	"H051YK08PKe7nvX": {
-		"name": "Morze",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "jb5IB_r02"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:42",
-		"version": 2
-	},
-	"-aSxEMh4zXma2NT": {
-		"name": "Serial jasniej",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "94Ay0_r02_d99"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:37",
-		"version": 2
-	},
-	"QV50YFxvP7wwZFs": {
-		"name": "Czytanie",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "cKu06_r06_d02"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:26",
-		"version": 2
-	},
-	"Fk2a3QpYXerdM6v": {
-		"name": "Burito",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "X9uNZ_r02"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T17:11:42",
-		"version": 2
-	},
-	"Q3KJ5c7d6QA1ozj": {
-		"name": "Hopla",
-		"type": "GroupScene",
-		"group": "2",
-		"lights": [
-			"1",
-			"2",
-			"3",
-			"4"
-		],
-		"owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "1h5RS_r02_d99"
-		},
-		"picture": "",
-		"lastupdated": "2017-11-13T18:19:55",
-		"version": 2
-	},
-	"esOIASdWGx-Y88s": {
-		"name": "Zorza polarna",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "TrGGf_r05_d17"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:30",
-		"version": 2
-	},
-	"qTAcHGZsCBMYbuK": {
-		"name": "Wiosenny kwiat",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "R9nlW_r05_d18"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-09T18:58:30",
-		"version": 2
-	},
-	"FESsvIDdx0z8cCc": {
-		"name": "Recover room 5",
-		"type": "GroupScene",
-		"group": "5",
-		"lights": [
-			"5",
-			"6",
-			"7"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": true,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "rk65y_r05_h01"
-		},
-		"picture": "",
-		"lastupdated": "2018-11-11T18:11:21",
-		"version": 2
-	},
-	"vwEkUP1FH9KAEps": {
-		"name": "Koncentracja",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "cgqEf_r06_d03"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:26",
-		"version": 2
-	},
-	"MrqIgXzAL9FDcSW": {
-		"name": "Energia",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "SFN5L_r06_d04"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:26",
-		"version": 2
-	},
-	"cXF6bSUkMcr9lDY": {
-		"name": "Jasne",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "EiulV_r06_d05"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:27",
-		"version": 2
-	},
-	"eSkzZ05Xi4SLgFw": {
-		"name": "Przyćmione",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "nfHmy_r06_d06"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:27",
-		"version": 2
-	},
-	"REpbqC7cIQqtS5i": {
-		"name": "Lampka nocna",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "AU1uW_r06_d07"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:27",
-		"version": 2
-	},
-	"GYdcYxdrTYjGeot": {
-		"name": "Zachód słońca na sawannie",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "WJdLC_r06_d15"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:28",
-		"version": 2
-	},
-	"PxjDtSG0sbwEtIe": {
-		"name": "Tropikalny zmierzch",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "jZ3Cj_r06_d16"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:28",
-		"version": 2
-	},
-	"z8oDZG7mxzqGnbc": {
-		"name": "Zorza polarna",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "ijjiX_r06_d17"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:28",
-		"version": 2
-	},
-	"0YJvN0Ud6dvJoci": {
-		"name": "Wiosenny kwiat",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "cLBva_r06_d18"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:29",
-		"version": 2
-	},
-	"DtBN89eufJvaEC7": {
-		"name": "Salon jasno",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "4h4I5_r06_d99"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:27",
-		"version": 2
-	},
-	"7WEeWb6FYt9dbqW": {
-		"name": "Chill w salonie",
-		"type": "GroupScene",
-		"group": "6",
-		"lights": [
-			"8",
-			"9",
-			"10",
-			"11",
-			"12",
-			"17"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "wvmwS_r06_d99"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:57:28",
-		"version": 2
-	},
-	"ANXyOuuqetQLPyz": {
-		"name": "Relaks",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "wdJes_r07_d01"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:33",
-		"version": 2
-	},
-	"jTQaGdX42bXuN0V": {
-		"name": "Czytanie",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "5lLSK_r07_d02"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:34",
-		"version": 2
-	},
-	"0Rb6VCwaqAaVAo8": {
-		"name": "Koncentracja",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "ywWYa_r07_d03"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:34",
-		"version": 2
-	},
-	"7DIFIONmtq79efE": {
-		"name": "Energia",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": true,
-		"appdata": {
-			"version": 1,
-			"data": "IJ4dq_r07_d04"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:34",
-		"version": 2
-	},
-	"Gl3tFiwuXpwPYVo": {
-		"name": "Jasne",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "SW20O_r07_d05"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:34",
-		"version": 2
-	},
-	"xey22AQIuObTLbO": {
-		"name": "Przyćmione",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "ouXRp_r07_d06"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	},
-	"seDH04qIprOqi5D": {
-		"name": "Lampka nocna",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "sfzmj_r07_d07"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	},
-	"N45UrLYCwvlR6F8": {
-		"name": "Zachód słońca na sawannie",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "vvh0q_r07_d15"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	},
-	"S06PPphwJSMVMpJ": {
-		"name": "Tropikalny zmierzch",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "qZwg4_r07_d16"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	},
-	"-mN3kPLUoPGFLGp": {
-		"name": "Zorza polarna",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "RJvor_r07_d17"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	},
-	"1fgqVv8X5bPBmwb": {
-		"name": "Wiosenny kwiat",
-		"type": "GroupScene",
-		"group": "7",
-		"lights": [
-			"13",
-			"14",
-			"15",
-			"16"
-		],
-		"owner": "YOUR_BRIDGE_USERNAME",
-		"recycle": false,
-		"locked": false,
-		"appdata": {
-			"version": 1,
-			"data": "tHt0D_r07_d18"
-		},
-		"picture": "",
-		"lastupdated": "2019-03-28T16:17:35",
-		"version": 2
-	}
+  "BbDjmShiEuOd8PC": {
+    "name": "Recover room 2",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": true,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "RfRB2_r02_h01"
+    },
+    "picture": "",
+    "lastupdated": "2018-07-03T21:37:25",
+    "version": 2
+  },
+  "4oWvuZNCU1dtskT": {
+    "name": "Jezioro wiosną",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "mGaHS_r02"
+    },
+    "picture": "",
+    "lastupdated": "2018-05-31T09:03:51",
+    "version": 2
+  },
+  "5c8yrWtZ42fP5s0": {
+    "name": "Relaks",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "82jtI_r05_d01"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:28",
+    "version": 2
+  },
+  "mWNGohYU7AhozNa": {
+    "name": "Czytanie",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "xZ6GK_r05_d02"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "j8c76GNmqd-eieZ": {
+    "name": "Koncentracja",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "656gk_r05_d03"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "hj8LAmUABRIwjBv": {
+    "name": "Energia",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "YfdTc_r05_d04"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "llKNbWONRfaKKtW": {
+    "name": "Jasne",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "xQUub_r05_d05"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "Fkk819b8v7X81j2": {
+    "name": "Przyćmione",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "ZFUUY_r05_d06"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "k9eQauxDfFW0MSE": {
+    "name": "Lampka nocna",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "EodaG_r05_d07"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "axH5QEEekzLSKse": {
+    "name": "Zachód słońca na sawannie",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "8YWVo_r05_d15"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "SFFOmd1EMoXZc1f": {
+    "name": "Tropikalny zmierzch",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "UYqto_r05_d16"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:29",
+    "version": 2
+  },
+  "2bwqC-i0ogfInVI": {
+    "name": "Relaks",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "6eKok_r02_d01"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:35",
+    "version": 2
+  },
+  "z5AIFa3at7bOOJl": {
+    "name": "Czytanie",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "HYiMX_r02_d02"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:35",
+    "version": 2
+  },
+  "Ete5gFZ1C5QVVcO": {
+    "name": "Koncentracja",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "A1Zzz_r02_d03"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:29",
+    "version": 2
+  },
+  "rjPCsC0uQPpzYjP": {
+    "name": "Energia",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "4zOLo_r02_d04"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:28",
+    "version": 2
+  },
+  "37MCDOYsDbA3KAz": {
+    "name": "Jasne",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "1X78w_r02_d05"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:41",
+    "version": 2
+  },
+  "wnbUmT8sZOyQjia": {
+    "name": "Przyciemnione",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "1zt7H_r02_d06"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:34",
+    "version": 2
+  },
+  "UdYGlmBcG0mFzNs": {
+    "name": "Lampka nocna",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "JW8sb_r02_d07"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:43",
+    "version": 2
+  },
+  "0jseHfVGF0dYHjV": {
+    "name": "Zachód słońca na sawannie",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "3QHUF_r02_d15"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:40",
+    "version": 2
+  },
+  "gjlXAOo7-ziopTP": {
+    "name": "Tropikalny zmierzch",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "HwUzn_r02_d16"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:38",
+    "version": 2
+  },
+  "pAhjMlX5bPCxZRg": {
+    "name": "Zorza polarna",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "V2P72_r02_d17"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:37",
+    "version": 2
+  },
+  "2F0mSy6Ot9A9HXR": {
+    "name": "Wiosenny kwiat",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "U2JgZ_r02_d18"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:40",
+    "version": 2
+  },
+  "rBl61JxNEUlV93S": {
+    "name": "late night",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "38627218-23d8-4391-a161-f14277ad76f9",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "TcbJ0_r06_d99"
+    },
+    "picture": "",
+    "lastupdated": "2019-06-04T22:32:03",
+    "version": 2
+  },
+  "KrzM6czsiXMLjmw": {
+    "name": "Go to sleep start",
+    "type": "LightScene",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": true,
+    "locked": false,
+    "appdata": {},
+    "picture": "",
+    "lastupdated": "2019-06-15T09:16:43",
+    "version": 2
+  },
+  "HNqe36iYU7GYFh6": {
+    "name": "Serial",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "6yvEn_r02_d99"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:37",
+    "version": 2
+  },
+  "KparI7HdRMF2FZu": {
+    "name": "Relaks",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "NeZa4_r06_d01"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:25",
+    "version": 2
+  },
+  "H051YK08PKe7nvX": {
+    "name": "Morze",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "jb5IB_r02"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:42",
+    "version": 2
+  },
+  "-aSxEMh4zXma2NT": {
+    "name": "Serial jasniej",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "94Ay0_r02_d99"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:37",
+    "version": 2
+  },
+  "7xCyWUJXEA1vJv4": {
+    "name": "Go to sleep end",
+    "type": "LightScene",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": true,
+    "locked": false,
+    "appdata": {},
+    "picture": "",
+    "lastupdated": "2019-06-15T09:16:43",
+    "version": 2
+  },
+  "QV50YFxvP7wwZFs": {
+    "name": "Czytanie",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "cKu06_r06_d02"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:26",
+    "version": 2
+  },
+  "Fk2a3QpYXerdM6v": {
+    "name": "Burito",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "X9uNZ_r02"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T17:11:42",
+    "version": 2
+  },
+  "Q3KJ5c7d6QA1ozj": {
+    "name": "Hopla",
+    "type": "GroupScene",
+    "group": "2",
+    "lights": ["1", "2", "3", "4"],
+    "owner": "3e531992-16bb-467f-9ccb-6d75a4dcd805",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "1h5RS_r02_d99"
+    },
+    "picture": "",
+    "lastupdated": "2017-11-13T18:19:55",
+    "version": 2
+  },
+  "esOIASdWGx-Y88s": {
+    "name": "Zorza polarna",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "TrGGf_r05_d17"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:30",
+    "version": 2
+  },
+  "qTAcHGZsCBMYbuK": {
+    "name": "Wiosenny kwiat",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "R9nlW_r05_d18"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-09T18:58:30",
+    "version": 2
+  },
+  "FESsvIDdx0z8cCc": {
+    "name": "Recover room 5",
+    "type": "GroupScene",
+    "group": "5",
+    "lights": ["5", "6", "7"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": true,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "rk65y_r05_h01"
+    },
+    "picture": "",
+    "lastupdated": "2018-11-11T18:11:21",
+    "version": 2
+  },
+  "vwEkUP1FH9KAEps": {
+    "name": "Koncentracja",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "cgqEf_r06_d03"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:26",
+    "version": 2
+  },
+  "MrqIgXzAL9FDcSW": {
+    "name": "Energia",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "SFN5L_r06_d04"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:26",
+    "version": 2
+  },
+  "cXF6bSUkMcr9lDY": {
+    "name": "Jasne",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "EiulV_r06_d05"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:27",
+    "version": 2
+  },
+  "eSkzZ05Xi4SLgFw": {
+    "name": "Przyćmione",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "nfHmy_r06_d06"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:27",
+    "version": 2
+  },
+  "REpbqC7cIQqtS5i": {
+    "name": "Lampka nocna",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "AU1uW_r06_d07"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:27",
+    "version": 2
+  },
+  "GYdcYxdrTYjGeot": {
+    "name": "Zachód słońca na sawannie",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "WJdLC_r06_d15"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:28",
+    "version": 2
+  },
+  "PxjDtSG0sbwEtIe": {
+    "name": "Tropikalny zmierzch",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "jZ3Cj_r06_d16"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:28",
+    "version": 2
+  },
+  "z8oDZG7mxzqGnbc": {
+    "name": "Zorza polarna",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "ijjiX_r06_d17"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:28",
+    "version": 2
+  },
+  "0YJvN0Ud6dvJoci": {
+    "name": "Wiosenny kwiat",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "cLBva_r06_d18"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:29",
+    "version": 2
+  },
+  "DtBN89eufJvaEC7": {
+    "name": "Salon jasno",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "4h4I5_r06_d99"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:27",
+    "version": 2
+  },
+  "7WEeWb6FYt9dbqW": {
+    "name": "Chill w salonie",
+    "type": "GroupScene",
+    "group": "6",
+    "lights": ["8", "9", "10", "11", "12", "17"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "wvmwS_r06_d99"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:57:28",
+    "version": 2
+  },
+  "ANXyOuuqetQLPyz": {
+    "name": "Relaks",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "wdJes_r07_d01"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:33",
+    "version": 2
+  },
+  "jTQaGdX42bXuN0V": {
+    "name": "Czytanie",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "5lLSK_r07_d02"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:34",
+    "version": 2
+  },
+  "0Rb6VCwaqAaVAo8": {
+    "name": "Koncentracja",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "ywWYa_r07_d03"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:34",
+    "version": 2
+  },
+  "7DIFIONmtq79efE": {
+    "name": "Energia",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": true,
+    "appdata": {
+      "version": 1,
+      "data": "IJ4dq_r07_d04"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:34",
+    "version": 2
+  },
+  "Gl3tFiwuXpwPYVo": {
+    "name": "Jasne",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "SW20O_r07_d05"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:34",
+    "version": 2
+  },
+  "xey22AQIuObTLbO": {
+    "name": "Przyćmione",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "ouXRp_r07_d06"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  },
+  "seDH04qIprOqi5D": {
+    "name": "Lampka nocna",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "sfzmj_r07_d07"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  },
+  "N45UrLYCwvlR6F8": {
+    "name": "Zachód słońca na sawannie",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "vvh0q_r07_d15"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  },
+  "S06PPphwJSMVMpJ": {
+    "name": "Tropikalny zmierzch",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "qZwg4_r07_d16"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  },
+  "-mN3kPLUoPGFLGp": {
+    "name": "Zorza polarna",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "RJvor_r07_d17"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  },
+  "1fgqVv8X5bPBmwb": {
+    "name": "Wiosenny kwiat",
+    "type": "GroupScene",
+    "group": "7",
+    "lights": ["13", "14", "15", "16"],
+    "owner": "YOUR_BRIDGE_USERNAME",
+    "recycle": false,
+    "locked": false,
+    "appdata": {
+      "version": 1,
+      "data": "tHt0D_r07_d18"
+    },
+    "picture": "",
+    "lastupdated": "2019-03-28T16:17:35",
+    "version": 2
+  }
 }
