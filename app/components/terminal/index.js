@@ -104,3 +104,7 @@ const Terminal = withScope(() => {
 });
 
 export default Terminal;
+
+const addLine = actions.addLine;
+
+export { addLine };
