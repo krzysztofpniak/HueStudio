@@ -5,6 +5,7 @@ import {
   addIndex,
   always,
   assoc,
+  chain,
   compose,
   cond,
   evolve,
@@ -63,6 +64,7 @@ import actions from './actions';
 import reducer from './reducer';
 import ruleToAst from '../../hueScript/ruleToAst';
 import scheduleToAst from '../../hueScript/scheduleToAst';
+import useHueData from './useHueData';
 
 const filterWithKey = addIndex(filter);
 const mapWithKey = addIndex(map);
@@ -166,36 +168,6 @@ const Editor = cond([
   [T, always('Open a file or resource')]
 ]);
 
-const normalize = (resourceName, data, transform) =>
-  fromPairs(
-    map(
-      ([id, e]) => [
-        id,
-        (transform || identity)(assoc('ref', `/${resourceName}/${id}`, e))
-      ],
-      toPairs(data)
-    )
-  );
-
-const transformRule = r => {
-  const code = {};
-
-  return { ...r, code };
-};
-
-const transformSchedule = s => {
-  const [, , , ...rest] = s.command.address.split('/');
-
-  return evolve(
-    {
-      command: {
-        address: always(`/${join('/', rest)}`)
-      }
-    },
-    s
-  );
-};
-
 const Home = withStaticScope('home')(() => {
   const {
     codeEditorStates,
@@ -207,7 +179,7 @@ const Home = withStaticScope('home')(() => {
     addTerminalLine,
     metaPressed,
     toggleEditorMode,
-    data: { lights, rules, schedules, scenes, groups, sensors }
+    data
   } = useKReducer(reducer, actions);
   const editorRef = useRef();
 
@@ -224,17 +196,7 @@ const Home = withStaticScope('home')(() => {
 
   const errors = useMemo(() => toErrors(parsed), [parsed]);
 
-  const hueData = useMemo(
-    () => ({
-      rules: normalize('rules', rules.result, transformRule),
-      groups: normalize('groups', groups.result),
-      scenes: normalize('scenes', scenes.result),
-      lights: normalize('lights', lights.result),
-      schedules: normalize('schedules', schedules.result, transformSchedule),
-      sensors: normalize('sensors', sensors.result)
-    }),
-    [rules, groups, scenes, lights, schedules, sensors]
-  );
+  const hueData = useHueData(data);
 
   const hueDataRef = useRef(hueData);
 
