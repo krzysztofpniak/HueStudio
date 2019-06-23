@@ -203,14 +203,39 @@ const dfs = (hueData, v, onVisitNode, onVisitEdge) => {
     v = s.pop();
     if (!discovered[v.ref]) {
       discovered[v.ref] = true;
-      //console.log('visiting', v.name);
       onVisitNode(v);
-      const adjacentEdges = getAdjacents(hueData, v);
+      const adjacentEdges = getAdjacents(v);
       for (let i = 0; i < adjacentEdges.length; i++) {
         const e = adjacentEdges[i];
-        onVisitEdge(v, e);
-        s.push(e);
+        if (e.node) {
+          onVisitEdge(v, e.node);
+          s.push(e.node);
+        } else {
+          console.error('not found', e.ref);
+        }
       }
+    }
+  }
+};
+
+const dfs2 = (hueData, v, onVisitNode, onVisitEdge) => {
+  const { getAdjacents } = hueData;
+  onVisitNode(v);
+  const adjacentEdges = getAdjacents(v);
+  for (let i = 0; i < adjacentEdges.length; i++) {
+    const e = adjacentEdges[i];
+    if (e.node) {
+      onVisitEdge(v, e.node);
+      onVisitNode(e.node);
+    } else {
+      const fakeNode = {
+        ref: e.ref,
+        name: `Not found: ${e.ref}`,
+        hasError: true
+      };
+      onVisitEdge(v, fakeNode);
+      onVisitNode(fakeNode);
+      console.error('not found', v.ref, e.ref);
     }
   }
 };
