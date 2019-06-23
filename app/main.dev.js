@@ -88,7 +88,8 @@ const init = async () => {
     width,
     height,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
 
