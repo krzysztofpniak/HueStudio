@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { createElement, useEffect, useMemo, useState } from 'react';
 import {
   find,
   map,
@@ -136,6 +136,44 @@ const actions = {
         }
       }),
       codeCreator: (resourceId, data) => `group(${resourceId}).alert('select');`
+    },
+    {
+      id: 'setScene',
+      name: 'Set Scene',
+      editor: ({ value, onChange, hueData, resourceId, resourceType }) => {
+        const options = useMemo(
+          () =>
+            map(
+              ([key, s]) => ({ id: key, name: s.name }),
+              filter(
+                ([k, s]) => s.group === resourceId,
+                toPairs(hueData.scenes)
+              )
+            ),
+          [hueData]
+        );
+        return (
+          <Select value={value} onChange={e => onChange(e.target.value)}>
+            {mapWithKey(
+              o => (
+                <MenuItem key={o.id} value={o.id}>
+                  {o.name}
+                </MenuItem>
+              ),
+              options
+            )}
+          </Select>
+        );
+      },
+      requestCreator: (resourceId, { editorValue }) => ({
+        url: `/groups/${resourceId}/action`,
+        method: 'PUT',
+        body: {
+          scene: editorValue
+        }
+      }),
+      codeCreator: (resourceId, { editorValue }) =>
+        `group(${resourceId}).setScene('${editorValue}');`
     }
   ],
   schedules: [
@@ -420,6 +458,7 @@ const ResourceViewer = ({
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [editorValue, setEditorValue] = useState('');
 
   const [graph, setGraph] = useState(getEmptyGraph());
 
@@ -458,15 +497,48 @@ const ResourceViewer = ({
     }
   }, [hueData]);
 
-  const currentResourceAction = useMemo(() => {
+  const currentResourceActionInt = useMemo(() => {
     const a = nth(actionIdx, actions[resourceType] || []);
+    return a;
+  }, [resourceType, actionIdx]);
+
+  const actionParamEditor = useMemo(() => {
+    return currentResourceActionInt.editor
+      ? createElement(currentResourceActionInt.editor, {
+          hueData,
+          resourceType,
+          resourceId,
+          value: editorValue,
+          onChange: setEditorValue
+        })
+      : null;
+  }, [
+    resourceType,
+    resourceId,
+    hueData,
+    currentResourceActionInt,
+    editorValue
+  ]);
+
+  const currentResourceAction = useMemo(() => {
+    const a = currentResourceActionInt;
     return a
       ? {
-          rest: a.requestCreator(resourceId, resource),
-          hs: a.codeCreator(resourceId, resource)
+          rest: a.requestCreator(resourceId, {
+            resourceType,
+            hueData,
+            editorValue
+          }),
+          hs: a.codeCreator(resourceId, { resourceType, hueData, editorValue })
         }
       : null;
-  }, [resourceId, resourceType, actionIdx]);
+  }, [
+    resourceId,
+    resourceType,
+    currentResourceActionInt,
+    hueData,
+    editorValue
+  ]);
 
   return (
     <div className={classes.root}>
@@ -512,6 +584,7 @@ const ResourceViewer = ({
                   actions[resourceType]
                 )}
               </Select>
+              {actionParamEditor}
               <h4>REST</h4>
               <pre className={styles.codeSimple}>
                 {JSON.stringify(currentResourceAction.rest, null, 2)}
