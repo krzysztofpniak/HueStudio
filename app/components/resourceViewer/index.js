@@ -66,7 +66,7 @@ const actions = {
           alert: 'select'
         }
       }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).alert('select);`
+      codeCreator: (resourceId, data) => `light(${resourceId}).alert('select');`
     },
     {
       id: 'effect1',
@@ -79,7 +79,7 @@ const actions = {
         }
       }),
       codeCreator: (resourceId, data) =>
-        `light(${resourceId}).effect('colorloop);`
+        `light(${resourceId}).effect('colorloop');`
     },
     {
       id: 'effect2',
@@ -91,7 +91,7 @@ const actions = {
           effect: 'none'
         }
       }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).effect('none);`
+      codeCreator: (resourceId, data) => `light(${resourceId}).effect('none');`
     }
   ],
   groups: [
@@ -130,6 +130,76 @@ const actions = {
         }
       }),
       codeCreator: (resourceId, data) => `group(${resourceId}).alert('select');`
+    }
+  ],
+  schedules: [
+    {
+      id: 'enable',
+      name: 'Enable',
+      requestCreator: (resourceId, data) => ({
+        url: `/schedules/${resourceId}`,
+        method: 'PUT',
+        body: {
+          status: 'enabled'
+        }
+      }),
+      codeCreator: resourceId => `schedule(${resourceId}).enable();`
+    },
+    {
+      id: 'disable',
+      name: 'Disable',
+      requestCreator: (resourceId, data) => ({
+        url: `/schedules/${resourceId}`,
+        method: 'PUT',
+        body: {
+          status: 'disabled'
+        }
+      }),
+      codeCreator: resourceId => `schedule(${resourceId}).disable();`
+    },
+    {
+      id: 'delete',
+      name: 'Delete',
+      requestCreator: (resourceId, data) => ({
+        url: `/schedules/${resourceId}`,
+        method: 'DELETE'
+      }),
+      codeCreator: resourceId => `schedule(${resourceId}).delete();`
+    }
+  ],
+  rules: [
+    {
+      id: 'enable',
+      name: 'Enable',
+      requestCreator: (resourceId, data) => ({
+        url: `/rules/${resourceId}`,
+        method: 'PUT',
+        body: {
+          status: 'enabled'
+        }
+      }),
+      codeCreator: resourceId => `rule(${resourceId}).enable();`
+    },
+    {
+      id: 'disable',
+      name: 'Disable',
+      requestCreator: (resourceId, data) => ({
+        url: `/rules/${resourceId}`,
+        method: 'PUT',
+        body: {
+          status: 'disabled'
+        }
+      }),
+      codeCreator: resourceId => `rule(${resourceId}).disable();`
+    },
+    {
+      id: 'delete',
+      name: 'Delete',
+      requestCreator: (resourceId, data) => ({
+        url: `/rules/${resourceId}`,
+        method: 'DELETE'
+      }),
+      codeCreator: resourceId => `rule(${resourceId}).delete();`
     }
   ]
 };
