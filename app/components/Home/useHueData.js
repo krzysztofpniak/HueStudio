@@ -13,6 +13,7 @@ import {
   map,
   mergeRight,
   prop,
+  propEq,
   toPairs,
   uniqBy,
   values
@@ -64,6 +65,10 @@ const getEdges = hueData => {
     g => map(l => [`/lights/${l}`, g.ref], g.lights),
     values(hueData.groups)
   );
+  const scenesEdges = map(
+    s => [s.ref, `/groups/${s.group}`],
+    filter(propEq('type', 'GroupScene'), values(hueData.scenes))
+  );
   const schedulesEdges = map(
     s => [s.ref, getRefFromAddress(s.command.address)],
     values(hueData.schedules)
@@ -79,6 +84,7 @@ const getEdges = hueData => {
 
   return [
     ...groupsEdges,
+    ...scenesEdges,
     ...schedulesEdges,
     ...rulesConditionsEdges,
     ...rulesActionsEdges
