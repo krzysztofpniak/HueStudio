@@ -287,6 +287,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-split-pane": "^0.1.87",
+    "react-spring": "^8.0.25",
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
