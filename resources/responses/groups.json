@@ -1,26 +1,4 @@
 {
-  "1": {
-    "name": "SML",
-    "lights": ["3", "2", "1", "4"],
-    "sensors": [],
-    "type": "LightGroup",
-    "state": {
-      "all_on": false,
-      "any_on": false
-    },
-    "recycle": false,
-    "action": {
-      "on": false,
-      "bri": 25,
-      "hue": 6291,
-      "sat": 251,
-      "effect": "none",
-      "xy": [0.5612, 0.4042],
-      "ct": 500,
-      "alert": "select",
-      "colormode": "xy"
-    }
-  },
   "2": {
     "name": "Sypialnia",
     "lights": ["2", "3", "4", "1"],
@@ -34,67 +12,12 @@
     "class": "Bedroom",
     "action": {
       "on": false,
-      "bri": 25,
+      "bri": 91,
       "hue": 15000,
       "sat": 254,
       "effect": "none",
-      "xy": [0.561, 0.4042],
+      "xy": [0.6202, 0.3588],
       "ct": 367,
-      "alert": "select",
-      "colormode": "xy"
-    }
-  },
-  "3": {
-    "name": "Hue Camera",
-    "lights": ["3", "1", "4", "2"],
-    "sensors": [],
-    "type": "LightGroup",
-    "state": {
-      "all_on": false,
-      "any_on": false
-    },
-    "recycle": false,
-    "action": {
-      "on": false,
-      "bri": 25,
-      "hue": 6291,
-      "sat": 251,
-      "effect": "none",
-      "xy": [0.5612, 0.4042],
-      "ct": 500,
-      "alert": "select",
-      "colormode": "xy"
-    }
-  },
-  "4": {
-    "name": "Obszar rozrywki 1",
-    "lights": ["4", "3"],
-    "sensors": [],
-    "type": "Entertainment",
-    "state": {
-      "all_on": false,
-      "any_on": false
-    },
-    "recycle": false,
-    "class": "TV",
-    "stream": {
-      "proxymode": "auto",
-      "proxynode": "/lights/4",
-      "active": false,
-      "owner": null
-    },
-    "locations": {
-      "3": [-0.2, 0.41, 0],
-      "4": [0.29, 0.09, 0]
-    },
-    "action": {
-      "on": false,
-      "bri": 25,
-      "hue": 6291,
-      "sat": 251,
-      "effect": "none",
-      "xy": [0.5612, 0.4042],
-      "ct": 500,
       "alert": "select",
       "colormode": "xy"
     }
@@ -113,26 +36,26 @@
     "action": {
       "on": false,
       "bri": 254,
-      "ct": 343,
+      "ct": 366,
       "alert": "select",
       "colormode": "ct"
     }
   },
   "6": {
     "name": "Salon",
-    "lights": ["8", "9", "10", "11", "12", "17"],
+    "lights": ["18", "8", "9", "10", "11", "12", "17"],
     "sensors": [],
     "type": "Room",
     "state": {
-      "all_on": false,
-      "any_on": false
+      "all_on": true,
+      "any_on": true
     },
     "recycle": false,
     "class": "Living room",
     "action": {
-      "on": false,
+      "on": true,
       "bri": 254,
-      "ct": 417,
+      "ct": 366,
       "alert": "select",
       "colormode": "ct"
     }
