@@ -4,7 +4,8 @@ import {
   getLinearScale,
   getLinearScaleXFromTransform,
   invert,
-  getLinearScaleYFromTransform
+  getLinearScaleYFromTransform,
+  getLinearFactor
 } from './helpers';
 
 const dataSelector = props => props.data;
@@ -32,6 +33,12 @@ const scaleXSelector = createSelector(
   widthSelector,
   domainXSelector,
   (width, domain) => getLinearScale([0, width], domain)
+);
+
+const factorSelector = createSelector(
+  widthSelector,
+  domainXSelector,
+  (width, domain) => getLinearFactor([0, width], domain)
 );
 
 const viewportScaleXSelector = createSelector(
@@ -89,9 +96,10 @@ const viewportScaleYSelector = createSelector(
 const scaledNodesSelector = createSelector(
   viewportScaleXSelector,
   viewportScaleYSelector,
+  factorSelector,
   dataSelector,
   rescaleSelector,
-  (sX, sY, data, rescale) => rescale(sX, sY, data)
+  (sX, sY, factor, data, rescale) => rescale({ sX, sY, factor }, data)
 );
 
 const previewScaleXSelector = createSelector(
@@ -111,9 +119,10 @@ const previewScaleYSelector = createSelector(
 const previewNodesSelector = createSelector(
   previewScaleXSelector,
   previewScaleYSelector,
+  factorSelector,
   dataSelector,
   rescaleSelector,
-  (sX, sY, data, rescale) => rescale(sX, sY, data)
+  (sX, sY, factor, data, rescale) => rescale({ sX, sY, factor }, data)
 );
 
 const previewHeightSelector = createSelector(

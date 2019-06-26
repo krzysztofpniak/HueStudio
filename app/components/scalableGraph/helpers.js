@@ -27,11 +27,21 @@ const getLinearScale = curry(([y1, y2], [x1, x2]) => {
   return fn;
 });
 
+const getLinearFactor = curry(([y1, y2], [x1, x2]) => {
+  const a = (y2 - y1) / (x2 - x1);
+  const fn = function(x) {
+    return a * x;
+  };
+  fn.invert = x => x / a;
+  return fn;
+});
+
 export {
   invertX,
   invertY,
   invert,
   getLinearScaleXFromTransform,
   getLinearScaleYFromTransform,
-  getLinearScale
+  getLinearScale,
+  getLinearFactor
 };
