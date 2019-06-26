@@ -14,43 +14,22 @@ const ruleActionsToAst = actions => {
 
     if (typeId === 'groups') {
       return reduce(
-        (p, c) =>
-          callNode(
-            'set',
-            'Group',
-            p,
-            callNode(c, 'Prop'),
-            stringNode(action.body[c])
-          ),
-        callNode('group', 'Group', numberNode(id)),
+        (p, c) => callNode('set', p, callNode(c), stringNode(action.body[c])),
+        callNode('group', numberNode(id)),
         keys(action.body)
       );
     }
     if (typeId === 'sensors') {
       return reduce(
-        (p, c) =>
-          callNode(
-            'set',
-            'Sensor',
-            p,
-            callNode(c, 'Prop'),
-            stringNode(action.body[c])
-          ),
-        callNode('sensor', 'Sensor', numberNode(id)),
+        (p, c) => callNode('set', p, callNode(c), stringNode(action.body[c])),
+        callNode('sensor', numberNode(id)),
         keys(action.body)
       );
     }
     if (typeId === 'schedules') {
       return reduce(
-        (p, c) =>
-          callNode(
-            'set',
-            'Schedule',
-            p,
-            callNode(c, 'Prop'),
-            stringNode(action.body[c])
-          ),
-        callNode('schedule', 'Schedule', numberNode(id)),
+        (p, c) => callNode('set', p, callNode(c), stringNode(action.body[c])),
+        callNode('schedule', numberNode(id)),
         keys(action.body)
       );
     }
@@ -62,7 +41,7 @@ const ruleToAst = rule => {
 
   const actions = ruleActionsToAst(rule.actions);
 
-  return callNode('handle', 'Unknown', buttonTrigger, handlerNode(actions));
+  return callNode('handle', buttonTrigger, handlerNode(actions));
 };
 
 export default ruleToAst;

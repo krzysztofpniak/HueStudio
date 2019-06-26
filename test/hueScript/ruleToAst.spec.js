@@ -54,22 +54,16 @@ describe('ruleToAst', () => {
     expect(ruleToAst(rule1)).toEqual(
       callNode(
         'handle',
-        'Unknown',
         callNode(
           'initial_press',
-          'ButtonEvent',
           callNode(
             'button1',
-            'EventSource',
             callNode('dimmer', 'DimmerSensor', numberNode(25))
           )
         ),
         handlerNode([
-          callNode('on', 'Group', callNode('group', 'Group', numberNode(7))),
-          assignNode(
-            callNode('sensor', 'Sensor', numberNode(26)),
-            numberNode(1)
-          )
+          callNode('on', callNode('group', numberNode(7))),
+          assignNode(callNode('sensor', numberNode(26)), numberNode(1))
         ])
       )
     );

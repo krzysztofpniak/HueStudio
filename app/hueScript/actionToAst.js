@@ -20,9 +20,8 @@ const actionToAst = action => {
   const name = names[typeId];
 
   return reduce(
-    (p, c) =>
-      callNode('set', type, p, callNode(c, 'Prop'), stringNode(action.body[c])),
-    callNode(name, type, numberNode(id)),
+    (p, c) => callNode('set', p, callNode(c), stringNode(action.body[c])),
+    callNode(name, numberNode(id)),
     keys(action.body)
   );
 };

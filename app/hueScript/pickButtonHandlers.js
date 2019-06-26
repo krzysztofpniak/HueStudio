@@ -20,12 +20,7 @@ const pickButtonHandlers = conditions => {
     return [
       callNode(
         eventName,
-        'ButtonEvent',
-        callNode(
-          buttonId,
-          'EventSource',
-          callNode('dimmer', 'DimmerSensor', numberNode(+id))
-        )
+        callNode(buttonId, callNode('dimmer', numberNode(+id)))
       ),
       rest
     ];
@@ -41,15 +36,7 @@ const pickButtonHandlers = conditions => {
     );
 
     return [
-      callNode(
-        'change',
-        'StateChangeEvent',
-        callNode(
-          prop,
-          'EventSource',
-          callNode('sensor', 'Sensor', numberNode(+id))
-        )
-      ),
+      callNode('change', callNode(prop, callNode('sensor', numberNode(+id)))),
       rest
     ];
   }
@@ -66,19 +53,14 @@ const pickButtonHandlers = conditions => {
     return [
       callNode(
         'delayedChange',
-        'StateChangeEvent',
-        callNode(
-          prop,
-          'EventSource',
-          callNode('sensor', 'Sensor', numberNode(+id))
-        ),
+        callNode(prop, callNode('sensor', numberNode(+id))),
         stringNode(ddxCondition.value)
       ),
       rest
     ];
   }
 
-  return [callNode('watchTruth', 'StateChangeEvent'), []];
+  return [callNode('watchTruth'), []];
 
   throw { message: 'strange rule' };
 };

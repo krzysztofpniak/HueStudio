@@ -10,7 +10,6 @@ import actionToAst from './actionToAst';
 const scheduleToAst = schedule => {
   return callNode(
     'schedule',
-    'Test',
     handlerNode([actionToAst(schedule.command)]),
     stringNode(schedule.localtime)
   );

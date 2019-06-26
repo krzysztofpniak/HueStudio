@@ -7,32 +7,22 @@ import {
 
 const a = callNode(
   'short_release',
-  'Light',
   mcallNode(
     'button1',
-    'Light',
-    mcallNode('dimmer', 'Dimmer', numberNode(1), numberNode(2)),
+    mcallNode('dimmer', numberNode(1), numberNode(2)),
     numberNode(3)
   ),
   numberNode(4)
 );
 
-const b = callNode(
-  'short_release',
-  'Light',
-  mcallNode('button1', 'Light', mcallNode('dimmer', 'Dimmer'))
-);
+const b = callNode('short_release', mcallNode('button1', mcallNode('dimmer')));
 
-const c = callNode(
-  'short_release',
-  'Light',
-  callNode('button1', 'Light', callNode('dimmer', 'Dimmer'))
-);
+const c = callNode('short_release', callNode('button1', callNode('dimmer')));
 
 const d = callNode(
   'short_release',
   'Light',
-  mcallNode('button1', 'Light', callNode('dimmer', 'Dimmer', numberNode(12)))
+  mcallNode('button1', 'Light', callNode('dimmer', numberNode(12)))
 );
 
 describe('toSource', () => {

@@ -1,3 +1,5 @@
+import { map, cond, identity, T, is } from 'ramda';
+
 const numberNode = value => ({
   type: 'literal',
   name: 'number',
@@ -12,11 +14,13 @@ const stringNode = value => ({
   value: value
 });
 
-const callNode = (name, cls, ...args) => ({
+const callNode = (name, ...args) => ({
   type: 'call',
   name,
-  cls,
-  args
+  args: map(
+    cond([[is(Number), numberNode], [is(String), stringNode], [T, identity]]),
+    args
+  )
 });
 
 const mcallNode = (name, cls, ...args) => ({
