@@ -4,7 +4,7 @@
 }
 
 start
-  = s:statements _ {return {statements: s, vars};}
+  = s:statements _ {return {root: {type: 'program', statements: s}, vars};}
 
 statements
   = s:statement _ ss:statements {return [s, ...ss];}
