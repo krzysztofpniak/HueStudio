@@ -128,19 +128,6 @@ const useHueData = data => {
     edges
   ]);
 
-  /*const z = map(
-    r =>
-      assoc(
-        'errors',
-        map(
-          a => `Reference to not existing resource: ${a.ref}`,
-          uniqBy(prop('ref'), filter(a => !a.node, getAdjacents(r)))
-        ),
-        r
-      ),
-    chain(values, values(hueData))
-  );*/
-
   const hueDataWithErrors = useMemo(
     () =>
       map(
