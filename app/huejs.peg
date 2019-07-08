@@ -96,10 +96,18 @@ arg
   / h:handler {return {type: 'handler', ...h, location: location()};}
 
 handler
-  = "(" _ ")" _ "=>" _ "{" _ s:statements _ "}"
+  = "(" a:inputArgs? ")" _ "=>" _ s:handlerBody
   {
-    return s;
+    return {argNames: a || [], body: s};
   }
+
+handlerBody
+  = "{" _ s:statements _ "}" {return s;}
+  / s:fme {return [s];}
+
+inputArgs
+  = a:identifier _ "," _ as:inputArgs {return [a, ...as];}
+  / a:identifier {return [a];}
 
 fme
   = x:memberExpression
