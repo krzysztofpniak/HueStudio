@@ -20,7 +20,6 @@ statement
       location: x.location,
       value: c,
       readOnly: true,
-      cls: c.cls
     };
 
     vars[x.text] = newC;
@@ -40,7 +39,6 @@ letStatement
       location: x.location,
       value: v,
       readOnly: false,
-      cls: 'Sensor'
     };
 
     vars[x.text] = newC;
@@ -50,7 +48,6 @@ letStatement
       name: x,
       value: v,
       readOnly: true,
-      cls: 'Sensor'
     };
   }
 
@@ -93,10 +90,10 @@ args
 
 arg
   = f:fme {return {...f, location: location()};}
-  / n:number {return {type: 'literal', cls: 'number', name: 'number', value: n, location: location()};}
-  / t:timePattern {return {type: 'timePattern', cls: 'TimePattern', name: 'timePattern', value: t, location: location()}}
-  / a:literal {return {type: 'literal', cls: 'string', value: a, location: location()};}
-  / h:handler {return {type: 'handler', cls: 'Handler', value: h, location: location()};}
+  / n:number {return {type: 'literal', name: 'number', value: n, location: location()};}
+  / t:timePattern {return {type: 'timePattern', name: 'timePattern', value: t, location: location()}}
+  / a:literal {return {type: 'literal', value: a, location: location()};}
+  / h:handler {return {type: 'handler', ...h, location: location()};}
 
 handler
   = "(" _ ")" _ "=>" _ "{" _ s:statements _ "}"
@@ -119,7 +116,7 @@ memberExpression
   / i:f {return [i];}
 
 boolExpression
-  = (fme / number) _ boolOperator _ (fme / number) {return {cls: 'Bool', location: location()}}
+  = left:(fme / number) _ boolOperator _ right:(fme / number) {return {left, right, location: location()}}
   / fme
 
 boolOperator

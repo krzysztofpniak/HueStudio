@@ -16,11 +16,11 @@ const parseHue = tryCatch(
 
 const isMethodCall = (node, style) =>
   style === 'keep'
-    ? node.args && node.args.length > 0 && node.args[0].type === 'mcall'
+    ? node.args && node.args.length > 0 && node.args[node.args.length - 1].mcall
     : style === 'object'
     ? node.args &&
       node.args.length > 0 &&
-      (node.args[0].type === 'mcall' || node.args[0].type === 'call')
+      !node.args[node.args.length - 1].mcall
     : style === 'strictObject';
 
 const defaultToSourceOptions = {
@@ -28,7 +28,7 @@ const defaultToSourceOptions = {
 };
 
 const toSource = (node, options = defaultToSourceOptions) => {
-  if (node.type === 'call' || node.type === 'mcall') {
+  if (node.type === 'call') {
     const [member, ...rest] = isMethodCall(node, options.style)
       ? node.args
       : [null, ...node.args];
