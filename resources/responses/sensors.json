@@ -1,923 +1,900 @@
 {
-	"1": {
-		"state": {
-			"daylight": true,
-			"lastupdated": "2019-06-11T03:07:00"
-		},
-		"config": {
-			"on": true,
-			"configured": true,
-			"sunriseoffset": 30,
-			"sunsetoffset": -30
-		},
-		"name": "Daylight",
-		"type": "Daylight",
-		"modelid": "PHDL00",
-		"manufacturername": "Philips",
-		"swversion": "1.0"
-	},
-	"3": {
-		"state": {
-			"presence": true,
-			"lastupdated": "2019-05-07T17:54:06"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "HomeAway",
-		"type": "CLIPPresence",
-		"modelid": "HOMEAWAY",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "L_01_n5JVh",
-		"recycle": false
-	},
-	"8": {
-		"state": {
-			"buttonevent": 4002,
-			"lastupdated": "2019-06-10T20:54:23"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true,
-			"battery": 99,
-			"reachable": true,
-			"pending": []
-		},
-		"name": "Dimmer sypialnia",
-		"type": "ZLLSwitch",
-		"modelid": "RWL021",
-		"manufacturername": "Philips",
-		"productname": "Hue dimmer switch",
-		"diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
-		"swversion": "5.45.1.17846",
-		"uniqueid": "00:17:88:01:02:e2:00:33-02-fc00",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 1000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 1001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 1002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 1003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 2000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 2001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 2002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 2003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 3000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 3001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 3002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 3003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 4000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 4001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 4002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 4003,
-							"eventtype": "long_release"
-						}
-					]
-				}
-			]
-		}
-	},
-	"11": {
-		"state": {
-			"temperature": 2704,
-			"lastupdated": "2019-06-11T17:46:36"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": "2019-03-31T12:41:23"
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"alert": "none",
-			"ledindication": false,
-			"usertest": false,
-			"pending": []
-		},
-		"name": "Hue temperature sensor 1",
-		"type": "ZLLTemperature",
-		"modelid": "SML001",
-		"manufacturername": "Philips",
-		"productname": "Hue temperature sensor",
-		"swversion": "6.1.1.27575",
-		"uniqueid": "00:17:88:01:03:28:b6:67-02-0402",
-		"capabilities": {
-			"certified": true,
-			"primary": false
-		}
-	},
-	"12": {
-		"state": {
-			"presence": false,
-			"lastupdated": "2019-05-26T10:03:16"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": "2019-03-31T12:41:23"
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"alert": "none",
-			"ledindication": false,
-			"usertest": false,
-			"sensitivity": 2,
-			"sensitivitymax": 2,
-			"pending": []
-		},
-		"name": "czujnik Krzysztof",
-		"type": "ZLLPresence",
-		"modelid": "SML001",
-		"manufacturername": "Philips",
-		"productname": "Hue motion sensor",
-		"swversion": "6.1.1.27575",
-		"uniqueid": "00:17:88:01:03:28:b6:67-02-0406",
-		"capabilities": {
-			"certified": true,
-			"primary": true
-		}
-	},
-	"13": {
-		"state": {
-			"lightlevel": 0,
-			"dark": true,
-			"daylight": false,
-			"lastupdated": "2019-06-11T17:44:59"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": "2019-03-31T12:41:23"
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"alert": "none",
-			"tholddark": 19112,
-			"tholdoffset": 7000,
-			"ledindication": false,
-			"usertest": false,
-			"pending": []
-		},
-		"name": "Hue ambient light sensor 1",
-		"type": "ZLLLightLevel",
-		"modelid": "SML001",
-		"manufacturername": "Philips",
-		"productname": "Hue ambient light sensor",
-		"swversion": "6.1.1.27575",
-		"uniqueid": "00:17:88:01:03:28:b6:67-02-0400",
-		"capabilities": {
-			"certified": true,
-			"primary": false
-		}
-	},
-	"14": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-11T15:07:56"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "MotionSensor 12.Companion",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHA_STATE",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "MotionSensor 12.Companion",
-		"recycle": true
-	},
-	"16": {
-		"state": {
-			"buttonevent": 4002,
-			"lastupdated": "2019-06-09T18:47:51"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"pending": []
-		},
-		"name": "przełącznik Przedpokój",
-		"type": "ZLLSwitch",
-		"modelid": "RWL021",
-		"manufacturername": "Philips",
-		"productname": "Hue dimmer switch",
-		"diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
-		"swversion": "5.45.1.17846",
-		"uniqueid": "00:17:88:01:03:c9:3a:04-02-fc00",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 1000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 1001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 1002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 1003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 2000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 2001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 2002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 2003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 3000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 3001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 3002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 3003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 4000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 4001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 4002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 4003,
-							"eventtype": "long_release"
-						}
-					]
-				}
-			]
-		}
-	},
-	"17": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-09T18:48:01"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 16 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
-	"19": {
-		"state": {
-			"buttonevent": 4002,
-			"lastupdated": "2019-06-11T17:36:30"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"pending": []
-		},
-		"name": "Dimmer salon",
-		"type": "ZLLSwitch",
-		"modelid": "RWL021",
-		"manufacturername": "Philips",
-		"productname": "Hue dimmer switch",
-		"diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
-		"swversion": "5.45.1.17846",
-		"uniqueid": "00:17:88:01:02:1a:40:b9-02-fc00",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 1000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 1001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 1002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 1003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 2000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 2001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 2002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 2003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 3000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 3001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 3002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 3003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 4000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 4001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 4002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 4003,
-							"eventtype": "long_release"
-						}
-					]
-				}
-			]
-		}
-	},
-	"20": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-11T17:36:40"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 19 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
-	"21": {
-		"state": {
-			"buttonevent": 3002,
-			"lastupdated": "2019-06-11T17:34:09"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"pending": []
-		},
-		"name": "przełącznik Salon",
-		"type": "ZLLSwitch",
-		"modelid": "RWL021",
-		"manufacturername": "Philips",
-		"productname": "Hue dimmer switch",
-		"diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
-		"swversion": "5.45.1.17846",
-		"uniqueid": "00:17:88:01:04:e4:72:a5-02-fc00",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 1000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 1001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 1002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 1003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 2000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 2001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 2002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 2003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 3000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 3001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 3002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 3003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 4000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 4001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 4002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 4003,
-							"eventtype": "long_release"
-						}
-					]
-				}
-			]
-		}
-	},
-	"22": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-11T17:34:19"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 21 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
-	"25": {
-		"state": {
-			"buttonevent": 4002,
-			"lastupdated": "2019-06-10T20:50:33"
-		},
-		"swupdate": {
-			"state": "noupdates",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true,
-			"battery": 100,
-			"reachable": true,
-			"pending": []
-		},
-		"name": "przełącznik Studio",
-		"type": "ZLLSwitch",
-		"modelid": "RWL021",
-		"manufacturername": "Philips",
-		"productname": "Hue dimmer switch",
-		"diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
-		"swversion": "5.45.1.17846",
-		"uniqueid": "00:17:88:01:04:e4:73:c8-02-fc00",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 1000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 1001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 1002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 1003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 2000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 2001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 2002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 2003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 3000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 3001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 3002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 3003,
-							"eventtype": "long_release"
-						}
-					]
-				},
-				{
-					"repeatintervals": [
-						800
-					],
-					"events": [
-						{
-							"buttonevent": 4000,
-							"eventtype": "initial_press"
-						},
-						{
-							"buttonevent": 4001,
-							"eventtype": "repeat"
-						},
-						{
-							"buttonevent": 4002,
-							"eventtype": "short_release"
-						},
-						{
-							"buttonevent": 4003,
-							"eventtype": "long_release"
-						}
-					]
-				}
-			]
-		}
-	},
-	"26": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-10T20:46:34"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 25 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
-	"27": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-05-08T06:16:45"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "HL-S00-5000",
-		"type": "CLIPGenericStatus",
-		"modelid": "HL_STATE",
-		"manufacturername": "LapApps, LLC",
-		"swversion": "1.0",
-		"uniqueid": "4c:61:70:41:70:70:73-HL-00-00",
-		"recycle": false
-	},
-	"29": {
-		"state": {
-			"status": 0,
-			"lastupdated": "2019-06-10T20:54:33"
-		},
-		"config": {
-			"on": true,
-			"reachable": true
-		},
-		"name": "Dimmer Switch 8 SceneCycle",
-		"type": "CLIPGenericStatus",
-		"modelid": "PHWA01",
-		"manufacturername": "Philips",
-		"swversion": "1.0",
-		"uniqueid": "WA0001",
-		"recycle": true
-	},
-	"30": {
-		"state": {
-			"buttonevent": 34,
-			"lastupdated": "2019-06-11T15:07:56"
-		},
-		"swupdate": {
-			"state": "notupdatable",
-			"lastinstall": null
-		},
-		"config": {
-			"on": true
-		},
-		"name": "przełącznik Przedpokój",
-		"type": "ZGPSwitch",
-		"modelid": "ZGPSWITCH",
-		"manufacturername": "Philips",
-		"productname": "Hue tap switch",
-		"diversityid": "d8cde5d5-0eef-4b95-b0f0-71ddd2952af4",
-		"uniqueid": "00:00:00:00:00:44:a1:2f-f2",
-		"capabilities": {
-			"certified": true,
-			"primary": true,
-			"inputs": [
-				{
-					"repeatintervals": [],
-					"events": [
-						{
-							"buttonevent": 34,
-							"eventtype": "initial_press"
-						}
-					]
-				},
-				{
-					"repeatintervals": [],
-					"events": [
-						{
-							"buttonevent": 16,
-							"eventtype": "initial_press"
-						}
-					]
-				},
-				{
-					"repeatintervals": [],
-					"events": [
-						{
-							"buttonevent": 17,
-							"eventtype": "initial_press"
-						}
-					]
-				},
-				{
-					"repeatintervals": [],
-					"events": [
-						{
-							"buttonevent": 18,
-							"eventtype": "initial_press"
-						}
-					]
-				}
-			]
-		}
-	}
+  "1": {
+    "state": {
+      "daylight": false,
+      "lastupdated": "2019-07-03T18:40:00"
+    },
+    "config": {
+      "on": true,
+      "configured": true,
+      "sunriseoffset": 30,
+      "sunsetoffset": -30
+    },
+    "name": "Daylight",
+    "type": "Daylight",
+    "modelid": "PHDL00",
+    "manufacturername": "Philips",
+    "swversion": "1.0"
+  },
+  "3": {
+    "state": {
+      "presence": true,
+      "lastupdated": "2019-05-07T17:54:06"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "HomeAway",
+    "type": "CLIPPresence",
+    "modelid": "HOMEAWAY",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "L_01_n5JVh",
+    "recycle": false
+  },
+  "8": {
+    "state": {
+      "buttonevent": 1002,
+      "lastupdated": "2019-07-03T19:49:16"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true,
+      "battery": 90,
+      "reachable": true,
+      "pending": []
+    },
+    "name": "Dimmer sypialnia",
+    "type": "ZLLSwitch",
+    "modelid": "RWL021",
+    "manufacturername": "Philips",
+    "productname": "Hue dimmer switch",
+    "diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
+    "swversion": "5.45.1.17846",
+    "uniqueid": "00:17:88:01:02:e2:00:33-02-fc00",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 1000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 1001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 1002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 1003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 2000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 2001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 2002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 2003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 3000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 3001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 3002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 3003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 4000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 4001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 4002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 4003,
+              "eventtype": "long_release"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "11": {
+    "state": {
+      "temperature": 2634,
+      "lastupdated": "2019-07-03T20:26:40"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "2019-03-31T12:41:23"
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "alert": "none",
+      "ledindication": false,
+      "usertest": false,
+      "pending": []
+    },
+    "name": "Hue temperature sensor 1",
+    "type": "ZLLTemperature",
+    "modelid": "SML001",
+    "manufacturername": "Philips",
+    "productname": "Hue temperature sensor",
+    "swversion": "6.1.1.27575",
+    "uniqueid": "00:17:88:01:03:28:b6:67-02-0402",
+    "capabilities": {
+      "certified": true,
+      "primary": false
+    }
+  },
+  "12": {
+    "state": {
+      "presence": false,
+      "lastupdated": "2019-06-25T20:00:32"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "2019-03-31T12:41:23"
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "alert": "none",
+      "ledindication": false,
+      "usertest": false,
+      "sensitivity": 2,
+      "sensitivitymax": 2,
+      "pending": []
+    },
+    "name": "czujnik Krzysztof",
+    "type": "ZLLPresence",
+    "modelid": "SML001",
+    "manufacturername": "Philips",
+    "productname": "Hue motion sensor",
+    "swversion": "6.1.1.27575",
+    "uniqueid": "00:17:88:01:03:28:b6:67-02-0406",
+    "capabilities": {
+      "certified": true,
+      "primary": true
+    }
+  },
+  "13": {
+    "state": {
+      "lightlevel": 0,
+      "dark": true,
+      "daylight": false,
+      "lastupdated": "2019-07-03T20:26:19"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "2019-03-31T12:41:23"
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "alert": "none",
+      "tholddark": 19112,
+      "tholdoffset": 7000,
+      "ledindication": false,
+      "usertest": false,
+      "pending": []
+    },
+    "name": "Hue ambient light sensor 1",
+    "type": "ZLLLightLevel",
+    "modelid": "SML001",
+    "manufacturername": "Philips",
+    "productname": "Hue ambient light sensor",
+    "swversion": "6.1.1.27575",
+    "uniqueid": "00:17:88:01:03:28:b6:67-02-0400",
+    "capabilities": {
+      "certified": true,
+      "primary": false
+    }
+  },
+  "14": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-07-03T20:27:41"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "MotionSensor 12.Companion",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHA_STATE",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "MotionSensor 12.Companion",
+    "recycle": true
+  },
+  "16": {
+    "state": {
+      "buttonevent": 4002,
+      "lastupdated": "2019-07-03T04:59:00"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "pending": []
+    },
+    "name": "przełącznik Przedpokój",
+    "type": "ZLLSwitch",
+    "modelid": "RWL021",
+    "manufacturername": "Philips",
+    "productname": "Hue dimmer switch",
+    "diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
+    "swversion": "5.45.1.17846",
+    "uniqueid": "00:17:88:01:03:c9:3a:04-02-fc00",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 1000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 1001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 1002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 1003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 2000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 2001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 2002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 2003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 3000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 3001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 3002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 3003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 4000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 4001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 4002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 4003,
+              "eventtype": "long_release"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "17": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-07-03T04:59:10"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Dimmer Switch 16 SceneCycle",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHWA01",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "WA0001",
+    "recycle": true
+  },
+  "19": {
+    "state": {
+      "buttonevent": 1003,
+      "lastupdated": "2019-06-30T20:05:17"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": false,
+      "pending": []
+    },
+    "name": "Dimmer salon",
+    "type": "ZLLSwitch",
+    "modelid": "RWL021",
+    "manufacturername": "Philips",
+    "productname": "Hue dimmer switch",
+    "diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
+    "swversion": "5.45.1.17846",
+    "uniqueid": "00:17:88:01:02:1a:40:b9-02-fc00",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 1000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 1001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 1002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 1003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 2000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 2001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 2002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 2003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 3000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 3001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 3002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 3003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 4000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 4001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 4002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 4003,
+              "eventtype": "long_release"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "20": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-06-30T20:05:27"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Dimmer Switch 19 SceneCycle",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHWA01",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "WA0001",
+    "recycle": true
+  },
+  "21": {
+    "state": {
+      "buttonevent": 3003,
+      "lastupdated": "2019-07-03T20:27:26"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "pending": []
+    },
+    "name": "przełącznik Salon",
+    "type": "ZLLSwitch",
+    "modelid": "RWL021",
+    "manufacturername": "Philips",
+    "productname": "Hue dimmer switch",
+    "diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
+    "swversion": "5.45.1.17846",
+    "uniqueid": "00:17:88:01:04:e4:72:a5-02-fc00",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 1000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 1001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 1002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 1003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 2000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 2001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 2002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 2003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 3000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 3001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 3002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 3003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 4000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 4001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 4002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 4003,
+              "eventtype": "long_release"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "22": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-07-03T20:27:36"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Dimmer Switch 21 SceneCycle",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHWA01",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "WA0001",
+    "recycle": true
+  },
+  "25": {
+    "state": {
+      "buttonevent": 4002,
+      "lastupdated": "2019-07-03T20:27:41"
+    },
+    "swupdate": {
+      "state": "noupdates",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true,
+      "battery": 100,
+      "reachable": true,
+      "pending": []
+    },
+    "name": "przełącznik Studio",
+    "type": "ZLLSwitch",
+    "modelid": "RWL021",
+    "manufacturername": "Philips",
+    "productname": "Hue dimmer switch",
+    "diversityid": "73bbabea-3420-499a-9856-46bf437e119b",
+    "swversion": "5.45.1.17846",
+    "uniqueid": "00:17:88:01:04:e4:73:c8-02-fc00",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 1000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 1001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 1002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 1003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 2000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 2001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 2002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 2003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 3000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 3001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 3002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 3003,
+              "eventtype": "long_release"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [800],
+          "events": [
+            {
+              "buttonevent": 4000,
+              "eventtype": "initial_press"
+            },
+            {
+              "buttonevent": 4001,
+              "eventtype": "repeat"
+            },
+            {
+              "buttonevent": 4002,
+              "eventtype": "short_release"
+            },
+            {
+              "buttonevent": 4003,
+              "eventtype": "long_release"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "26": {
+    "state": {
+      "status": 3,
+      "lastupdated": "2019-07-03T20:27:35"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Dimmer Switch 25 SceneCycle",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHWA01",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "WA0001",
+    "recycle": true
+  },
+  "27": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-05-08T06:16:45"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "HL-S00-5000",
+    "type": "CLIPGenericStatus",
+    "modelid": "HL_STATE",
+    "manufacturername": "LapApps, LLC",
+    "swversion": "1.0",
+    "uniqueid": "4c:61:70:41:70:70:73-HL-00-00",
+    "recycle": false
+  },
+  "29": {
+    "state": {
+      "status": 0,
+      "lastupdated": "2019-07-03T19:49:26"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Dimmer Switch 8 SceneCycle",
+    "type": "CLIPGenericStatus",
+    "modelid": "PHWA01",
+    "manufacturername": "Philips",
+    "swversion": "1.0",
+    "uniqueid": "WA0001",
+    "recycle": true
+  },
+  "30": {
+    "state": {
+      "buttonevent": 34,
+      "lastupdated": "2019-06-15T15:11:08"
+    },
+    "swupdate": {
+      "state": "notupdatable",
+      "lastinstall": null
+    },
+    "config": {
+      "on": true
+    },
+    "name": "przełącznik Przedpokój",
+    "type": "ZGPSwitch",
+    "modelid": "ZGPSWITCH",
+    "manufacturername": "Philips",
+    "productname": "Hue tap switch",
+    "diversityid": "d8cde5d5-0eef-4b95-b0f0-71ddd2952af4",
+    "uniqueid": "00:00:00:00:00:44:a1:2f-f2",
+    "capabilities": {
+      "certified": true,
+      "primary": true,
+      "inputs": [
+        {
+          "repeatintervals": [],
+          "events": [
+            {
+              "buttonevent": 34,
+              "eventtype": "initial_press"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [],
+          "events": [
+            {
+              "buttonevent": 16,
+              "eventtype": "initial_press"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [],
+          "events": [
+            {
+              "buttonevent": 17,
+              "eventtype": "initial_press"
+            }
+          ]
+        },
+        {
+          "repeatintervals": [],
+          "events": [
+            {
+              "buttonevent": 18,
+              "eventtype": "initial_press"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "31": {
+    "state": {
+      "flag": false,
+      "lastupdated": "2019-06-22T21:01:00"
+    },
+    "config": {
+      "on": true,
+      "reachable": true
+    },
+    "name": "Go to sleep",
+    "type": "CLIPGenericFlag",
+    "modelid": "GOTOSLEEP",
+    "manufacturername": "Philips",
+    "swversion": "A_1",
+    "uniqueid": "L_05_MPdM3",
+    "recycle": true
+  }
 }
