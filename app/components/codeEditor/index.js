@@ -155,6 +155,7 @@ const colorize = (errors, lines, tokenize, customStyles) =>
   mapWithKey(
     (t, idx) =>
       getTextInfo(
+        idx + 1,
         t,
         concat(
           translateTokens(customStyles, tokenize(t)),
@@ -164,10 +165,12 @@ const colorize = (errors, lines, tokenize, customStyles) =>
     lines
   );
 
-const getTextInfo = (text, styles) => {
+const getTextInfo = (line, text, styles) => {
   let resultItem = {
     text: '',
-    styles: []
+    styles: [],
+    line,
+    column: 1
   };
 
   const result = [];
@@ -185,7 +188,9 @@ const getTextInfo = (text, styles) => {
       }
       resultItem = {
         text: text[i],
-        styles: cs
+        styles: cs,
+        column: i + 1,
+        line
       };
     }
   }
@@ -288,37 +293,43 @@ const Editor = forwardRef(
       []
     );
 
-    const updateInput = useCallback((record: Record) => {
-      const input = _input.current;
+    const updateInput = useCallback(
+      (record: Record) => {
+        const input = _input.current;
 
-      if (!input) return;
+        if (!input) return;
 
-      // Update values and selection state
-      input.value = record.value;
-      input.selectionStart = record.selectionStart;
-      input.selectionEnd = record.selectionEnd;
+        // Update values and selection state
+        input.value = record.value;
+        input.selectionStart = record.selectionStart;
+        input.selectionEnd = record.selectionEnd;
 
-      onValueChange(record.value);
-    }, []);
+        onValueChange(record.value);
+      },
+      [onValueChange]
+    );
 
-    const applyEdits = useCallback((record: Record) => {
-      // Save last selection state
-      const { stack, offset } = history.current;
-      const input = _input.current;
-      const last = stack[offset];
+    const applyEdits = useCallback(
+      (record: Record) => {
+        // Save last selection state
+        const { stack, offset } = history.current;
+        const input = _input.current;
+        const last = stack[offset];
 
-      if (last && input) {
-        stack[offset] = {
-          ...last,
-          selectionStart: input.selectionStart,
-          selectionEnd: input.selectionEnd
-        };
-      }
+        if (last && input) {
+          stack[offset] = {
+            ...last,
+            selectionStart: input.selectionStart,
+            selectionEnd: input.selectionEnd
+          };
+        }
 
-      // Save the changes
-      recordChange(record);
-      updateInput(record);
-    }, []);
+        // Save the changes
+        recordChange(record);
+        updateInput(record);
+      },
+      [updateInput]
+    );
 
     const undoEdit = useCallback(() => {
       const { stack, offset } = history.current;
@@ -331,7 +342,7 @@ const Editor = forwardRef(
         updateInput(record);
         history.current.offset = Math.max(offset - 1, 0);
       }
-    }, []);
+    }, [updateInput]);
 
     const redoEdit = useCallback(() => {
       const { stack, offset } = history.current;
@@ -344,7 +355,7 @@ const Editor = forwardRef(
         updateInput(record);
         history.current.offset = Math.min(offset + 1, stack.length - 1);
       }
-    }, []);
+    }, [updateInput]);
 
     const recordChange = (record: Record, overwrite?: boolean = false) => {
       const { stack, offset } = history.current;
@@ -403,20 +414,23 @@ const Editor = forwardRef(
       history.current.offset++;
     };
 
-    const handleChange = useCallback(e => {
-      const { value, selectionStart, selectionEnd } = e.target;
+    const handleChange = useCallback(
+      e => {
+        const { value, selectionStart, selectionEnd } = e.target;
 
-      recordChange(
-        {
-          value,
-          selectionStart,
-          selectionEnd
-        },
-        true
-      );
+        recordChange(
+          {
+            value,
+            selectionStart,
+            selectionEnd
+          },
+          true
+        );
 
-      onValueChange(value);
-    }, []);
+        onValueChange(value);
+      },
+      [onValueChange]
+    );
 
     const handleKeyDown = useCallback((e: *) => {
       if (onKeyDown) {
