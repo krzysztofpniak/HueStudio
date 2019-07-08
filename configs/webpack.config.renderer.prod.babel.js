@@ -14,7 +14,7 @@ import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
 CheckNodeEnv('production');
 export default merge.smart(baseConfig, {
-  devtool: 'source-map',
+  devtool: false,
 
   mode: 'production',
 
@@ -176,7 +176,7 @@ export default merge.smart(baseConfig, {
       : [
           new TerserPlugin({
             parallel: true,
-            sourceMap: true,
+            sourceMap: false,
             cache: true
           }),
           new OptimizeCSSAssetsPlugin({
