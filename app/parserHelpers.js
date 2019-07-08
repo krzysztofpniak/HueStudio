@@ -132,7 +132,7 @@ const getHelpers = ({ error }) => {
       unless(Array.isArray, of, overloads)
     );
 
-  const toMCall = xs => map(x => ({ ...x, type: 'mcall' }), xs);
+  const toMCall = xs => map(x => ({ ...x, mcall: true }), xs);
 
   const clearVars = () => {
     for (let prop in vars) {
