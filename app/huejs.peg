@@ -1,10 +1,10 @@
 {
-  const {fns, vars, toCall, toMCall, reduce, map, validateCall, clearVars} = P.getHelpers({error});
+  const {vars, toCall, toMCall, reduce, map, clearVars} = P.getHelpers({error});
   clearVars();
 }
 
 start
-  = s:statements _ {return {root: {type: 'program', statements: s}, vars};}
+  = s:statements _ {return {root: {type: 'program', statements: s}};}
 
 statements
   = s:statement _ ss:statements {return [s, ...ss];}
@@ -73,10 +73,6 @@ assignment
 ifStatement
   = _ IF _ "(" _ b:boolExpression _ ")" _ "{" _ s:statements _ "}"
   {
-    if (b.cls !== 'Bool') {
-      error(`if statement expects a boolean expression, ${b.cls} given`, b.location);
-    }
-
     return {
       type: 'condition',
       condition: b,
@@ -113,8 +109,8 @@ fme
   = x:memberExpression
   {
     return reduce(
-      (p, c) =>
-        [validateCall({type: 'call', name: c.name, args: [...toMCall(p), ...(c.args || [])], cls: c.cls, location: c.location})],
+      (p, c) => console.log('fme', p) ||
+        [{type: 'call', name: c.name, args: [...(c.args || []), ...toMCall(p)], location: c.location}],
         [],
         x)[0];
     }
