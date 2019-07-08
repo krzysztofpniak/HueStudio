@@ -3,14 +3,12 @@ import { map, cond, identity, T, is } from 'ramda';
 const numberNode = value => ({
   type: 'literal',
   name: 'number',
-  cls: 'Number',
   value: +value
 });
 
 const stringNode = value => ({
   type: 'literal',
   name: 'string',
-  cls: 'String',
   value: value
 });
 
@@ -23,22 +21,20 @@ const callNode = (name, ...args) => ({
   )
 });
 
-const mcallNode = (name, cls, ...args) => ({
-  type: 'mcall',
+const mcallNode = (name, ...args) => ({
+  type: 'call',
+  mcall: true,
   name,
-  cls,
   args
 });
 
 const handlerNode = value => ({
   type: 'handler',
-  cls: 'Handler',
   value
 });
 
 const assignNode = (left, right) => ({
   type: 'assign',
-  cls: 'void',
   left,
   right
 });

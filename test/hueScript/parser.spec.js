@@ -23,11 +23,9 @@ describe('parseHue', () => {
                 type: 'literal',
                 name: 'number',
                 location: location(7, 9),
-                value: 12,
-                cls: 'number'
+                value: 12
               }
-            ],
-            cls: 'SwitchSensor'
+            ]
           }
         ],
         vars: {}
@@ -44,21 +42,19 @@ describe('parseHue', () => {
             name: 'on',
             args: [
               {
-                type: 'mcall',
+                type: 'call',
+                mcall: true,
                 name: 'light',
-                cls: 'Light',
                 args: [
                   {
                     type: 'literal',
                     name: 'number',
                     location: location(6, 7),
-                    value: 1,
-                    cls: 'number'
+                    value: 1
                   }
                 ]
               }
-            ],
-            cls: 'Light'
+            ]
           }
         ],
         vars: {}
