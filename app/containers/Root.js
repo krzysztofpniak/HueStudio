@@ -1,6 +1,5 @@
 // @flow
 import React, { useEffect } from 'react';
-import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router';
 import { KProvider } from '@k-frame/core';
 import { scopedSagaMiddleware } from '@k-frame/sagas';
