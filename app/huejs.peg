@@ -1,134 +1,477 @@
 {
-  const {vars, toCall, toMCall, reduce, map, clearVars} = P.getHelpers({error});
-  clearVars();
+  const {vars, toCall, toMCall, reduce, map} = P.getHelpers({error});
+
+  var TYPES_TO_PROPERTY_NAMES = {
+    CallExpression:   "callee",
+    MemberExpression: "object",
+  };
+
+  function extractOptional(optional, index) {
+    return optional ? optional[index] : null;
+  }
+
+  function extractList(list, index) {
+    return list.map(function(element) { return element[index]; });
+  }
+
+  function buildList(head, tail, index) {
+    return [head].concat(extractList(tail, index));
+  }
+
+  function optionalList(value) {
+    return value !== null ? value : [];
+  }
+
+  function buildBinaryExpression(head, tail) {
+    return tail.reduce(function(result, element) {
+      return {
+        type: "BinaryExpression",
+        operator: element[1],
+        left: result,
+        right: element[3]
+      };
+    }, head);
+  }
+
+  function buildLogicalExpression(head, tail) {
+    return tail.reduce(function(result, element) {
+      return {
+        type: "LogicalExpression",
+        operator: element[1],
+        left: result,
+        right: element[3]
+      };
+    }, head);
+  }
 }
 
-start
-  = s:statements _ {return {root: {type: 'program', statements: s}};}
+Start
+  = __ program:Program __ { return program; }
 
-statements
-  = s:statement _ ss:statements {return [s, ...ss];}
-  / s:statement {return [s];}
-
-statement
-  = _ c:fme _ ";" {return c;}
-  / _ "const" _ x:identifier2 _ "=" _ c:arg _ ";"
-  {
-    const newC = {
-      type: 'const',
-      name: x.text,
-      location: x.location,
-      value: c,
-      readOnly: true,
-    };
-
-    vars[x.text] = newC;
-
-    return newC;
-  }
-  / letStatement
-  / assignment
-  / ifStatement
-
-letStatement
-  = _ LET _ x:identifier2 _ "=" _ v:number _ ";"
-  {
-    const newC = {
-      type: 'const',
-      name: x.text,
-      location: x.location,
-      value: v,
-      readOnly: false,
-    };
-
-    vars[x.text] = newC;
-
-    return {
-      type: 'let',
-      name: x,
-      value: v,
-      readOnly: true,
-    };
-  }
-
-assignment
-  = x:identifier2 _ "=" _ v:number _ ";"
-  {
-    const ref = vars[x.text];
-    if (!ref) {
-      error(`Unknown identifier ${x.text}`);
+Program
+  = body:SourceElements? {
+      return {
+        type: "Program",
+        body: optionalList(body)
+      };
     }
 
-    if (ref.readOnly) {
-      error(`Cannot assign to ${x.text} defined as const.`);
+SourceElements
+  = head:SourceElement tail:(__ SourceElement)* {
+      return buildList(head, tail, 1);
     }
 
-    return {
-      type: 'assign',
-      name: x,
-      value: v,
-    };
-  }
+SourceElement
+  = Statement
 
-ifStatement
-  = _ IF _ "(" _ b:boolExpression _ ")" _ "{" _ s:statements _ "}"
-  {
-    return {
-      type: 'condition',
-      condition: b,
-      statements: s
-    };
-  }
+Statement
+  = Block
+  / VariableStatement
+  // EmptyStatement
+  / ExpressionStatement
+  // IfStatement
+  / ReturnStatement
+  // WithStatement
+  // LabelledStatement
+  // SwitchStatement
 
-args
-  = a:arg _ "," _ as:args {return [a, ...as];}
-  / a:arg {return [a];}
-
-arg
-  = f:fme {return {...f, location: location()};}
-  / n:number {return {type: 'literal', name: 'number', value: n, location: location()};}
-  / t:timePattern {return {type: 'timePattern', name: 'timePattern', value: t, location: location()}}
-  / a:literal {return {type: 'literal', value: a, location: location()};}
-  / h:handler {return {type: 'handler', ...h, location: location()};}
-
-handler
-  = "(" a:inputArgs? ")" _ "=>" _ s:handlerBody
-  {
-    return {argNames: a || [], body: s};
-  }
-
-handlerBody
-  = "{" _ s:statements _ "}" {return s;}
-  / s:fme {return [s];}
-
-inputArgs
-  = a:identifier _ "," _ as:inputArgs {return [a, ...as];}
-  / a:identifier {return [a];}
-
-fme
-  = x:memberExpression
-  {
-    return reduce(
-      (p, c) => console.log('fme', p) ||
-        [{type: 'call', name: c.name, args: [...(c.args || []), ...toMCall(p)], location: c.location}],
-        [],
-        x)[0];
+Block
+  = "{" __ body:(StatementList __)? "}" {
+      return {
+        type: "BlockStatement",
+        body: optionalList(extractOptional(body, 0))
+      };
     }
 
-memberExpression
-  = i:f _ "." _ e:memberExpression { return [i, ...e]; }
-  / i:f {return [i];}
+ReturnStatement
+  = ReturnToken EOS {
+      return { type: "ReturnStatement", argument: null };
+    }
+  / ReturnToken _ argument:Expression EOS {
+      return { type: "ReturnStatement", argument: argument };
+    }
 
-boolExpression
-  = left:(fme / number) _ boolOperator _ right:(fme / number) {return {left, right, location: location()}}
-  / fme
+StatementList
+  = head:Statement tail:(__ Statement)* { return buildList(head, tail, 1); }
 
-boolOperator
-  = ">" / "<" / "=="
+VariableStatement
+  = k:ConstToken __ declarations:VariableDeclarationList EOS {
+      return {
+        type: "VariableDeclaration",
+        declarations: declarations,
+        kind: k
+      };
+    }
 
-f
-  = i:identifier _ "(" _ a:args? _ ")" {return toCall(i, a, location(), 'a');}
-  / i:identifier !("(") {return toCall(i, [], location(), 'b');}
+VariableDeclarationList
+  = head:VariableDeclaration tail:(__ "," __ VariableDeclaration)* {
+      return buildList(head, tail, 3);
+    }
+
+VariableDeclaration
+  = id:Identifier init:(__ Initializer) {
+      return {
+        type: "VariableDeclarator",
+        id: id,
+        init: extractOptional(init, 1)
+      };
+    }
+
+Initializer
+  = "=" !"=" __ expression:AssignmentExpression { return expression; }
+
+ExpressionStatement
+  = !("{") expression:Expression EOS {
+      return {
+        type: "ExpressionStatement",
+        expression: expression
+      };
+    }
+
+Expression
+  = head:AssignmentExpression tail:(__ "," __ AssignmentExpression)* {
+      return tail.length > 0
+        ? { type: "SequenceExpression", expressions: buildList(head, tail, 3) }
+        : head;
+    }
+
+AssignmentExpression
+  = left:LeftHandSideExpression __
+    "=" !"=" __
+    right:AssignmentExpression
+    {
+      return {
+        type: "AssignmentExpression",
+        operator: "=",
+        left: left,
+        right: right,
+      };
+    }
+  / ConditionalExpression
+
+LeftHandSideExpression
+  = c: CallExpression {return {...c, location: location()}}
+  / MemberExpression
+
+CallExpression
+  = head:(
+      callee:MemberExpression __ args:Arguments {
+        return { type: "CallExpression", callee: callee, arguments: args };
+      }
+    )
+    tail:(
+        __ args:Arguments {
+          return { type: "CallExpression", arguments: args };
+        }
+      / __ "." __ property:IdentifierName {
+          return {
+            type: "MemberExpression",
+            property: property,
+            computed: false
+          };
+        }
+    )*
+    {
+      return tail.reduce(function(result, element) {
+        element[TYPES_TO_PROPERTY_NAMES[element.type]] = result;
+
+        return element;
+      }, head);
+    }
+
+Arguments
+  = "(" __ args:(ArgumentList __)? ")" {
+      return optionalList(extractOptional(args, 0));
+    }
+
+ArgumentList
+  = head:AssignmentExpression tail:(__ "," __ AssignmentExpression)* {
+      return buildList(head, tail, 3);
+    }
+
+MemberExpression
+  = head:(FunctionExpression / PrimaryExpression)
+    tail:(__ "." __ property:IdentifierName {
+        return { property: property, computed: false };
+      }
+    )*
+    {
+      return tail.reduce(function(result, element) {
+        return {
+          type: "MemberExpression",
+          object: result,
+          property: element.property,
+          computed: element.computed
+        };
+      }, head);
+    }
+
+PrimaryExpression
+  = Identifier
+  / l:Literal {return {...l, location: location()};}
+  / ArrayLiteral
+  / "(" __ expression:Expression __ ")" { return expression; }
+
+FunctionExpression
+  = "(" __ params:(FormalParameterList __)? ")" __ "=>" __
+    "{" __ body:FunctionBody __ "}"
+    {
+      return {
+        type: "FunctionExpression",
+        params: optionalList(extractOptional(params, 0)),
+        body: body
+      };
+    }
+
+FormalParameterList
+  = head:Identifier tail:(__ "," __ Identifier)* {
+      return buildList(head, tail, 3);
+    }
+
+FunctionBody
+  = body:SourceElements? {
+      return {
+        type: "BlockStatement",
+        body: optionalList(body)
+      };
+    }
+
+Literal
+  = BooleanLiteral
+  / NumericLiteral
+  / StringLiteral
+  // TimePatternLiteral
+
+ArrayLiteral
+  = "[" __ elements:ElementList __ "]" {
+      return {
+        type: "ArrayExpression",
+        elements: elements,
+        location: location()
+      };
+    }
+
+ElementList
+  = head:(
+      elision:(Elision __)? element:AssignmentExpression {
+        return optionalList(extractOptional(elision, 0)).concat(element);
+      }
+    )
+    tail:(
+      __ "," __ elision:(Elision __)? element:AssignmentExpression {
+        return optionalList(extractOptional(elision, 0)).concat(element);
+      }
+    )*
+    { return Array.prototype.concat.apply(head, tail); }
+
+Elision
+  = "," commas:(__ ",")* { return filledArray(commas.length + 1, null); }
+
+BooleanLiteral
+  = TrueToken  { return { type: "Literal", value: true  }; }
+  / FalseToken { return { type: "Literal", value: false }; }
+
+// The "!(IdentifierStart / DecimalDigit)" predicate is not part of the official
+// grammar, it comes from text in section 7.8.3.
+NumericLiteral "number"
+  = literal:DecimalLiteral !(IdentifierStart / DecimalDigit) {
+      return literal;
+    }
+
+DecimalLiteral
+  = DecimalIntegerLiteral {
+      return { type: "Literal", value: parseFloat(text()) };
+    }
+
+DecimalIntegerLiteral
+  = "0"
+  / NonZeroDigit DecimalDigit*
+
+DecimalDigit
+  = [0-9]
+
+NonZeroDigit
+  = [1-9]
+
+StringLiteral "string"
+  =  "'" chars:SingleStringCharacter* "'" {
+      return { type: "Literal", value: chars.join("") };
+    }
+
+SingleStringCharacter
+  = !("'") SourceCharacter { return text(); }
+
+ConditionalExpression
+  = test:LogicalORExpression __
+    "?" __ consequent:AssignmentExpression __
+    ":" __ alternate:AssignmentExpression
+    {
+      return {
+        type: "ConditionalExpression",
+        test: test,
+        consequent: consequent,
+        alternate: alternate
+      };
+    }
+  / LogicalORExpression
+
+LogicalORExpression
+  = head:LogicalANDExpression
+    tail:(__ LogicalOROperator __ LogicalANDExpression)*
+    { return buildLogicalExpression(head, tail); }
+
+LogicalANDExpression
+  = head:EqualityExpression
+    tail:(__ LogicalANDOperator __ EqualityExpression)*
+    { return buildLogicalExpression(head, tail); }
+
+LogicalOROperator
+  = "||"
+
+EqualityExpression
+  = head:RelationalExpression
+    tail:(__ EqualityOperator __ RelationalExpression)*
+    { return buildBinaryExpression(head, tail); }
+
+RelationalExpression
+  = head:UnaryExpression
+    tail:(__ RelationalOperator __ UnaryExpression)*
+    { return buildBinaryExpression(head, tail); }
+
+RelationalOperator
+  = "<="
+  / ">="
+  / $("<" !"<")
+  / $(">" !">")
+  / $InToken
+
+LogicalANDOperator
+  = "&&"
+
+EqualityOperator
+  = "=="
+  / "!="
+
+UnaryExpression
+  = LeftHandSideExpression
+  / operator:UnaryOperator __ argument:UnaryExpression {
+      return {
+        type: "UnaryExpression",
+        operator: operator,
+        argument: argument,
+        prefix: true
+      };
+    }
+
+UnaryOperator
+  = "!"
+
+/* core */
+
+SourceCharacter
+  = .
+
+WhiteSpace "whitespace"
+  = "\t"
+  / "\v"
+  / "\f"
+  / " "
+  / "\u00A0"
+  / "\uFEFF"
+  / Zs
+
+// Separator, Space
+Zs = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
+
+LineTerminator
+  = [\n\r\u2028\u2029]
+
+LineTerminatorSequence "end of line"
+  = "\n"
+  / "\r\n"
+  / "\r"
+  / "\u2028"
+  / "\u2029"
+
+Comment "comment"
+  = MultiLineComment
+  / SingleLineComment
+
+MultiLineComment
+  = "/*" (!"*/" SourceCharacter)* "*/"
+
+MultiLineCommentNoLineTerminator
+  = "/*" (!("*/" / LineTerminator) SourceCharacter)* "*/"
+
+SingleLineComment
+  = "//" (!LineTerminator SourceCharacter)*
+
+Identifier
+  = !ReservedWord name:IdentifierName { return name; }
+
+IdentifierName "identifier"
+  = head:IdentifierStart tail:IdentifierPart* {
+      return {
+        type: "Identifier",
+        name: head + tail.join(""),
+        location: location()
+      };
+    }
+
+IdentifierStart
+  = Letter
+  / "$"
+  / "_"
+
+Letter = [a-zA-Z]
+
+IdentifierPart
+  = IdentifierStart
+  / DecimalDigit
+
+ReservedWord
+  = Keyword
+  / BooleanLiteral
+
+Keyword
+  = ConstToken
+  / LetToken
+  / IfToken
+  / InToken
+  / ReturnToken
+  / VoidToken
+
+// Tokens
+
+ConstToken      = s:"const"      !IdentifierPart {return s;}
+LetToken        = s:"let"        !IdentifierPart {return s;}
+ExportToken     = "export"     !IdentifierPart
+FalseToken      = "false"      !IdentifierPart
+IfToken         = "if"         !IdentifierPart
+ImportToken     = "import"     !IdentifierPart
+InToken         = "in"         !IdentifierPart
+ReturnToken     = "return"     !IdentifierPart
+TrueToken       = "true"       !IdentifierPart
+VoidToken       = "void"       !IdentifierPart
+
+__
+  = (WhiteSpace / LineTerminatorSequence / Comment)*
+
+_
+  = (WhiteSpace / MultiLineCommentNoLineTerminator)*
+
+// Automatic Semicolon Insertion
+
+EOS
+  = __ ";"
+  / _ SingleLineComment? LineTerminatorSequence
+  / _ &"}"
+  / __ EOF
+
+EOF
+  = !.
+
+/* old */
 
 identifier "Identifier"
   = !(keywords / [0-9] ) x:namechar+ {return x.join('');}
@@ -213,8 +556,3 @@ namechar
 
 number "Number"
   = n:([0-9]+) {return parseInt(n.join(''), 10);}
-
-_ "whitespace"
-  = [ \t\n\r]*
-
-//handle(button1(dim(1)), 'sdf', () => { group(7).on; });
