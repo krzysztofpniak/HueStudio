@@ -105,7 +105,7 @@ const init = async () => {
       mainWindow.minimize();
     } else {
       mainWindow.show();
-      mainWindow.focus();
+      //mainWindow.focus();
     }
   });
 
