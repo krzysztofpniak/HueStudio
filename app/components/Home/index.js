@@ -41,7 +41,7 @@ import { parseHue, toSource } from '../../hueScript';
 import store from '../../appSettings';
 import Terminal, { addLine } from '../terminal';
 import ResourceViewer from '../resourceViewer';
-import { format } from 'prettier';
+import { useTransition, animated } from 'react-spring';
 import {
   createAction,
   createPayloadReducer,
@@ -56,8 +56,6 @@ import {
 import { useSagaRunner } from '@k-frame/sagas';
 import HSEditor from '../hueScriptEditor';
 import saga, { deploySaga } from './effects';
-import { withStyles } from '@material-ui/core';
-import { handle } from '../../hueTranslator';
 import useDebounce from '../../helpers/useDebounce';
 import getSideBarItems from './getSideBarItems';
 import actions from './actions';
@@ -65,6 +63,12 @@ import reducer from './reducer';
 import ruleToAst from '../../hueScript/ruleToAst';
 import scheduleToAst from '../../hueScript/scheduleToAst';
 import useHueData from './useHueData';
+import AstViewer from '../astViewer';
+import {
+  astToBridgeState,
+  createEmptyContext,
+  emptyContext
+} from '../../hueScript/astToBridgeState';
 
 const filterWithKey = addIndex(filter);
 const mapWithKey = addIndex(map);
@@ -116,13 +120,21 @@ const RuleEditor = ({
   onPanesChange,
   inputRef,
   metaPressed,
-  args
+  args,
+  baseApiUrl
 }) => {
-  const json = useMemo(
-    () =>
-      parsed.data ? JSON.stringify(parsed.data, null, 2) : parsed.error.message,
-    [parsed]
-  );
+  const transitions = useTransition(parsed.error, null, {
+    from: { opacity: 0, color: 'red' },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 }
+  });
+
+  const lastErrorRef = useRef(parsed.error);
+  useEffect(() => {
+    if (parsed.error) {
+      lastErrorRef.current = parsed.error;
+    }
+  });
 
   return (
     <SplitPane
@@ -131,22 +143,42 @@ const RuleEditor = ({
       onChange={onPanesChange}
       pane1Style={{ overflow: 'scroll' }}
     >
-      <HSEditor
-        value={text}
-        onValueChange={onTextChange}
-        padding={10}
-        errors={errors}
-        ref={inputRef}
-        metaPressed={metaPressed}
-        args={args}
-      />
-      <textarea className={styles.code} value={json} readOnly />
+      <div
+        style={{
+          display: 'flex',
+          height: '100%',
+          flexDirection: 'column'
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <HSEditor
+            value={text}
+            onValueChange={onTextChange}
+            padding={10}
+            errors={errors}
+            ref={inputRef}
+            metaPressed={metaPressed}
+            args={args}
+          />
+        </div>
+        {transitions.map(
+          ({ item, key, props }) =>
+            item && (
+              <animated.div key={key} style={props}>
+                {parsed.error && parsed.error.message}
+              </animated.div>
+            )
+        )}
+      </div>
+      <AstViewer baseApiUrl={baseApiUrl} ast={parsed.data} />
     </SplitPane>
   );
 };
 
+const hasErrorLocation = path(['error', 'location']);
+
 const toErrors = ifElse(
-  hasPath(['error', 'location']),
+  hasErrorLocation,
   compose(
     of,
     path(['error', 'location'])
@@ -192,9 +224,21 @@ const Home = withStaticScope('home')(() => {
 
   const parsed = useMemo(() => parseHue(debouncedText), [debouncedText]);
 
-  const vars = useMemo(() => pathOr([], ['data', 'vars'], parsed), [parsed]);
+  const { state, infos } = useMemo(() => {
+    const context = createEmptyContext();
+    const state = parsed.data ? astToBridgeState(parsed.data, context) : [];
+    return { state, infos: context.infos };
+  }, [parsed]);
 
-  const errors = useMemo(() => toErrors(parsed), [parsed]);
+  const errors = useMemo(() => {
+    if (hasErrorLocation(parsed)) {
+      return toErrors(parsed);
+    } else {
+      return toErrors(state);
+    }
+  }, [parsed, state]);
+
+  const vars = {};
 
   const hueData = useHueData(data);
 
@@ -291,13 +335,17 @@ const Home = withStaticScope('home')(() => {
     setActiveTabId(newActiveTab ? newActiveTab.ref : null);
   };
 
-  const runRest = async request => {
-    const response = await fetch(`${baseApiUrl}${request.url}`, {
-      method: request.method,
-      body: request.body ? JSON.stringify(request.body) : null
-    });
-    const data = await response.json();
-    addTerminalLine(JSON.stringify(data));
+  const runRest = async ast => {
+    /*const requests = astToRest(ast);
+    for (let i = 0; i < requests.length; i++) {
+      const request = requests[i].request({});
+      const response = await fetch(`${baseApiUrl}${request.url}`, {
+        method: request.method,
+        body: request.body ? JSON.stringify(request.body) : null
+      });
+      const data = await response.json();
+      addTerminalLine(JSON.stringify(data));
+    }*/
   };
 
   const handleEditorTextChange = useCallback(
@@ -305,9 +353,8 @@ const Home = withStaticScope('home')(() => {
     [activeTabId]
   );
 
-  const startDeploy = () => {
+  const startDeploy = async () => {
     if (parsed.data) {
-      fork(deploySaga, parsed.data);
     }
   };
 
@@ -332,27 +379,6 @@ const Home = withStaticScope('home')(() => {
       document.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
-
-  const debugText0 = useMemo(() => {
-    try {
-      const vars = {};
-
-      for (let i = 0; i < parsed.data.statements.length; i += 1) {
-        const d = parsed.data.statements[i];
-        if (d.type === 'const') {
-          vars[d.name] = d.value;
-        }
-        console.log('vars', vars);
-        if (d.name === 'handle') {
-          const result = handle(d, vars);
-
-          return { data: result };
-        }
-      }
-    } catch (e) {
-      return { error: e };
-    }
-  }, [parsed]);
 
   const debugText = parsed;
 
@@ -395,8 +421,9 @@ const Home = withStaticScope('home')(() => {
                 onRunClick={runRest}
                 inputRef={editorRef}
                 metaPressed={metaPressed}
-                args={{ vars, editorRef }}
+                args={{ vars, editorRef, infos }}
                 hueData={hueData}
+                baseApiUrl={baseApiUrl}
               />
             )}
           </SplitPane>

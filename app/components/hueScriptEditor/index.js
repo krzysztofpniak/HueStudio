@@ -1,16 +1,17 @@
 import React, { forwardRef } from 'react';
 import CodeEditor from '../codeEditor';
 import { tokenizeBuilder } from '../codeEditor/helpers';
-import { withStyles } from '@material-ui/core';
-import { fns } from '../../parserHelpers';
+import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip/Tooltip';
+import { map, addIndex } from 'ramda';
+const mapWithKey = addIndex(map);
 
 const sqlConfig = {
-  keywords: ['IF', 'CONST', 'LET'],
+  keywords: ['IF', 'CONST', 'LET', 'RETURN'],
   operators: {
     '+': 'PLUS',
     '-': 'MINUS',
-    '*': 'MULTIPLY',
+    //'*': 'MULTIPLY',
     '.': 'PERIOD',
     '\\': 'BACKSLASH',
     ':': 'COLON',
@@ -32,8 +33,8 @@ const sqlConfig = {
   blocks: [
     {
       type: 'QUOTE',
-      terminator: "'",
-      terminatorEnd: "'"
+      terminator: '*',
+      terminatorEnd: '*'
     },
     {
       type: 'QUOTE2',
@@ -44,6 +45,11 @@ const sqlConfig = {
       type: 'COMMENT',
       terminator: '//',
       terminatorEnd: '\n'
+    },
+    {
+      type: 'COMMENT',
+      terminator: '/*',
+      terminatorEnd: '*/'
     }
   ]
 };
@@ -56,45 +62,27 @@ const Identifier = withStyles({
       textDecoration: 'underline'
     }
   }
-})(({ text, classes, args }) => {
-  const tooltip = (
-    <div>
-      <table>
-        <tbody>
-          <tr>
-            <th>Type:</th>
-            <td>
-              {args.vars[text]
-                ? args.vars[text].cls
-                : fns[text]
-                ? fns[text].returnType
-                : ''}
-            </td>
-          </tr>
-          <tr>
-            <th>Light type:</th>
-            <td>asd</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+})(({ text, line, column, classes, args }) => {
+  const location = `${line}:${column}`;
+  const info = args.infos[location] || {};
+  const { signature } = info;
+  const tooltip = <div>{signature}</div>;
+
+  const inner = (
+    <span
+      onClick={() =>
+        args.editorRef.current.focus(
+          args.vars[text].location.start.offset,
+          args.vars[text].location.end.offset
+        )
+      }
+      className={classes.span}
+    >
+      {text}
+    </span>
   );
 
-  return (
-    <Tooltip title={tooltip}>
-      <span
-        onClick={() =>
-          args.editorRef.current.focus(
-            args.vars[text].location.start.offset,
-            args.vars[text].location.end.offset
-          )
-        }
-        className={classes.span}
-      >
-        {text}
-      </span>
-    </Tooltip>
-  );
+  return signature ? <Tooltip title={tooltip}>{inner}</Tooltip> : inner;
 });
 
 const customStyleMap = {
@@ -124,7 +112,13 @@ const HueScriptEditor = forwardRef((props, ref) => (
   <CodeEditor
     customStyles={customStyleMap}
     tokenize={tokenize}
-    style={{ fontFamily: 'Menlo, "Courier New", serif', fontSize: '13px' }}
+    style={{
+      fontFamily: 'Menlo, "Courier New", serif',
+      fontSize: '13px',
+      boxShadow: 'inset 0px 0px 10px 3px rgba(0,0,0,0.2)',
+      height: '100%',
+      boxSizing: 'border-box'
+    }}
     ref={ref}
     {...props}
   />

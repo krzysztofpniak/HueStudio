@@ -6,12 +6,6 @@
 .code {
   font-family: Menlo, "Courier New", serif;
   font-size: 13px;
-  height: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
   border: none;
   padding: 5px;

@@ -12,13 +12,22 @@ import {
   getContext
 } from 'redux-saga/effects';
 import { asyncAction } from '@k-frame/sagas';
-import { propEq, propOr, find, values, map, dissoc } from 'ramda';
+import {
+  propEq,
+  propOr,
+  find,
+  values,
+  map,
+  dissoc,
+  prop,
+  indexBy,
+  assoc
+} from 'ramda';
 import { format, formatWithCursor } from 'prettier';
 import { readFile, writeFile, existsSync } from 'fs';
 import { join } from 'path';
 import { getHuePreferencesPath } from '../../HuePreferences';
 import store from '../../appSettings';
-import { handle } from '../../hueTranslator';
 import lights from '../../../resources/responses/lights.json';
 import scenes from '../../../resources/responses/scenes.json';
 import groups from '../../../resources/responses/groups.json';
@@ -122,7 +131,9 @@ function* saveFile(editorRef) {
   if (!temp && existsSync(activeTabId)) {
     const content = codeEditorStates[activeTabId];
     const { formatted, cursorOffset } = formatWithCursor(content, {
-      cursorOffset: selectionStart
+      cursorOffset: selectionStart,
+      singleQuote: true,
+      arrowParens: 'always'
     });
     yield put({
       type: 'setCodeEditorState',
@@ -156,41 +167,59 @@ function* debounceBy(ms, pattern, groupBy, worker) {
 }
 
 function* persistence() {
-  const openedResources = store.get('openedResources');
-  for (let i = 0; i < openedResources.length; i += 1) {
-    const f = openedResources[i];
-    if (f.type === 'file') {
-      yield put({ type: 'openFile', payload: f.ref });
-      yield take('fileLoaded');
+  try {
+    const openedResources = store.get('openedResources');
+    for (let i = 0; i < openedResources.length; i += 1) {
+      const f = openedResources[i];
+      if (f.type === 'file') {
+        yield put({ type: 'openFile', payload: f.ref });
+        yield take('fileLoaded');
+      }
     }
-  }
-  yield put({ type: 'setOpenedResources', payload: openedResources });
-  if (openedResources.length > 0) {
-    yield put({ type: 'setActiveTabId', payload: openedResources[0].ref });
-  }
-  yield takeEvery(
-    ['fileSaved', 'fileCreated', 'fileLoaded', 'setOpenedResources'],
-    function*() {
-      const { openedResources } = yield select(s => s);
-      store.set(
-        'openedResources',
-        map(dissoc('savedContent'), openedResources)
-      );
-    }
-  );
-  yield debounceBy(3000, 'setCodeEditorState', a => a.payload.tabId, function*(
-    a
-  ) {
-    const { openedResources, activeTabId } = yield select(s => s);
-    const temp = propOr(
-      false,
-      'temp',
-      find(propEq('ref', activeTabId), openedResources)
+    const currentOpenedResources = indexBy(
+      prop('ref'),
+      yield select(m => m.openedResources)
     );
-    if (temp) {
-      yield cps(writeFile, a.payload.tabId, a.payload.state);
+    yield put({
+      type: 'setOpenedResources',
+      payload: map(
+        r =>
+          assoc('savedContent', currentOpenedResources[r.ref].savedContent, r),
+        openedResources
+      )
+    });
+    if (openedResources.length > 0) {
+      yield put({ type: 'setActiveTabId', payload: openedResources[0].ref });
     }
-  });
+    yield takeEvery(
+      ['fileSaved', 'fileCreated', 'fileLoaded', 'setOpenedResources'],
+      function*() {
+        const { openedResources } = yield select(s => s);
+        store.set(
+          'openedResources',
+          map(dissoc('savedContent'), openedResources)
+        );
+      }
+    );
+    yield debounceBy(
+      3000,
+      'setCodeEditorState',
+      a => a.payload.tabId,
+      function*(a) {
+        const { openedResources, activeTabId } = yield select(s => s);
+        const temp = propOr(
+          false,
+          'temp',
+          find(propEq('ref', activeTabId), openedResources)
+        );
+        if (temp) {
+          yield cps(writeFile, a.payload.tabId, a.payload.state);
+        }
+      }
+    );
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 const delayedPromise = data =>
@@ -225,16 +254,9 @@ function* saga(editorRef) {
 function* deploySaga(data) {
   const { statements } = data;
   yield put({ type: 'terminal.addLine', payload: 'start' });
-  const vars = {};
 
   for (let i = 0; i < statements.length; i += 1) {
     const d = statements[i];
-    if (d.type === 'const') {
-      vars[d.name] = d.value;
-    }
-    if (d.name === 'handle') {
-      handle(d, vars);
-    }
 
     yield put({ type: 'terminal.addLine', payload: d.name });
   }

@@ -1,4 +1,10 @@
-import React, { createElement, useEffect, useMemo, useState } from 'react';
+import React, {
+  createElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import {
   find,
   map,
@@ -15,7 +21,10 @@ import {
   none,
   chain,
   head,
-  nth
+  pathOr,
+  nth,
+  mapAccum,
+  join
 } from 'ramda';
 import SplitPane from 'react-split-pane';
 import Select from '@material-ui/core/Select/Select';
@@ -30,176 +39,128 @@ import styles from '../Home.css';
 import Edge from './edge';
 import ScalableGraph from '../scalableGraph';
 import Toolbar from '@material-ui/core/Toolbar';
+import { callNode, numberNode } from '../../hueScript/astBuilders';
+import { toSource } from '../../hueScript/index';
+import AstViewer from '../astViewer';
 
 const ELK = require('elkjs');
 
 const elk = new ELK();
 const mapWithKey = addIndex(map);
 
+const createSelectEditor = optionsMapper => ({
+  value,
+  onChange,
+  hueData,
+  resourceId,
+  resourceType
+}) => {
+  const options = useMemo(
+    () => optionsMapper({ hueData, resourceId, resourceType }),
+    [hueData, resourceId, resourceType]
+  );
+  return (
+    <Select value={value} onChange={e => onChange(e.target.value)}>
+      {mapWithKey(
+        o => (
+          <MenuItem key={o.id} value={o.id}>
+            {o.name}
+          </MenuItem>
+        ),
+        options
+      )}
+    </Select>
+  );
+};
+
+const SceneSelector = createSelectEditor(({ hueData, resourceId }) =>
+  map(
+    ([key, s]) => ({ id: key, name: s.name }),
+    filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
+  )
+);
+
+const EffectSelector = createSelectEditor(() => [
+  { id: 'none', name: 'None' },
+  { id: 'colorloop', name: 'Color Loop' }
+]);
+
 const actions = {
   lights: [
     {
       id: 'on',
       name: 'On',
-      requestCreator: (resourceId, data) => ({
-        url: `/lights/${resourceId}/state`,
-        method: 'PUT',
-        body: {
-          on: true
-        }
-      }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).on();`
+      codeCreator: resourceId => callNode('on', callNode('light', +resourceId))
     },
     {
       id: 'off',
       name: 'Off',
-      requestCreator: (resourceId, data) => ({
-        url: `/lights/${resourceId}/state`,
-        method: 'PUT',
-        body: {
-          on: false
-        }
-      }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).off();`
+      codeCreator: resourceId => callNode('off', callNode('light', +resourceId))
     },
     {
       id: 'alert',
       name: 'Alert',
-      requestCreator: (resourceId, data) => ({
-        url: `/lights/${resourceId}/state`,
-        method: 'PUT',
-        body: {
-          alert: 'select'
-        }
-      }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).alert('select');`
+      codeCreator: resourceId =>
+        callNode('alert', callNode('light', +resourceId), 'select')
     },
     {
-      id: 'effect1',
-      name: 'Effect Loop',
-      requestCreator: (resourceId, data) => ({
-        url: `/lights/${resourceId}/state`,
-        method: 'PUT',
-        body: {
-          effect: 'colorloop'
-        }
-      }),
-      codeCreator: (resourceId, data) =>
-        `light(${resourceId}).effect('colorloop');`
-    },
-    {
-      id: 'effect2',
-      name: 'Effect None',
-      requestCreator: (resourceId, data) => ({
-        url: `/lights/${resourceId}/state`,
-        method: 'PUT',
-        body: {
-          effect: 'none'
-        }
-      }),
-      codeCreator: (resourceId, data) => `light(${resourceId}).effect('none');`
+      id: 'effect',
+      name: 'Effect',
+      editor: EffectSelector,
+      editorDefault: () => 'colorloop',
+      codeCreator: (resourceId, { editorValue }) =>
+        callNode('effect', callNode('light', +resourceId), editorValue)
     }
   ],
   groups: [
     {
       id: 'on',
       name: 'On',
-      requestCreator: (resourceId, data) => ({
-        url: `/groups/${resourceId}/action`,
-        method: 'PUT',
-        body: {
-          on: true
-        }
-      }),
-      codeCreator: (resourceId, data) => `group(${resourceId}).on();`
+      codeCreator: resourceId => callNode('on', callNode('group', +resourceId))
     },
     {
       id: 'off',
       name: 'Off',
-      requestCreator: (resourceId, data) => ({
-        url: `/groups/${resourceId}/action`,
-        method: 'PUT',
-        body: {
-          on: false
-        }
-      }),
-      codeCreator: (resourceId, data) => `group(${resourceId}).off();`
+      codeCreator: resourceId => callNode('off', callNode('group', +resourceId))
     },
     {
       id: 'alert',
       name: 'Alert',
-      requestCreator: (resourceId, data) => ({
-        url: `/groups/${resourceId}/action`,
-        method: 'PUT',
-        body: {
-          alert: 'select'
-        }
-      }),
-      codeCreator: (resourceId, data) => `group(${resourceId}).alert('select');`
+      codeCreator: resourceId =>
+        callNode('alert', callNode('group', +resourceId), 'select')
     },
     {
       id: 'setScene',
       name: 'Set Scene',
-      editor: ({ value, onChange, hueData, resourceId, resourceType }) => {
-        const options = useMemo(
-          () =>
-            map(
-              ([key, s]) => ({ id: key, name: s.name }),
-              filter(
-                ([k, s]) => s.group === resourceId,
-                toPairs(hueData.scenes)
-              )
-            ),
-          [hueData]
-        );
-        return (
-          <Select value={value} onChange={e => onChange(e.target.value)}>
-            {mapWithKey(
-              o => (
-                <MenuItem key={o.id} value={o.id}>
-                  {o.name}
-                </MenuItem>
-              ),
-              options
-            )}
-          </Select>
-        );
-      },
-      requestCreator: (resourceId, { editorValue }) => ({
-        url: `/groups/${resourceId}/action`,
-        method: 'PUT',
-        body: {
-          scene: editorValue
-        }
-      }),
+      editor: SceneSelector,
+      editorDefault: ({ hueData, resourceId }) =>
+        pathOr(
+          '',
+          [0, 0],
+          filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
+        ),
       codeCreator: (resourceId, { editorValue }) =>
-        `group(${resourceId}).setScene('${editorValue}');`
+        callNode('setScene', callNode('group', +resourceId), editorValue)
+    },
+    {
+      id: 'delete',
+      name: 'Delete',
+      codeCreator: resourceId =>
+        callNode('delete', callNode('group', +resourceId))
     }
   ],
   schedules: [
     {
       id: 'enable',
       name: 'Enable',
-      requestCreator: (resourceId, data) => ({
-        url: `/schedules/${resourceId}`,
-        method: 'PUT',
-        body: {
-          status: 'enabled'
-        }
-      }),
-      codeCreator: resourceId => `schedule(${resourceId}).enable();`
+      codeCreator: resourceId =>
+        callNode('enable', callNode('schedule', +resourceId))
     },
     {
       id: 'disable',
       name: 'Disable',
-      requestCreator: (resourceId, data) => ({
-        url: `/schedules/${resourceId}`,
-        method: 'PUT',
-        body: {
-          status: 'disabled'
-        }
-      }),
-      codeCreator: resourceId => `schedule(${resourceId}).disable();`
+      codeCreator: resourceId =>
+        callNode('disable', callNode('schedule', +resourceId))
     },
     {
       id: 'delete',
@@ -208,7 +169,8 @@ const actions = {
         url: `/schedules/${resourceId}`,
         method: 'DELETE'
       }),
-      codeCreator: resourceId => `schedule(${resourceId}).delete();`
+      codeCreator: resourceId =>
+        callNode('delete', callNode('schedule', +resourceId))
     }
   ],
   rules: [
@@ -222,7 +184,8 @@ const actions = {
           status: 'enabled'
         }
       }),
-      codeCreator: resourceId => `rule(${resourceId}).enable();`
+      codeCreator: resourceId =>
+        callNode('enable', callNode('rule', +resourceId))
     },
     {
       id: 'disable',
@@ -234,7 +197,8 @@ const actions = {
           status: 'disabled'
         }
       }),
-      codeCreator: resourceId => `rule(${resourceId}).disable();`
+      codeCreator: resourceId =>
+        callNode('disable', callNode('schedule', +resourceId))
     },
     {
       id: 'delete',
@@ -243,7 +207,8 @@ const actions = {
         url: `/rules/${resourceId}`,
         method: 'DELETE'
       }),
-      codeCreator: resourceId => `rule(${resourceId}).delete();`
+      codeCreator: resourceId =>
+        callNode('delete', callNode('schedule', +resourceId))
     }
   ]
 };
@@ -332,7 +297,7 @@ const dfs2 = (hueData, v, onVisitNode, onVisitEdge) => {
 const Graph = ({ transform, data }) => (
   <g>
     {mapWithKey(
-      ({ x, y, width, height, name, hasError }, key) => (
+      ({ x, y, width, height, name, fontSize, textTop, hasError }, key) => (
         <g transform={`translate(${x},${y})`} key={key}>
           <rect
             x={0}
@@ -348,7 +313,12 @@ const Graph = ({ transform, data }) => (
             }
           />
           <g transform={`scale(${transform.k})`}>
-            <text x={5} y={10} fontSize={8} fill={hasError ? 'white' : 'black'}>
+            <text
+              x={5}
+              y={textTop}
+              fontSize={fontSize}
+              fill={hasError ? 'white' : 'black'}
+            >
               {name}
             </text>
           </g>
@@ -372,14 +342,16 @@ const Graph = ({ transform, data }) => (
   </g>
 );
 
-const rescale = (sX, sY, { children, edges }) => ({
+const rescale = ({ sX, sY, factor }, { children, edges }) => ({
   nodes: map(
     n => ({
       ...n,
       x: sX(n.x),
       y: sY(n.y),
       width: sX(n.x + n.width) - sX(n.x),
-      height: sY(n.y + n.height) - sY(n.y)
+      height: sY(n.y + n.height) - sY(n.y),
+      fontSize: factor(14),
+      textTop: factor(20)
     }),
     children
   ),
@@ -449,7 +421,8 @@ const ResourceViewer = ({
   hueData,
   defaultSize,
   onPanesChange,
-  onRunClick
+  onRunClick,
+  baseApiUrl
 }) => {
   const [resourceType, resourceId] = useMemo(() => {
     const [, type, id] = activeTab.split('/');
@@ -502,8 +475,19 @@ const ResourceViewer = ({
     return a;
   }, [resourceType, actionIdx]);
 
+  useEffect(() => {
+    if (currentResourceActionInt && currentResourceActionInt.editorDefault) {
+      const defaultValue = currentResourceActionInt.editorDefault({
+        hueData,
+        resourceType,
+        resourceId
+      });
+      setEditorValue(defaultValue);
+    }
+  }, [currentResourceActionInt, resourceId]);
+
   const actionParamEditor = useMemo(() => {
-    return currentResourceActionInt.editor
+    return currentResourceActionInt && currentResourceActionInt.editor
       ? createElement(currentResourceActionInt.editor, {
           hueData,
           resourceType,
@@ -522,16 +506,21 @@ const ResourceViewer = ({
 
   const currentResourceAction = useMemo(() => {
     const a = currentResourceActionInt;
-    return a
-      ? {
-          rest: a.requestCreator(resourceId, {
-            resourceType,
-            hueData,
-            editorValue
-          }),
-          hs: a.codeCreator(resourceId, { resourceType, hueData, editorValue })
-        }
-      : null;
+
+    if (a) {
+      const ast = a.codeCreator(resourceId, {
+        resourceType,
+        hueData,
+        editorValue
+      });
+
+      return {
+        ast,
+        hs: toSource(ast, { style: 'object' })
+      };
+    }
+
+    return null;
   }, [
     resourceId,
     resourceType,
@@ -550,7 +539,7 @@ const ResourceViewer = ({
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Relations" />
-          <Tab label="Overview" />
+          <Tab label="Playground" />
           <Tab label="Raw data" />
         </Tabs>
       </AppBar>
@@ -585,19 +574,26 @@ const ResourceViewer = ({
                 )}
               </Select>
               {actionParamEditor}
-              <h4>REST</h4>
-              <pre className={styles.codeSimple}>
-                {JSON.stringify(currentResourceAction.rest, null, 2)}
-              </pre>
-              <h4>Hue Script</h4>
-              <pre className={styles.codeSimple}>
-                {currentResourceAction.hs}
-              </pre>
+              <div style={{ display: 'flex', marginTop: '20px' }}>
+                <div style={{ width: '50%' }}>
+                  <h4>Hue Script</h4>
+                  <pre className={styles.codeSimple}>
+                    {currentResourceAction.hs}
+                  </pre>
+                </div>
+                <div style={{ width: '50%' }}>
+                  <AstViewer
+                    baseApiUrl={baseApiUrl}
+                    ast={currentResourceAction.ast}
+                  />
+                </div>
+              </div>
+
               <Button
                 type="button"
                 variant="contained"
                 color="primary"
-                onClick={() => onRunClick(currentResourceAction.rest)}
+                onClick={() => onRunClick(currentResourceAction.ast)}
               >
                 Run
               </Button>
