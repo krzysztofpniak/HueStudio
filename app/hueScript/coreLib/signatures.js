@@ -49,14 +49,18 @@ const hasNArgs = (n, type) =>
 
 const validateCallArgs = (args, type) => {
   for (let i = 0; i < args.length; i++) {
-    if (
-      none(
-        s =>
-          (s[i].kind === 'Scalar' && test(/^[a-z]/, s[i].name)) ||
-          equals(args[i].type, s[i]),
-        type.signatures
-      )
-    ) {
+    let someMatches = false;
+    for (let j = 0; j < type.signatures.length; j++) {
+      const s = type.signatures[j];
+      if (
+        (s[i].kind === 'Scalar' && test(/^[a-z]/, s[i].name)) ||
+        equals(args[i].type, s[i])
+      ) {
+        someMatches = true;
+        break;
+      }
+    }
+    if (!someMatches) {
       return i;
     }
   }
@@ -74,8 +78,10 @@ const typeToString = type => {
         ' or ',
         map(
           compose(
+            s => `(${s})`,
             join(' → '),
-            map(typeToString)
+            map(typeToString),
+            s => (s.length > 1 ? s : [scalar('()'), ...s])
           ),
           type.signatures
         )

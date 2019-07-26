@@ -1,4 +1,3 @@
-import astResult from '../astResult';
 import { array, scalar, fn, fnMulti } from './signatures';
 import { map, pathOr } from 'ramda';
 
@@ -32,13 +31,22 @@ const group = createFunction(fn(scalar('Number'), scalar('Group')), id => ({
  *  on({type: 'Group', ref: '/groups/1'});
  *  // => {type: 'Group', state: {on: true}}
  */
-const on = createFunction(fn(scalar('Group'), scalar('Group')), target => ({
-  ...target,
-  state: { ...target.state, on: true }
-}));
+const on = createFunction(
+  fnMulti([
+    [scalar('Light'), scalar('Light')],
+    [scalar('Group'), scalar('Group')]
+  ]),
+  target => ({
+    ...target,
+    state: { ...target.state, on: true }
+  })
+);
 
 const bri = createFunction(
-  fn(scalar('Number'), scalar('Group'), scalar('Group')),
+  fnMulti([
+    [scalar('Number'), scalar('Group'), scalar('Group')],
+    [scalar('Number'), scalar('Light'), scalar('Light')]
+  ]),
   (brightness, target) => ({
     ...target,
     state: { ...target.state, bri: brightness.value }
@@ -91,30 +99,39 @@ const dimmer = createFunction(
  *  button1({type: 'Dimmer', ref: '/sensors/12'});
  *  // => {type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const button1 = sensor => ({
-  type: scalar('Button'),
-  button: 'button1',
-  sensor
-});
+const button1 = createFunction(
+  fn(scalar('Number'), scalar('Button')),
+  sensor => ({
+    type: scalar('Button'),
+    button: 'button1',
+    sensor
+  })
+);
 
 /**
  * @example
  *  initial_press({type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}});
  *  // => {type: 'ButtonEvent', button: 'button1', eventCode: 1000, sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const initial_press = button => ({
-  type: 'ButtonEvent',
-  button: button.button,
-  eventCode: 1000,
-  sensor: button.sensor
-});
+const initial_press = createFunction(
+  fn(scalar('Button'), scalar('ButtonEvent')),
+  button => ({
+    type: scalar('ButtonEvent'),
+    button: button.button,
+    eventCode: 1000,
+    sensor: button.sensor
+  })
+);
 
 /**
  * @example
  *  handle({type: 'ButtonEvent', ...}, {type: 'FunctionExpression', argsNames: [], fn});
  *  // => {type: 'EventHandler', event: {type: 'ButtonEvent', ...}, actions: [...]}
  */
-const handle = (event, actions) => ({ type: 'EventHandler', event, actions });
+const handle = createFunction(
+  fn(fn(scalar('void')), scalar('ButtonEvent'), scalar('Rule')),
+  (event, actions) => ({ type: scalar('Rule'), event, actions })
+);
 
 /**
  * @example
@@ -141,7 +158,7 @@ const eq = () => ({});
 const condition = () => ({});
 
 const mapFn = createFunction(
-  fn(fn(scalar('a'), scalar('b')), array('a'), array('b')),
+  fn(fn(scalar('a'), scalar('b')), array(scalar('a')), array(scalar('b'))),
   (it, list) => ({
     type: 'Array',
     elements: map(it.function, list.elements)

@@ -20,7 +20,7 @@ const isMethodCall = (node, style) =>
     : style === 'object'
     ? node.args &&
       node.args.length > 0 &&
-      !node.args[node.args.length - 1].mcall
+      node.args[node.args.length - 1].type === 'call'
     : style === 'strictObject';
 
 const defaultToSourceOptions = {
