@@ -34,19 +34,21 @@ import {
   set
 } from 'ramda';
 import coreLib from './coreLib/index';
+import { resolveCall, resolveType } from './resolveType';
 import {
-  dropNArgs,
   fn,
-  scalar,
+  typeToString,
   array,
+  scalar,
+  dropNArgs,
+  dropLastArg,
+  isFunction,
   canAcceptNArgs,
   hasNArgs,
-  dropLastArg,
   validateCallArgs,
-  typeToString,
-  fnMulti
-} from './coreLib/signatures';
-import { resolveCall, resolveType } from './resolveType';
+  unwrapConstraint
+} from './typeSystem';
+import constraint from './typeSystem/constraint';
 
 const filterWithKey = addIndex(filter);
 
@@ -55,17 +57,6 @@ const allEquals = compose(
   length,
   uniq
 );
-
-const signatureNth = (idx, signature) =>
-  uniq(
-    map(
-      compose(
-        of,
-        nth(idx)
-      ),
-      signature
-    )
-  );
 
 const findVar = (name, scopes) => {
   const scope = find(prop(name), scopes);
@@ -99,12 +90,15 @@ const inferSignature = (ast, context) => {
     } else if (ast.type === 'MemberExpression') {
       const obj = inferSignature(ast.object, context);
       const prop = inferSignature(ast.property, context);
-      if (prop.kind === 'Function') {
+      if (isFunction(prop)) {
         console.log('infer MemberExpression', obj, ast.property.name, prop);
-        const appliedSignatures = map(applyLastArg(obj), prop.signatures);
+        const appliedSignatures = applyLastArg(
+          obj,
+          unwrapConstraint(prop)[1].signature
+        );
 
         return dropLastArg(
-          resolveType(fnMulti(appliedSignatures), prop, context.inferred)
+          resolveType(fn(...appliedSignatures), prop, context.inferred)
         );
       }
       console.error('not implemented yet');
@@ -170,7 +164,7 @@ const translateCallExpression = (ast, context) => {
   const args = map(a => astToBridgeStateInt(a, context), ast.arguments);
   console.log('CallExpression', callee, args);
 
-  if (callee.type.kind !== 'Function') {
+  if (!isFunction(callee.type)) {
     throw {
       message: 'callee is not a function',
       location: ast.callee.location
@@ -185,9 +179,8 @@ const translateCallExpression = (ast, context) => {
 
   if (wrongArg !== null) {
     throw {
-      message: `Wrong argument type, expected: ${join(
-        ' or ',
-        uniq(map(s => typeToString(s[wrongArg]), callee.type.signatures))
+      message: `Wrong argument type, expected: ${typeToString(
+        unwrapConstraint(callee.type)[1].signature[wrongArg]
       )}, ${typeToString(args[wrongArg].type)} given`,
       location: ast.arguments[wrongArg].location
     };
@@ -257,15 +250,17 @@ const translateArrayExpression = (ast, context) => {
   const elements = map(e => astToBridgeStateInt(e, context), ast.elements);
   console.log('ArrayExpression', elements);
 
-  if (!allEquals(pluck('type', elements))) {
-    throw {
-      message: 'All array elements must have the same type',
-      location: ast.location
-    };
-  }
+  const elementTypes = map(typeToString, uniq(pluck('type', elements)));
+
+  const arrayType =
+    elementTypes.length === 0
+      ? array(scalar('Void'))
+      : elementTypes.length === 1
+      ? array(scalar(elementTypes[0]))
+      : constraint({ a: elementTypes }, array(scalar('a')));
 
   return {
-    type: array(elements.length > 0 ? elements[0].type : scalar('void')),
+    type: arrayType,
     elements
   };
 };

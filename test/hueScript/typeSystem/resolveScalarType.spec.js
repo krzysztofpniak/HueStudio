@@ -1,5 +1,5 @@
-import { resolveScalarType } from '../../app/hueScript/resolveType';
-import { scalar, fn, array } from '../../app/hueScript/coreLib/signatures';
+import { resolveScalarType } from '../../../app/hueScript/resolveType';
+import { scalar, fn, array } from '../../../app/hueScript/typeSystem';
 
 describe('resolveScalarType', () => {
   it('should resolve (Number), (Number) into (Number)', () => {

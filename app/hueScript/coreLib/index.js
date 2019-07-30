@@ -1,4 +1,4 @@
-import { array, scalar, fn, fnMulti } from './signatures';
+import { array, scalar, fn, constraint } from '../typeSystem';
 import { map, pathOr } from 'ramda';
 
 const createFunction = (signature, fn) => ({
@@ -24,6 +24,8 @@ const group = createFunction(fn(scalar('Number'), scalar('Group')), id => ({
   ref: `/groups/${id.value}`
 }));
 
+//constraint({a: ['Group', 'Light']}, fn(scalar('a'), scalar('a'))
+
 /**
  * @example
  *  on({type: 'Light', ref: '/lights/1'});
@@ -32,10 +34,7 @@ const group = createFunction(fn(scalar('Number'), scalar('Group')), id => ({
  *  // => {type: 'Group', state: {on: true}}
  */
 const on = createFunction(
-  fnMulti([
-    [scalar('Light'), scalar('Light')],
-    [scalar('Group'), scalar('Group')]
-  ]),
+  constraint({ a: ['Light', 'Group'] }, fn(scalar('a'), scalar('a'))),
   target => ({
     ...target,
     state: { ...target.state, on: true }
@@ -43,10 +42,10 @@ const on = createFunction(
 );
 
 const bri = createFunction(
-  fnMulti([
-    [scalar('Number'), scalar('Group'), scalar('Group')],
-    [scalar('Number'), scalar('Light'), scalar('Light')]
-  ]),
+  constraint(
+    { a: ['Light', 'Group'] },
+    fn(scalar('Number'), scalar('a'), scalar('a'))
+  ),
   (brightness, target) => ({
     ...target,
     state: { ...target.state, bri: brightness.value }
@@ -54,10 +53,10 @@ const bri = createFunction(
 );
 
 const transition = createFunction(
-  fnMulti([
-    [scalar('Number'), scalar('Group'), scalar('Group')],
-    [scalar('Number'), scalar('Light'), scalar('Light')]
-  ]),
+  constraint(
+    { a: ['Light', 'Group'] },
+    fn(scalar('Number'), scalar('a'), scalar('a'))
+  ),
   (value, target) => ({
     ...target,
     state: { ...target.state, transition: value.value }
@@ -78,7 +77,7 @@ const setScene = createFunction(
  *  off({type: 'Group', ref: '/groups/1'}); // => {type: 'Group', state: {on: false}}
  */
 const off = createFunction(
-  fn(scalar('Number'), scalar('Group'), scalar('Group')),
+  constraint({ a: ['Light', 'Group'] }, fn(scalar('a'), scalar('a'))),
   target => ({ ...target, state: { ...target.state, on: false } })
 );
 
@@ -165,6 +164,18 @@ const mapFn = createFunction(
   })
 );
 
+const removeFn = createFunction(
+  constraint(
+    { a: ['Group', 'Light', 'Schedule', 'Rule'] },
+    fn(scalar('a'), scalar('Void'))
+  ),
+  (it, list) => {
+    return {
+      type: 'remove'
+    };
+  }
+);
+
 const coreLib = {
   light,
   group,
@@ -180,7 +191,8 @@ const coreLib = {
   schedule,
   eq,
   condition,
-  map: mapFn
+  map: mapFn,
+  remove: removeFn
 };
 
 export default coreLib;

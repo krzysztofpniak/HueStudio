@@ -1,5 +1,5 @@
-import { resolveArrayType } from '../../app/hueScript/resolveType';
-import { scalar, fn, array } from '../../app/hueScript/coreLib/signatures';
+import { resolveArrayType } from '../../../app/hueScript/resolveType';
+import { scalar, fn, array } from '../../../app/hueScript/typeSystem';
 
 describe('resolveArrayType', () => {
   it('should resolve [Number], [Number] into [Number]', () => {
@@ -38,7 +38,7 @@ describe('resolveArrayType', () => {
   it('should throw on unmatched', () => {
     expect(() =>
       resolveArrayType(array(scalar('Number')), array(scalar('String')))
-    ).toThrow('Wrong type, expected [String], Number given');
+    ).toThrow('Wrong type, expected [String], [Number] given');
     expect(() =>
       resolveArrayType(fn(array(scalar('a'))), array(scalar('String')))
     ).toThrow('Wrong type, expected [String], (() → a) given');

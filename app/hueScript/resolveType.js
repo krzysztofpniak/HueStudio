@@ -15,11 +15,12 @@ import {
 import {
   typeToString,
   fn,
-  fnMulti,
   scalar,
   array,
-  dropNArgs
-} from './coreLib/signatures';
+  dropNArgs,
+  unwrapConstraint
+} from './typeSystem';
+import constraint from './typeSystem/constraint';
 
 const isPolyType = test(/^[a-z]+$/);
 
@@ -48,31 +49,24 @@ const newZip = curry((a, b) =>
 
 const resolveFunctionType = (arg, type, resolved = {}) => {
   if (arg.kind === 'Function') {
-    const candidates = map(
-      ([a, b]) => newZip(a, b),
-      xprod(arg.signatures, type.signatures)
-    );
+    const candidates = newZip(arg.signature, type.signature);
 
-    const signatures = filter(
+    const signature = filter(
       identity,
-      map(x => {
+      map(([a, b]) => {
         try {
-          return map(([a, b]) => {
-            if (a === null) {
-              return resolveType(b, b, resolved);
-            } else {
-              return resolveType(a, b, resolved);
-            }
-          }, x);
+          if (a === null) {
+            return resolveType(b, b, resolved);
+          } else {
+            return resolveType(a, b, resolved);
+          }
         } catch (e) {
           return null;
         }
       }, candidates)
     );
 
-    if (signatures.length > 0) {
-      return fnMulti(signatures);
-    }
+    return fn(...signature);
   }
 
   throw `Wrong type, expected ${typeToString(type)}, ${typeToString(
@@ -102,24 +96,33 @@ const resolveType = (arg, type, resolved = {}) => {
     return resolveArrayType(arg, type, resolved);
   } else if (type.kind === 'Function') {
     return resolveFunctionType(arg, type, resolved);
+  } else if (type.kind === 'Constraint') {
+    //return resolveFunctionType(arg, type, resolved);
+    const [constr, target] = unwrapConstraint(type);
+    return resolveType(arg, target, resolved);
   }
   throw 'not implemented yet';
 };
 
 const resolveCall = (args, type, resolved = {}) => {
   const f = fn(...args);
-  const argCount = type.signatures[0].length - 1;
+
+  const [constr, func] = unwrapConstraint(type);
+
+  const argCount = func.signature.length - 1;
   if (args.length > argCount) {
     throw 'Too many arguments';
   }
 
-  const zz = dropNArgs(args.length, resolveType(f, type, resolved));
+  const appliedFunction = dropNArgs(
+    args.length,
+    resolveType(f, func, resolved)
+  );
 
-  if (args.length === argCount) {
-    return zz.signatures[0][0];
-  } else {
-    return zz;
-  }
+  const applicationResult =
+    args.length === argCount ? appliedFunction.signature[0] : appliedFunction;
+
+  return constr ? constraint(constr, applicationResult) : applicationResult;
 };
 
 export {
