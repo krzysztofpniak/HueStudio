@@ -109,9 +109,8 @@ const getTemplate = store => {
         submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }]
       }
     );
-
-    return template;
   }
+  return template;
 };
 
 const Root = ({ store }) => {
