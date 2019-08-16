@@ -1,5 +1,4 @@
-import { isConcreteScalar } from '../../../app/hueScript/typeSystem';
-import { scalar } from '../../../app/hueScript/coreLib/signatures';
+import { scalar, isConcreteScalar } from '../../../app/hueScript/typeSystem';
 
 describe('isConcreteScalar', () => {
   it('should resolve to true', () => {
@@ -8,8 +7,8 @@ describe('isConcreteScalar', () => {
     expect(isConcreteScalar(scalar('Group'))).toEqual(true);
   });
   it('should resolve to false', () => {
-    expect(isConcreteScalar(1)).toEqual(true);
-    expect(isConcreteScalar('a')).toEqual(true);
-    expect(isConcreteScalar(scalar('a'))).toEqual(true);
+    expect(isConcreteScalar(1)).toEqual(false);
+    expect(isConcreteScalar('a')).toEqual(false);
+    expect(isConcreteScalar(scalar('a'))).toEqual(false);
   });
 });

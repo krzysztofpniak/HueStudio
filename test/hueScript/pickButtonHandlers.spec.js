@@ -34,8 +34,8 @@ describe('pickButtonHandlers', () => {
           args: [
             {
               type: 'call',
-              name: 'dim',
-              args: [{ type: 'literal', value: 25 }]
+              name: 'dimmer',
+              args: [{ name: 'number', type: 'literal', value: 25 }]
             }
           ]
         }

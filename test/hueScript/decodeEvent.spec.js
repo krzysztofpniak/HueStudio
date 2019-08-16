@@ -1,3 +1,5 @@
+import decodeEvent from '../../app/hueScript/decodeEvent';
+
 describe('decodeEvent', () => {
   it('should decode', () => {
     expect(decodeEvent(1000)).toEqual(['button1', 'initial_press']);

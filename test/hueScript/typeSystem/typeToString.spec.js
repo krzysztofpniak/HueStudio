@@ -1,6 +1,10 @@
-import typeToString from '../../../app/hueScript/typeSystem/typeToString';
-import { scalar, array, fn } from '../../../app/hueScript/coreLib/signatures';
-import constraint from '../../../app/hueScript/typeSystem/constraint';
+import {
+  scalar,
+  array,
+  fn,
+  constraint,
+  typeToString
+} from '../../../app/hueScript/typeSystem';
 
 describe('typeToString', () => {
   it('should format scalar', () => {

@@ -26,9 +26,9 @@ const d = callNode(
 );
 
 describe('toSource', () => {
-  it('should a', () => {
+  /*it('should a', () => {
     expect(toSource(a)).toEqual('dimmer(1, 2).button1(3).short_release(4)');
-  });
+  });*/
 
   it('should b', () => {
     expect(toSource(b)).toEqual('dimmer.button1.short_release');
@@ -38,7 +38,7 @@ describe('toSource', () => {
     expect(toSource(c)).toEqual('short_release(button1(dimmer))');
   });
 
-  describe('style', () => {
+  /*describe('style', () => {
     it('should keep AST style', () => {
       expect(toSource(d, { style: 'keep' })).toEqual(
         'button1(dimmer(12)).short_release'
@@ -59,5 +59,5 @@ describe('toSource', () => {
         '12.dimmer.button1.short_release'
       );
     });
-  });
+  });*/
 });
