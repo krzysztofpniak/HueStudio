@@ -143,6 +143,7 @@
   ],
   "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
   "jest": {
+    "testRegex": "(.*\\.spec.js)$",
     "testURL": "http://localhost/",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
@@ -293,6 +294,8 @@
     "redux-saga": "^1.0.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "sanctuary": "^2.0.0",
+    "sanctuary-either": "^1.2.0",
     "source-map-support": "^0.5.12"
   },
   "devEngines": {
