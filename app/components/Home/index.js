@@ -359,13 +359,13 @@ const Home = withStaticScope('home')(() => {
   };
 
   const handleKeyDown = useCallback(e => {
-    if (e.keyCode === 91) {
+    if (e.keyCode === 91 || e.keyCode === 17) {
       toggleEditorMode(true);
     }
   }, []);
 
   const handleKeyUp = useCallback(e => {
-    if (e.keyCode === 91) {
+    if (e.keyCode === 91 || e.keyCode === 17) {
       toggleEditorMode(false);
     }
   }, []);
