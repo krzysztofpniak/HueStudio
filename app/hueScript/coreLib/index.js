@@ -1,5 +1,5 @@
-import { array, scalar, fn, constraint } from '../typeSystem';
-import { map, pathOr } from 'ramda';
+import { array, scalar, fn, constraint, overConstraint } from '../typeSystem';
+import { map, pathOr, pluck } from 'ramda';
 
 const createFunction = (signature, fn) => ({
   type: signature,
@@ -158,20 +158,25 @@ const condition = () => ({});
 
 const mapFn = createFunction(
   fn(fn(scalar('a'), scalar('b')), array(scalar('a')), array(scalar('b'))),
-  (it, list) => ({
-    type: 'Array',
-    elements: map(it.function, list.elements)
-  })
+  (it, list) => {
+    const elements = map(it.function, list.elements);
+
+    return {
+      type: overConstraint(t => array(t.signature[1]), it.type),
+      elements
+    };
+  }
 );
 
 const removeFn = createFunction(
   constraint(
-    { a: ['Group', 'Light', 'Schedule', 'Rule'] },
+    { a: ['Group', 'Schedule', 'Rule'] },
     fn(scalar('a'), scalar('Void'))
   ),
   (it, list) => {
     return {
-      type: 'remove'
+      type: scalar('Void')
+      //effect: ''
     };
   }
 );

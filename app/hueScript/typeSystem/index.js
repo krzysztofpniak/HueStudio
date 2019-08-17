@@ -1,7 +1,5 @@
 import {
   scalar,
-  array,
-  fn,
   unwrapConstraint,
   isConcreteTypeName,
   isPolyTypeName,
@@ -14,6 +12,8 @@ import {
   getArrayType,
   getFunctionSignature
 } from './helpers';
+import fn from './fn';
+import array from './array';
 import typeMismatchError from './typeMismatchError';
 import typeToString from './typeToString';
 import validateCallArgs from './validateCallArgs';

@@ -1,21 +1,8 @@
-import {
-  addIndex,
-  complement,
-  curry,
-  filter,
-  map,
-  prop,
-  propEq,
-  test
-} from 'ramda';
+import { addIndex, filter, prop, propEq, test } from 'ramda';
 
 const filterIndexed = addIndex(filter);
 
 const scalar = name => ({ kind: 'Scalar', name });
-
-const array = of => ({ kind: 'Array', of });
-
-const fn = (...signature) => ({ kind: 'Function', signature: signature });
 
 const unwrapConstraint = type => {
   return type.kind === 'Constraint' ? [type.of, type.in] : [null, type];
@@ -44,8 +31,6 @@ const getFunctionSignature = prop('signature');
 export {
   filterIndexed,
   scalar,
-  array,
-  fn,
   unwrapConstraint,
   isConcreteTypeName,
   isPolyTypeName,

@@ -1,5 +1,6 @@
 import { curry, map } from 'ramda';
-import { fn, getFunctionSignature } from './helpers';
+import { getFunctionSignature } from './helpers';
+import fn from './fn';
 
 const overFunction = curry((op, type) => {
   return fn(...map(op, getFunctionSignature(type)));

@@ -1,5 +1,5 @@
 import getPolyNames from './getPolyNames';
-import { pick } from 'ramda';
+import { pick, keys } from 'ramda';
 import { isConstraint } from './helpers';
 
 const constraint = (def, type) => {
@@ -7,7 +7,7 @@ const constraint = (def, type) => {
   const of = pick(polyNames, isConstraint(type) ? { ...def, ...type.of } : def);
   const _in = isConstraint(type) ? type.in : type;
 
-  return polyNames.length > 0
+  return keys(of).length > 0
     ? {
         kind: 'Constraint',
         of,
