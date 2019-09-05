@@ -1,25 +1,30 @@
-import { compose, join, map, mapObjIndexed, values } from 'ramda';
+import { compose, join, map, mapObjIndexed, values, keys } from 'ramda';
 import { scalar } from '../typeSystem';
+import $ from 'sanctuary-def';
+import { def, HSType } from '../../sanctuary/types';
 
-const typeToString = type => {
+const typeToString = def('typeToString')({})([HSType, $.String])(type => {
+  const constraints = keys(type.constraints).length
+    ? `${join(
+        ', ',
+        values(
+          mapObjIndexed((v, k) => `${k} ∈ {${join(', ', v)}}`, type.constraints)
+        )
+      )} ⇒ `
+    : '';
   switch (type.kind) {
     case 'Scalar':
-      return type.name;
+      return constraints + type.name;
     case 'Array':
-      return `[${typeToString(type.of)}]`;
+      return `${constraints}[${typeToString(type.of)}]`;
     case 'Function':
       return compose(
-        s => `(${s})`,
+        s => `${constraints}(${s})`,
         join(' → '),
         map(typeToString),
         s => (s.length > 1 ? s : [scalar('()'), ...s])
       )(type.signature);
-    case 'Constraint':
-      return `${join(
-        ', ',
-        values(mapObjIndexed((v, k) => `${k} ∈ {${join(', ', v)}}`, type.of))
-      )} ⇒ ${typeToString(type.in)}`;
   }
-};
+});
 
 export default typeToString;

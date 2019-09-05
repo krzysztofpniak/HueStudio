@@ -1,24 +1,4 @@
-import {
-  test,
-  map,
-  zip,
-  concat,
-  repeat,
-  curry,
-  xprod,
-  filter,
-  identity,
-  equals,
-  tryCatch,
-  always,
-  sequence,
-  addIndex,
-  reduce,
-  includes,
-  mergeRight,
-  prop,
-  compose
-} from 'ramda';
+import { addIndex, includes, compose, dissoc, mapAccum, chain } from 'ramda';
 import {
   typeToString,
   fn,
@@ -32,7 +12,24 @@ import {
   isConstraint,
   getArrayType
 } from './typeSystem';
-import { bimap, Right, Left, mapLeft } from '../sanctuary';
+import {
+  bimap,
+  Right,
+  Left,
+  mapLeft,
+  lift2,
+  join,
+  lift3,
+  reduce,
+  keys,
+  fromMaybe,
+  takeLast,
+  concat,
+  zip,
+  map,
+  equals,
+  on
+} from '../sanctuary';
 import {
   getNewRenamesContext,
   resetRenamesScope
@@ -44,9 +41,18 @@ import getArity from './typeSystem/getArity';
 import overConstraint from './typeSystem/overConstraint';
 import extractContraints from './typeSystem/extractConstraints';
 import isPolyArray from './typeSystem/isPolyArray';
+import substitutePolyScalars from './typeSystem/substitutePolyScalars';
+import typeToTypeResolution from './typeSystem/typeToTypeResolution';
+import $ from 'sanctuary-def';
+import { def, HSType, HSTypeResolution } from '../sanctuary/types';
 const mapWithKey = addIndex(map);
+const mapAccumIndexed = addIndex(mapAccum);
 
-const getResolution = (resolved, arg) => {
+const getResolution = def('getResolution')({})([
+  $.StrMap(HSType),
+  HSType,
+  HSType
+])(resolved => arg => {
   if (isPolyScalar(arg)) {
     const argName = getScalarName(arg);
     if (resolved[argName]) {
@@ -60,13 +66,29 @@ const getResolution = (resolved, arg) => {
   }
 
   return arg;
-};
+});
 
-const tryUpdateResolved = (name, value, resolved, constraints) => {
-  if (!resolved[name] || isPolyScalar(resolved[name] && !isPolyScalar(value))) {
-    resolved[name] = constraint(constraints, getResolution(resolved, value));
+const tryUpdateResolved = def('tryUpdateResolved')({})([
+  $.String,
+  HSType,
+  $.StrMap(HSType),
+  $.StrMap(HSType)
+])(name => value => resolved => {
+  if (!resolved[name]) {
+    return { ...resolved, [name]: getResolution(resolved)(value) };
+  } else if (isPolyScalar(resolved[name]) && !isPolyScalar(value)) {
+    const resolution = getResolution(resolved)(value);
+    return {
+      ...map(
+        substitutePolyScalars({
+          [getScalarName(resolved[name])]: resolution
+        })
+      )(resolved),
+      [name]: resolution
+    };
   }
-};
+  return resolved;
+});
 
 const matchesConstraints = (constraints, name, value) => {
   return (
@@ -77,130 +99,214 @@ const matchesConstraints = (constraints, name, value) => {
   );
 };
 
-const resolveScalarType = (arg, type, resolved = {}, constraints = {}) => {
-  if (isPolyScalar(type)) {
-    if (isPolyScalar(arg)) {
-      const typeName = getScalarName(type);
-      const argName = getScalarName(arg);
-      tryUpdateResolved(typeName, arg, resolved, constraints);
-      tryUpdateResolved(argName, type, resolved, constraints);
-      return Right(constraint(constraints, getResolution(resolved, arg)));
-    } else {
-      const typeName = getScalarName(type);
+//typeResolutionToType :: TypeResolution -> Type
+const typeResolutionToType = dissoc('resolutions');
 
-      if (matchesConstraints(constraints, typeName, arg)) {
+//safeResolutionsMerge :: Resolutions -> Resolutions -> Either String Resolutions
+const safeResolutionsMerge = def('safeResolutionsMerge')({})([
+  $.StrMap(HSType),
+  $.StrMap(HSType),
+  $.Either($.Unknown)($.StrMap(HSType))
+])(left => right => {
+  return Right({ ...left, ...right });
+});
+
+const a = $.TypeVariable('a');
+
+const assoc = def('assoc')({})([$.String, a, $.StrMap(a), $.StrMap(a)])(
+  key => value => target => ({ ...target, [key]: value })
+);
+
+const renameKeys = def('renameKeys')({})([
+  $.StrMap($.String),
+  $.StrMap(a),
+  $.StrMap(a)
+])(keysMap => obj =>
+  reduce(acc => key => assoc(keysMap[key] || key)(obj[key])(acc))({})(keys(obj))
+);
+
+//safeApplyConstraints :: HSType -> HSType -> Either Error HSType
+const safeApplyConstraints = def('safeApplyConstraints')({})([
+  HSType,
+  HSType,
+  $.Either($.Error)(HSType)
+])(source => target => {
+  if (equals(source.constraints)({}) || isConcreteScalar(target)) {
+    return Right(target);
+  } else {
+    const sourceName = getScalarName(source);
+    const targetName = getScalarName(target);
+    const newConstraints = renameKeys({
+      [sourceName]: targetName
+    })(source.constraints);
+    return Right(constraint(newConstraints)(target));
+  }
+});
+
+//resolveScalarType :: TypeResolution -> TypeResolution -> Either String TypeResolution
+const resolveScalarType = def('resolveScalarType')({})([
+  HSTypeResolution,
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(a => b => {
+  const resolutionsBase = safeResolutionsMerge(a.resolutions)(b.resolutions);
+  const aType = a.type;
+  const bType = b.type;
+
+  if (isPolyScalar(bType)) {
+    if (isPolyScalar(aType)) {
+      const typeName = getScalarName(bType);
+      const argName = getScalarName(aType);
+
+      const constrainedAType = safeApplyConstraints(bType)(aType);
+      const constrainedBType = safeApplyConstraints(aType)(bType);
+
+      return lift3(r => a => b => {
+        return compose(
+          fr => ({ type: getResolution(fr)(a), resolutions: fr }),
+          tryUpdateResolved(typeName)(a),
+          tryUpdateResolved(argName)(b)
+        )(r);
+      })(resolutionsBase)(constrainedAType)(constrainedBType);
+    } else {
+      const typeName = getScalarName(bType);
+      return map(
+        compose(
+          r => ({ type: aType, resolutions: r }),
+          tryUpdateResolved(typeName)(aType)
+        )
+      )(resolutionsBase);
+      /*if (matchesConstraints(constraints, typeName, arg)) {
         tryUpdateResolved(typeName, arg, resolved, constraints);
         return Right(arg);
-      }
+      }*/
     }
   } else {
     //type is ConcreteScalar
-    if (isPolyScalar(arg)) {
+    if (isPolyScalar(aType)) {
       //arg is PolyScalar, type is ConcreteScalar
-      const argName = getScalarName(arg);
-      tryUpdateResolved(argName, type, resolved, constraints);
-      return Right(type);
-    } else if (isConcreteScalar(arg)) {
+      const argName = getScalarName(aType);
+
+      return map(
+        compose(
+          r => ({ type: bType, resolutions: r }),
+          tryUpdateResolved(argName)(bType)
+        )
+      )(resolutionsBase);
+    } else if (isConcreteScalar(aType)) {
       //arg is ConcreteScalar, type is ConcreteScalar
-      const typeName = getScalarName(type);
-      const argName = getScalarName(arg);
+      const typeName = getScalarName(bType);
+      const argName = getScalarName(aType);
       if (typeName === argName) {
-        return Right(type);
+        return map(r => ({ type: bType, resolutions: r }))(resolutionsBase);
       }
     } else if (
-      arg.kind === 'Constraint' &&
-      arg.in.kind === 'Scalar' &&
-      arg.of[arg.in.name].includes(type.name)
+      a.kind === 'Constraint' &&
+      a.in.kind === 'Scalar' &&
+      a.of[a.in.name].includes(b.name)
     ) {
-      return Right(type);
+      return Right(bType);
     }
   }
 
-  return Left(typeMismatchError(constraint(constraints, type), arg));
-  /* old */
-  /*
-  if (isPolyType(type.name) && !resolved[type.name]) {
-    resolved[type.name] = arg;
-    return Right(arg);
-  } else if (arg.kind === 'Scalar') {
-    if (!isPolyType(arg.name) && arg.name === type.name) {
-      return Right(arg);
-    } else if (isPolyType(arg.name) && !resolved[arg.name]) {
-      resolved[arg.name] = type;
-      return Right(type);
-    } else if (isPolyType(arg.name) && resolved[arg.name]) {
-      return Right(resolved[arg.name]);
-    }
-  } else if (
-    arg.kind === 'Constraint' &&
-    arg.in.kind === 'Scalar' &&
-    arg.of[arg.in.name].includes(type.name)
-  ) {
-    return Right(type);
-  }
-  return Left(typeMismatchError(type, arg));
-  */
-};
+  return Left(typeMismatchError(bType, aType));
+});
 
-const newZip = curry((a, b) =>
-  zip(concat(a, repeat(null, b.length - a.length)), b)
-);
+const resolveFunctionType = def('resolveFunctionType')({})([
+  HSTypeResolution,
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(a => b => {
+  const aType = a.type;
+  const bType = b.type;
 
-const resolveFunctionType = (arg, type, resolved = {}, constraints = {}) => {
-  if (arg.kind === 'Function' && getArity(arg) <= getArity(type)) {
-    const candidates = newZip(arg.signature, type.signature);
+  if (aType.kind === 'Function' && getArity(aType) === getArity(bType)) {
+    const candidates = zip(aType.signature)(bType.signature);
 
-    const resolvedArguments = mapWithKey(([a, b], idx) => {
-      return mapLeft(x => ({ ...x, argIdx: idx }))(
-        resolveType(a || b, b, resolved, constraints)
-      );
-    }, candidates);
+    const resolvedArgs = reduce(state => ([aArg, bArg]) =>
+      chain(([currentResolutions, list]) => {
+        const aR = { type: aArg, resolutions: currentResolutions };
+        const bR = { type: bArg, resolutions: currentResolutions };
+        const resolvedArgument = mapLeft(x => ({ ...x, argIdx: -1 }))(
+          resolveType(aR)(bR)
+        );
+        return map(({ type: arg, resolutions: r }) => [r, [...list, arg]])(
+          resolvedArgument
+        );
+      }, state)
+    )(Right([{}, []]))(candidates);
 
-    const signature = sequence(Right)(resolvedArguments);
-    const unpacked = map(extractContraints, signature);
-
+    return map(([resolutions, args]) => ({
+      type: substitutePolyScalars(resolutions)(fn(args)),
+      resolutions
+    }))(resolvedArgs);
+  } else if (isPolyScalar(aType)) {
+    //TODO: niepełne, a może już pełne, niewiadomo
     return map(
-      ([constr, s]) => constraint({ ...constraints, ...constr }, fn(...s)),
-      unpacked
-    );
-  } else if (isPolyScalar(arg)) {
-    //TODO: niepełne
-    resolved[getScalarName(arg)] = type;
-    return Right(type);
-  } else if (isConstraint(arg)) {
-    const [constr, e] = unwrapConstraint(arg);
-    return resolveType(e, type, resolved, { ...constraints, ...constr });
+      compose(
+        r => ({ type: bType, resolutions: r }),
+        tryUpdateResolved(getScalarName(aType))(bType)
+      )
+    )(safeResolutionsMerge(a.resolutions)(b.resolutions));
+  } else if (isConstraint(a)) {
+    const [constr, e] = unwrapConstraint(a);
+    return resolveType(e, b);
   }
 
-  return Left(typeMismatchError(type, arg));
-};
+  return Left(typeMismatchError(bType, aType));
+});
 
 const wrapMismatchErrorWithArray = e =>
   typeMismatchError(overConstraint(array, e.expected), array(e.given));
 
-const resolveArrayType = (arg, type, resolved = {}, constraints = {}) => {
-  if (arg.kind === 'Array') {
-    const res = resolveType(arg.of, type.of, resolved, constraints);
-    return bimap(wrapMismatchErrorWithArray)(overConstraint(array))(res);
+const resolveArrayType = def('resolveArrayType')({})([
+  HSTypeResolution,
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(a => b => {
+  const aType = a.type;
+  const bType = b.type;
+  if (aType.kind === 'Array') {
+    const res = resolveType({ type: a.type.of, resolutions: a.resolutions })({
+      type: b.type.of,
+      resolutions: b.resolutions
+    });
+    return bimap(wrapMismatchErrorWithArray)(({ type, resolutions }) => ({
+      type: array(type),
+      resolutions
+    }))(res);
   }
-  return Left(
-    typeMismatchError(
-      constraint(constraints, getResolution(resolved, type)),
-      arg
-    )
-  );
-};
+  return Left(typeMismatchError(bType, aType));
+});
 
-const resolveType = (arg, type, resolved = {}, constraints = {}) => {
-  if (type.kind === 'Scalar') {
-    return resolveScalarType(arg, type, resolved, constraints);
-  } else if (type.kind === 'Array') {
-    return resolveArrayType(arg, type, resolved, constraints);
-  } else if (type.kind === 'Function') {
-    return resolveFunctionType(arg, type, resolved, constraints);
-  } else if (type.kind === 'Constraint') {
-    const [constr, e] = unwrapConstraint(type);
-    const resolvedInner = resolveType(arg, e, resolved, {
+const newZip = def('newZip')({})([
+  $.Array(a),
+  $.Array(a),
+  $.Array($.Pair(a)(a))
+])(a => b => {
+  const normalizedA = concat(a)(
+    fromMaybe([])(takeLast(b.length - a.length)(b))
+  );
+  const normalizedB = concat(b)(
+    fromMaybe([])(takeLast(a.length - b.length)(a))
+  );
+  return zip(normalizedA)(normalizedB);
+});
+
+const resolveType = def('resolveType')({})([
+  HSTypeResolution,
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(a => b => {
+  if (b.type.kind === 'Scalar') {
+    return resolveScalarType(a)(b);
+  } else if (b.type.kind === 'Array') {
+    return resolveArrayType(a)(b);
+  } else if (b.type.kind === 'Function') {
+    return resolveFunctionType(a)(b);
+  } else if (b.type.kind === 'Constraint') {
+    const [constr, e] = unwrapConstraint(b);
+    const resolvedInner = resolveType(a, e, resolved, {
       ...constraints,
       ...constr
     });
@@ -208,45 +314,90 @@ const resolveType = (arg, type, resolved = {}, constraints = {}) => {
     return map(x => (constr ? constraint(constr, x) : x), resolvedInner);
   }
   return Left('not implemented yet');
-};
+});
 
-const getFnFromArgs = args => {
-  const [constr, signature] = extractContraints(args);
-  return constraint(constr, fn(...signature));
-};
+const getFnFromArgs = def('getFnFromArgs')({})([
+  $.Array(HSTypeResolution),
+  $.Either($.Unknown)(HSTypeResolution)
+])(args => {
+  //TODO: dodac constraints
+  //const [constr, signature] = extractContraints(args);
+  const signatureResolution = reduce(state => argResolution => {
+    return map(({ signature, resolutions }) => ({
+      signature: [...signature, argResolution.type],
+      resolutions: resolutions
+    }))(state);
+  })(Right({ signature: [], resolutions: {} }))(args);
+  return map(({ signature, resolutions }) => ({
+    type: fn(signature),
+    resolutions
+  }))(signatureResolution);
+});
 
-const resolveCall = (args, type, resolved = {}) => {
+const resolveCall = def('resolveCall')({})([
+  $.Array(HSTypeResolution),
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(args => type => {
   let renamesContext = getNewRenamesContext();
 
-  const raw = getFnFromArgs(args);
+  const rawArgs = getFnFromArgs(args);
 
-  const f = normalizePolyNames(raw, renamesContext);
+  //const [f, renamesContext2] = ;
+  const renamedArgs = map(r => normalizePolyNames(r.type)(renamesContext))(
+    rawArgs
+  );
 
-  renamesContext = resetRenamesScope(renamesContext);
-  const normalizedType = normalizePolyNames(type, renamesContext);
+  const normalizedF = map(r => r[0])(renamedArgs);
+  const renamesContext2 = map(r => r[1])(renamedArgs);
 
-  const [constr, func] = unwrapConstraint(normalizedType);
+  const renamesContext3 = map(resetRenamesScope)(renamesContext2);
 
-  const argCount = func.signature.length - 1;
+  const normalizedType = map(
+    compose(
+      a => a[0],
+      normalizePolyNames(type.type)
+    )
+  )(renamesContext3);
+
+  const argCount = type.type.signature.length - 1;
   if (args.length > argCount) {
-    throw 'Too many arguments';
+    return Left('Too many arguments');
   }
 
-  const appliedFunction = map(
-    dropNArgs(args.length),
-    resolveType(f, normalizedType, resolved)
+  const signaturesDiff = getArity(type.type) + 1 - args.length;
+
+  const normalizedLeft = lift2(f => t =>
+    fn(
+      concat(f.signature)(fromMaybe([])(takeLast(signaturesDiff)(t.signature)))
+    )
+  )(normalizedF)(normalizedType);
+
+  const resolvedFunction = join(
+    lift2(on(resolveType)(typeToTypeResolution))(normalizedLeft)(normalizedType)
   );
 
-  const applicationResult = map(
-    x => (args.length === argCount ? unwrapConstraint(x)[1].signature[0] : x),
-    appliedFunction
-  );
+  const appliedFunction = map(rf => ({
+    type: dropNArgs(args.length)(rf.type),
+    resolutions: rf.resolutions
+  }))(resolvedFunction);
 
-  return map(x => (constr ? constraint(constr, x) : x), applicationResult);
-};
+  const applicationResult = map(x =>
+    args.length === argCount
+      ? {
+          type: unwrapConstraint(x.type)[1].signature[0],
+          resolutions: x.resolutions
+        }
+      : x
+  )(appliedFunction);
+
+  return applicationResult;
+});
 
 export {
+  tryUpdateResolved,
   getResolution,
+  safeApplyConstraints,
   resolveScalarType,
   resolveFunctionType,
   resolveArrayType,

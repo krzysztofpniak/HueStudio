@@ -1,8 +1,14 @@
+import $ from 'sanctuary-def';
+import { def, HSType } from '../../sanctuary/types';
 import { addIndex, filter, prop, propEq, test } from 'ramda';
 
 const filterIndexed = addIndex(filter);
 
-const scalar = name => ({ kind: 'Scalar', name });
+const scalar = def('hsScalar')({})([$.String, HSType])(name => ({
+  kind: 'Scalar',
+  name,
+  constraints: {}
+}));
 
 const unwrapConstraint = type => {
   return type.kind === 'Constraint' ? [type.of, type.in] : [null, type];
@@ -20,7 +26,9 @@ const isArray = propEq('kind', 'Array');
 
 const isConstraint = propEq('kind', 'Constraint');
 
-const isCallable = type => isFunction(unwrapConstraint(type)[1]);
+const isCallable = def('isCallable')({})([HSType, $.Boolean])(type =>
+  isFunction(unwrapConstraint(type)[1])
+);
 
 const getScalarName = prop('name');
 

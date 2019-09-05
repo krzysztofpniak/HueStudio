@@ -16,26 +16,25 @@ describe('getPolyNames', () => {
   it('get from function', () => {
     expect(
       getPolyNames(
-        fn(
+        fn([
           scalar('a'),
           scalar('b'),
           scalar('Number'),
-          fn(scalar('a'), scalar('d'))
-        )
+          fn([scalar('a'), scalar('d')])
+        ])
       )
     ).toEqual(['a', 'b', 'd']);
   });
   it('get from constraint', () => {
     expect(
       getPolyNames(
-        constraint(
-          { a: ['Number', 'String'] },
-          fn(
+        constraint({ a: ['Number', 'String'] })(
+          fn([
             scalar('a'),
             scalar('b'),
             scalar('Number'),
-            fn(scalar('a'), scalar('d'))
-          )
+            fn([scalar('a'), scalar('d')])
+          ])
         )
       )
     ).toEqual(['a', 'b', 'd']);

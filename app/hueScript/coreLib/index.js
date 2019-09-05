@@ -10,7 +10,7 @@ const createFunction = (signature, fn) => ({
  * @example
  *  light(1); // => {type: 'Light', ref: '/lights/1'}
  */
-const light = createFunction(fn(scalar('Number'), scalar('Light')), id => ({
+const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
   type: scalar('Light'),
   ref: `/lights/${id.value}`
 }));
@@ -19,7 +19,7 @@ const light = createFunction(fn(scalar('Number'), scalar('Light')), id => ({
  * @example
  *  group(1); // => {type: 'Group', ref: '/groups/1'}
  */
-const group = createFunction(fn(scalar('Number'), scalar('Group')), id => ({
+const group = createFunction(fn([scalar('Number'), scalar('Group')]), id => ({
   type: scalar('Group'),
   ref: `/groups/${id.value}`
 }));
@@ -34,7 +34,7 @@ const group = createFunction(fn(scalar('Number'), scalar('Group')), id => ({
  *  // => {type: 'Group', state: {on: true}}
  */
 const on = createFunction(
-  constraint({ a: ['Light', 'Group'] }, fn(scalar('a'), scalar('a'))),
+  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
   target => ({
     ...target,
     state: { ...target.state, on: true }
@@ -42,9 +42,8 @@ const on = createFunction(
 );
 
 const bri = createFunction(
-  constraint(
-    { a: ['Light', 'Group'] },
-    fn(scalar('Number'), scalar('a'), scalar('a'))
+  constraint({ a: ['Light', 'Group'] })(
+    fn([scalar('Number'), scalar('a'), scalar('a')])
   ),
   (brightness, target) => ({
     ...target,
@@ -53,9 +52,8 @@ const bri = createFunction(
 );
 
 const transition = createFunction(
-  constraint(
-    { a: ['Light', 'Group'] },
-    fn(scalar('Number'), scalar('a'), scalar('a'))
+  constraint({ a: ['Light', 'Group'] })(
+    fn([scalar('Number'), scalar('a'), scalar('a')])
   ),
   (value, target) => ({
     ...target,
@@ -64,7 +62,7 @@ const transition = createFunction(
 );
 
 const setScene = createFunction(
-  fn(scalar('String'), scalar('Group'), scalar('Group')),
+  fn([scalar('String'), scalar('Group'), scalar('Group')]),
   (value, target) => ({
     ...target,
     state: { ...target.state, scene: value }
@@ -77,7 +75,7 @@ const setScene = createFunction(
  *  off({type: 'Group', ref: '/groups/1'}); // => {type: 'Group', state: {on: false}}
  */
 const off = createFunction(
-  constraint({ a: ['Light', 'Group'] }, fn(scalar('a'), scalar('a'))),
+  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
   target => ({ ...target, state: { ...target.state, on: false } })
 );
 
@@ -86,7 +84,7 @@ const off = createFunction(
  *  dimmer(12); // => {type: 'Dimmer', ref: '/sensors/12'}
  */
 const dimmer = createFunction(
-  fn(scalar('Number'), scalar('Dimmer')),
+  fn([scalar('Number'), scalar('Dimmer')]),
   dimmerId => ({
     type: scalar('Dimmer'),
     ref: `/sensors/${dimmerId.value}`
@@ -99,7 +97,7 @@ const dimmer = createFunction(
  *  // => {type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
 const button1 = createFunction(
-  fn(scalar('Number'), scalar('Button')),
+  fn([scalar('Number'), scalar('Button')]),
   sensor => ({
     type: scalar('Button'),
     button: 'button1',
@@ -113,7 +111,7 @@ const button1 = createFunction(
  *  // => {type: 'ButtonEvent', button: 'button1', eventCode: 1000, sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
 const initial_press = createFunction(
-  fn(scalar('Button'), scalar('ButtonEvent')),
+  fn([scalar('Button'), scalar('ButtonEvent')]),
   button => ({
     type: scalar('ButtonEvent'),
     button: button.button,
@@ -128,7 +126,7 @@ const initial_press = createFunction(
  *  // => {type: 'EventHandler', event: {type: 'ButtonEvent', ...}, actions: [...]}
  */
 const handle = createFunction(
-  fn(fn(scalar('void')), scalar('ButtonEvent'), scalar('Rule')),
+  fn([fn([scalar('void')]), scalar('ButtonEvent'), scalar('Rule')]),
   (event, actions) => ({ type: scalar('Rule'), event, actions })
 );
 
@@ -157,7 +155,7 @@ const eq = () => ({});
 const condition = () => ({});
 
 const mapFn = createFunction(
-  fn(fn(scalar('a'), scalar('b')), array(scalar('a')), array(scalar('b'))),
+  fn([fn([scalar('a'), scalar('b')]), array(scalar('a')), array(scalar('b'))]),
   (it, list) => {
     const elements = map(it.function, list.elements);
 
@@ -169,9 +167,8 @@ const mapFn = createFunction(
 );
 
 const removeFn = createFunction(
-  constraint(
-    { a: ['Group', 'Schedule', 'Rule'] },
-    fn(scalar('a'), scalar('Void'))
+  constraint({ a: ['Group', 'Schedule', 'Rule'] })(
+    fn([scalar('a'), scalar('Void')])
   ),
   (it, list) => {
     return {

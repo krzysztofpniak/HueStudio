@@ -27,6 +27,7 @@ import hasNArgs from './hasNArgs';
 import getArity from './getArity';
 import isConcreteScalar from './isConcreteScalar';
 import normalizePolyNames from './normalizePolyNames';
+import typeToTypeResolution from './typeToTypeResolution';
 
 export {
   scalar,
@@ -55,5 +56,6 @@ export {
   constraint,
   overConstraint,
   isConcreteScalar,
-  normalizePolyNames
+  normalizePolyNames,
+  typeToTypeResolution
 };

@@ -1,11 +1,15 @@
 import { both, compose } from 'ramda';
 import { getScalarName, isConcreteTypeName, isScalar } from './helpers';
+import $ from 'sanctuary-def';
+import { def, HSType } from '../../sanctuary/types';
 
-const isConcreteScalar = both(
-  isScalar,
-  compose(
-    isConcreteTypeName,
-    getScalarName
+const isConcreteScalar = def('isConcreteScalar')({})([HSType, $.Boolean])(
+  both(
+    isScalar,
+    compose(
+      isConcreteTypeName,
+      getScalarName
+    )
   )
 );
 

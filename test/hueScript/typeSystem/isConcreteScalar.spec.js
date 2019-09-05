@@ -7,8 +7,6 @@ describe('isConcreteScalar', () => {
     expect(isConcreteScalar(scalar('Group'))).toEqual(true);
   });
   it('should resolve to false', () => {
-    expect(isConcreteScalar(1)).toEqual(false);
-    expect(isConcreteScalar('a')).toEqual(false);
     expect(isConcreteScalar(scalar('a'))).toEqual(false);
   });
 });

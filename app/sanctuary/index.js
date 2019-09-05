@@ -1,4 +1,6 @@
 const { create, env } = require('sanctuary');
+import $ from 'sanctuary-def';
+import { def } from './types';
 
 const S = create({
   checkTypes: process.env.NODE_ENV !== 'production',
@@ -170,7 +172,33 @@ const {
   unchecked
 } = S;
 
+const a = $.TypeVariable('a');
+const b = $.TypeVariable('b');
+const c = $.TypeVariable('c');
+
+const cond = def('cond')({})([
+  $.Array($.Array2($.Function([a, $.Boolean]))($.Function([a, b]))),
+  a,
+  $.Maybe(b)
+])(conds => a => map(x => x[1](a))(find(x => x[0](a))(conds)));
+
+const cond2 = def('cond2')({})([
+  $.Array($.Array2($.Function([a, b, $.Boolean]))($.Function([a, b, c]))),
+  a,
+  b,
+  c
+])(conds => a => b =>
+  fromMaybe_(() => {
+    throw 'kupa';
+  })(map(x => x[1](a)(b))(find(x => x[0](a)(b))(conds)))
+);
+
+//const evolve = def('evolve')({})([$.StrMap($.)])();
+
 export {
+  def,
+  cond,
+  cond2,
   is,
   Maybe,
   Nothing,
