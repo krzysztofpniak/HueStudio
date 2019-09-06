@@ -24,8 +24,6 @@ const isFunction = propEq('kind', 'Function');
 
 const isArray = propEq('kind', 'Array');
 
-const isConstraint = propEq('kind', 'Constraint');
-
 const isCallable = def('isCallable')({})([HSType, $.Boolean])(type =>
   isFunction(unwrapConstraint(type)[1])
 );
@@ -45,7 +43,6 @@ export {
   isScalar,
   isFunction,
   isArray,
-  isConstraint,
   isCallable,
   getScalarName,
   getArrayType,

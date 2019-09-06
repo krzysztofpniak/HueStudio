@@ -1,7 +1,7 @@
 import $ from 'sanctuary-def';
 import { chain, uniq } from 'ramda';
 import isPolyScalar from './isPolyScalar';
-import { getScalarName, isConstraint, isArray, isFunction } from './helpers';
+import { getScalarName, isArray, isFunction } from './helpers';
 import { HSType, def } from '../../sanctuary/types';
 
 /**
@@ -17,8 +17,6 @@ const getPolyNames = def('getPolyNames')({})([HSType, $.Array($.String)])(
       return [getScalarName(type)];
     } else if (isArray(type)) {
       return getPolyNames(type.of);
-    } else if (isConstraint(type)) {
-      return getPolyNames(type.in);
     } else if (isFunction(type)) {
       return uniq(chain(getPolyNames, type.signature));
     } else {

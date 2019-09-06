@@ -5,6 +5,7 @@ import {
   fn
 } from '../../../app/hueScript/typeSystem';
 import { getNewRenamesContext } from '../../../app/hueScript/typeSystem/normalizePolyNames';
+import constraint from '../../../app/hueScript/typeSystem/constraint';
 
 describe('normalizePolyNames', () => {
   describe('with Scalar', () => {
@@ -53,6 +54,34 @@ describe('normalizePolyNames', () => {
           array(scalar('b'))
         ]),
         { renames: { x: 'a', y: 'b' }, start: 2 }
+      ]);
+    });
+  });
+
+  describe('with Constraints', () => {
+    it('should translate scalar with constraints', () => {
+      expect(
+        normalizePolyNames(
+          constraint({ b: ['String', 'Number'] })(scalar('b'))
+        )(getNewRenamesContext())
+      ).toEqual([
+        constraint({ a: ['String', 'Number'] })(scalar('a')),
+        { renames: { b: 'a' }, start: 1 }
+      ]);
+    });
+
+    it('should translate function with constraints', () => {
+      expect(
+        normalizePolyNames(
+          constraint({ b: ['String', 'Number'] })(
+            fn([scalar('b'), scalar('Number')])
+          )
+        )(getNewRenamesContext())
+      ).toEqual([
+        constraint({ a: ['String', 'Number'] })(
+          fn([scalar('a'), scalar('Number')])
+        ),
+        { renames: { b: 'a' }, start: 1 }
       ]);
     });
   });

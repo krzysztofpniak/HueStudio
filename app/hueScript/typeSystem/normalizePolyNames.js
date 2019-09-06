@@ -7,7 +7,6 @@ import {
   scalar,
   isArray,
   isFunction,
-  isConstraint,
   unwrapConstraint
 } from './helpers';
 import {
@@ -24,6 +23,7 @@ import {
 import constraint from './constraint';
 import { array, fn } from './index';
 import { HSType, RenamesContext, def } from '../../sanctuary/types';
+import { renameKeys } from '../../sanctuary';
 
 const mapKeys = curry((it, data) =>
   compose(
@@ -59,7 +59,12 @@ const normalizePolyNames = def('normalizePolyNames')({})([
     const name = getScalarName(type);
     if (isPolyTypeName(name)) {
       const [nextName, nextContext] = getNameFor(name, context);
-      return [scalar(nextName), nextContext];
+      return [
+        constraint(renameKeys(nextContext.renames)(type.constraints))(
+          scalar(nextName)
+        ),
+        nextContext
+      ];
     }
 
     return [type, context];
@@ -77,15 +82,10 @@ const normalizePolyNames = def('normalizePolyNames')({})([
       [[], context],
       type.signature
     );
-    return [fn(args), nextContext];
-  } else if (isConstraint(type)) {
-    const [constr, inner] = unwrapConstraint(type);
-
-    const normalizedInner = normalizePolyNames(inner)(context);
-
-    const normalizedConstr = mapKeys(c => getNameFor(c, context), constr);
-
-    return constraint(normalizedConstr, normalizedInner);
+    return [
+      constraint(renameKeys(nextContext.renames)(type.constraints))(fn(args)),
+      nextContext
+    ];
   }
 
   throw 'not implemented yet';
