@@ -29,7 +29,8 @@ import {
   map,
   equals,
   on,
-  zipWith
+  zipWith,
+  renameKeys
 } from '../sanctuary';
 import {
   getNewRenamesContext,
@@ -113,18 +114,6 @@ const safeResolutionsMerge = def('safeResolutionsMerge')({})([
 });
 
 const a = $.TypeVariable('a');
-
-const assoc = def('assoc')({})([$.String, a, $.StrMap(a), $.StrMap(a)])(
-  key => value => target => ({ ...target, [key]: value })
-);
-
-const renameKeys = def('renameKeys')({})([
-  $.StrMap($.String),
-  $.StrMap(a),
-  $.StrMap(a)
-])(keysMap => obj =>
-  reduce(acc => key => assoc(keysMap[key] || key)(obj[key])(acc))({})(keys(obj))
-);
 
 //safeApplyConstraints :: HSType -> HSType -> Either Error HSType
 const safeApplyConstraints = def('safeApplyConstraints')({})([

@@ -193,12 +193,25 @@ const cond2 = def('cond2')({})([
   })(map(x => x[1](a)(b))(find(x => x[0](a)(b))(conds)))
 );
 
+const assoc = def('assoc')({})([$.String, a, $.StrMap(a), $.StrMap(a)])(
+  key => value => target => ({ ...target, [key]: value })
+);
+
+const renameKeys = def('renameKeys')({})([
+  $.StrMap($.String),
+  $.StrMap(a),
+  $.StrMap(a)
+])(keysMap => obj =>
+  reduce(acc => key => assoc(keysMap[key] || key)(obj[key])(acc))({})(keys(obj))
+);
+
 //const evolve = def('evolve')({})([$.StrMap($.)])();
 
 export {
   def,
   cond,
   cond2,
+  renameKeys,
   is,
   Maybe,
   Nothing,
