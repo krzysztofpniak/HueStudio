@@ -1,20 +1,22 @@
-import { mergeRight, prop, compose, filter, reduce, map } from 'ramda';
+import {
+  mergeRight,
+  prop,
+  compose,
+  filter,
+  reduce,
+  map,
+  propOr,
+  assoc
+} from 'ramda';
 import { isConstraint, unwrapConstraint } from './helpers';
 
 //:: [Type] -> [constr, [Type]]
 const extractContraints = types => {
   const constr = compose(
     reduce(mergeRight, {}),
-    map(prop('of')),
-    filter(isConstraint)
+    map(propOr({}, 'constraints'))
   )(types);
-  const unpacked = map(
-    compose(
-      prop(1),
-      unwrapConstraint
-    ),
-    types
-  );
+  const unpacked = map(assoc('constraints', {}), types);
   return [constr, unpacked];
 };
 
