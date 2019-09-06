@@ -28,7 +28,8 @@ import {
   zip,
   map,
   equals,
-  on
+  on,
+  zipWith
 } from '../sanctuary';
 import {
   getNewRenamesContext,
@@ -221,7 +222,9 @@ const resolveFunctionType = def('resolveFunctionType')({})([
   const bType = b.type;
 
   if (aType.kind === 'Function' && getArity(aType) === getArity(bType)) {
-    const candidates = zip(aType.signature)(bType.signature);
+    const candidates = zip(map(constraint(aType.constraints))(aType.signature))(
+      map(constraint(bType.constraints))(bType.signature)
+    );
 
     const resolvedArgs = reduce(state => ([aArg, bArg]) =>
       chain(([currentResolutions, list]) => {
