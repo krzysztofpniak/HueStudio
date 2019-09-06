@@ -92,14 +92,19 @@ const tryUpdateResolved = def('tryUpdateResolved')({})([
   return resolved;
 });
 
-const matchesConstraints = (constraints, name, value) => {
+const matchesConstraints = def('matchesConstraints')({})([
+  $.StrMap($.Array($.String)),
+  $.String,
+  HSType,
+  $.Boolean
+])(constraints => name => value => {
   return (
     !constraints[name] ||
     (constraints[name] &&
       isConcreteScalar(value) &&
       includes(getScalarName(value), constraints[name]))
   );
-};
+});
 
 //typeResolutionToType :: TypeResolution -> Type
 const typeResolutionToType = dissoc('resolutions');
@@ -158,7 +163,9 @@ const resolveScalarType = def('resolveScalarType')({})([
           tryUpdateResolved(argName)(b)
         )(r);
       })(resolutionsBase)(constrainedAType)(constrainedBType);
-    } else {
+    } else if (
+      matchesConstraints(bType.constraints)(getScalarName(bType))(aType)
+    ) {
       const typeName = getScalarName(bType);
       return map(
         compose(
