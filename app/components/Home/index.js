@@ -2,36 +2,24 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import SplitPane from 'react-split-pane';
 import {
-  addIndex,
   always,
   assoc,
-  chain,
   compose,
   cond,
-  evolve,
-  filter,
   fromPairs,
-  hasPath,
   head,
-  identity,
   ifElse,
   includes,
   indexBy,
-  join,
   map,
   none,
-  objOf,
   of,
   path,
-  pathOr,
   prepend,
   prop,
   propEq,
   reject,
-  T,
-  toPairs,
-  tryCatch,
-  values
+  T
 } from 'ramda';
 import NestedList from '../NestedList';
 import AppBar from '../AppBar';
@@ -42,36 +30,20 @@ import store from '../../appSettings';
 import Terminal, { addLine } from '../terminal';
 import ResourceViewer from '../resourceViewer';
 import { useTransition, animated } from 'react-spring';
-import {
-  createAction,
-  createPayloadReducer,
-  createReducer,
-  createStateReducer,
-  handleAsyncs,
-  Scope,
-  useKReducer,
-  usePrevious,
-  withScope
-} from '@k-frame/core';
+import { Scope, useKReducer } from '@k-frame/core';
 import { useSagaRunner } from '@k-frame/sagas';
 import HSEditor from '../hueScriptEditor';
-import saga, { deploySaga } from './effects';
+import saga from './effects';
 import useDebounce from '../../helpers/useDebounce';
 import getSideBarItems from './getSideBarItems';
 import actions from './actions';
 import reducer from './reducer';
-import ruleToAst from '../../hueScript/ruleToAst';
-import scheduleToAst from '../../hueScript/scheduleToAst';
 import useHueData from './useHueData';
 import AstViewer from '../astViewer';
 import {
   astToBridgeState,
-  createEmptyContext,
-  emptyContext
+  createEmptyContext
 } from '../../hueScript/astToBridgeState';
-
-const filterWithKey = addIndex(filter);
-const mapWithKey = addIndex(map);
 
 const get = async url => {
   const r = await fetch(url);
@@ -227,7 +199,10 @@ const Home = withStaticScope('home')(() => {
   const { state, infos } = useMemo(() => {
     const context = createEmptyContext();
     const state = parsed.data ? astToBridgeState(parsed.data, context) : [];
-    return { state, infos: context.infos };
+    return {
+      state,
+      infos: context.infos
+    };
   }, [parsed]);
 
   const errors = useMemo(() => {
