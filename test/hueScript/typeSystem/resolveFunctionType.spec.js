@@ -95,7 +95,11 @@ describe('resolveFunctionType', () => {
             array(scalar('a'))
           ])
         ),
-        resolutions: {}
+        resolutions: {
+          a: constraint({ a: ['Light', 'Group'] })(scalar('a')),
+          b: constraint({ a: ['Light', 'Group'] })(scalar('a')),
+          c: constraint({ a: ['Light', 'Group'] })(scalar('a'))
+        }
       })
     );
   });

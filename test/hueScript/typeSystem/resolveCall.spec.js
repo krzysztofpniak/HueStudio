@@ -57,7 +57,9 @@ describe('resolveCall', () => {
         type: constraint({ a: ['Light', 'Group'] })(
           fn([scalar('a'), scalar('a')])
         ),
-        resolutions: {}
+        resolutions: {
+          a: constraint({ a: ['Light', 'Group'] })(scalar('a'))
+        }
       })
     );
   });
@@ -71,7 +73,7 @@ describe('resolveCall', () => {
           )
         )
       )
-    ).toEqual(Right({ type: scalar('Group') }));
+    ).toEqual(Right({ type: scalar('Group'), resolutions: { a: group } }));
   });
 
   it('should not resolve (Number, Number), (Number -> a -> a) with constraint', () => {
@@ -89,7 +91,7 @@ describe('resolveCall', () => {
           constraint({ a: ['Light', 'Group'] })(scalar('a')),
           scalar('Number')
         ),
-        argIdx: 1
+        argIdx: -1
       })
     );
   });

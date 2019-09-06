@@ -99,6 +99,21 @@ describe('resolveScalarType', () => {
     });
   });
 
+  it('should validate constraint', () => {
+    expect(
+      resolveScalarType(numberR)(
+        typeToTypeResolution(constraint({ a: ['Light', 'Group'] })(scalar('a')))
+      )
+    ).toEqual(
+      Left(
+        typeMismatchError(
+          constraint({ a: ['Light', 'Group'] })(scalar('a')),
+          number
+        )
+      )
+    );
+  });
+
   it('should throw on unmatched', () => {
     expect(resolveScalarType(numberR)(stringR)).toEqual(
       Left(typeMismatchError(string, number))
