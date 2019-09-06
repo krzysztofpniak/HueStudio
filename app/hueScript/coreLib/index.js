@@ -3,7 +3,7 @@ import { map, pathOr, pluck } from 'ramda';
 
 const createFunction = (signature, fn) => ({
   type: signature,
-  function: fn
+  value: fn
 });
 
 /**
