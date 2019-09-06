@@ -470,8 +470,13 @@ const astToBridgeState = (ast, context = createEmptyContext()) =>
   //  console.log('dupa', ast, context) || astToBridgeStateInt(ast)(context);
   translateProgram(ast)(context);
 
+const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
+  JSON.stringify(map(x => typeToString(x.type))(context.vars[0]), null, 2)
+);
+
 export {
   astToBridgeState,
+  showHSContext,
   createEmptyContext,
   createHSContext,
   putContextVar,
