@@ -3,8 +3,12 @@ import AppBar from '@material-ui/core/AppBar/AppBar';
 import Tabs from '@material-ui/core/Tabs/Tabs';
 import Tab from '@material-ui/core/Tab/Tab';
 import styles from '../Home.css';
-import { astToBridgeState } from '../../hueScript/astToBridgeState';
-import { always, cond, equals, evolve, join, map, mapAccum, nth } from 'ramda';
+import {
+  astToBridgeState,
+  showHSContext
+} from '../../hueScript/astToBridgeState';
+import { always, cond, equals, hasPath, join, map } from 'ramda';
+import { either, Left } from '../../sanctuary';
 
 const requestToRawHttp = request => {
   const body = JSON.stringify(request.body);
@@ -42,8 +46,12 @@ const AstViewer = ({ baseApiUrl, ast }) => {
   }, []);
 
   const stateOutput = useMemo(() => {
-    const state = ast ? astToBridgeState(ast) : [];
-    return JSON.stringify(state, null, 2);
+    const state = ast ? astToBridgeState(ast) : Left('no ast');
+    return hasPath(['error', 'message'], state)
+      ? state.error.message
+      : either(a => (a.message ? a.message : JSON.stringify(a, null, 2)))(
+          showHSContext
+        )(state);
   }, [ast]);
 
   const resolvedStream = useMemo(() => {
