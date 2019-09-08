@@ -1,5 +1,6 @@
 const { create, env } = require('sanctuary');
 import $ from 'sanctuary-def';
+import Z from 'sanctuary-type-classes';
 import { def } from './types';
 
 const S = create({
@@ -176,6 +177,8 @@ const a = $.TypeVariable('a');
 const b = $.TypeVariable('b');
 const c = $.TypeVariable('c');
 
+const f = $.UnaryTypeVariable('f');
+
 const cond = def('cond')({})([
   $.Array($.Array2($.Function([a, $.Boolean]))($.Function([a, b]))),
   a,
@@ -205,6 +208,16 @@ const renameKeys = def('renameKeys')({})([
   reduce(acc => key => assoc(keysMap[key] || key)(obj[key])(acc))({})(keys(obj))
 );
 
+const reduceIndexed = def('reduceIndexed')({ f: [Z.Foldable] })([
+  $.Fn(a)($.Fn(b)($.Fn(c)(a))),
+  a,
+  f(b),
+  a
+])(fn => initial => data => {
+  let idx = 0;
+  return reduce(p => c => fn(p)(c)(idx++))(initial)(data);
+});
+
 //const evolve = def('evolve')({})([$.StrMap($.)])();
 
 export {
@@ -212,6 +225,7 @@ export {
   cond,
   cond2,
   renameKeys,
+  reduceIndexed,
   is,
   Maybe,
   Nothing,
