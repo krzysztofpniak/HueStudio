@@ -30,7 +30,8 @@ import {
   equals,
   on,
   zipWith,
-  renameKeys
+  renameKeys,
+  reduceIndexed
 } from '../sanctuary';
 import {
   getNewRenamesContext,
@@ -222,11 +223,11 @@ const resolveFunctionType = def('resolveFunctionType')({})([
       map(constraint(bType.constraints))(bType.signature)
     );
 
-    const resolvedArgs = reduce(state => ([aArg, bArg]) =>
+    const resolvedArgs = reduceIndexed(state => ([aArg, bArg]) => idx =>
       chain(([currentResolutions, list]) => {
         const aR = { type: aArg, resolutions: currentResolutions };
         const bR = { type: bArg, resolutions: currentResolutions };
-        const resolvedArgument = mapLeft(x => ({ ...x, argIdx: -1 }))(
+        const resolvedArgument = mapLeft(x => ({ ...x, argIdx: idx }))(
           resolveType(aR)(bR)
         );
         return map(({ type: arg, resolutions: r }) => [r, [...list, arg]])(

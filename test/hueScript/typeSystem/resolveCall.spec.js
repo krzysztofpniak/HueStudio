@@ -91,7 +91,7 @@ describe('resolveCall', () => {
           constraint({ a: ['Light', 'Group'] })(scalar('a')),
           scalar('Number')
         ),
-        argIdx: -1
+        argIdx: 1
       })
     );
   });
