@@ -44,6 +44,7 @@ import {
   astToBridgeState,
   createEmptyContext
 } from '../../hueScript/astToBridgeState';
+import { either } from '../../sanctuary';
 
 const get = async url => {
   const r = await fetch(url);
@@ -209,7 +210,7 @@ const Home = withStaticScope('home')(() => {
     if (hasErrorLocation(parsed)) {
       return toErrors(parsed);
     } else {
-      return toErrors(state);
+      return either(v => [v.location])(() => [])(state);
     }
   }, [parsed, state]);
 
