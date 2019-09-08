@@ -10,6 +10,7 @@ import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchErr
 
 const callAst1 = parseHue('hello();').data.body[0].expression;
 const callAst2 = parseHue('a(1);').data.body[0].expression;
+const callAst3 = parseHue("a('a');").data.body[0].expression;
 
 describe('translateCallExpression', () => {
   it('should translate valid nullary call', () => {
@@ -47,6 +48,21 @@ describe('translateCallExpression', () => {
     expect(translateCallExpression(callAst2)(context)).toEqual(
       Left(
         typeMismatchError(fn([]), scalar('Number'), callAst2.callee.location)
+      )
+    );
+  });
+  it('should fail wrong arg type', () => {
+    const context = putContextVar('a')({
+      type: fn([scalar('Number'), scalar('Number')]),
+      value: a => a + 1
+    })(createHSContext());
+    expect(translateCallExpression(callAst3)(context)).toEqual(
+      Left(
+        typeMismatchError(
+          scalar('Number'),
+          scalar('String'),
+          callAst3.arguments[0].location
+        )
       )
     );
   });
