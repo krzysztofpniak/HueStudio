@@ -467,7 +467,6 @@ const putContextVar = def('putContextVar')({})([
 const createHSContext = createEmptyContext;
 
 const astToBridgeState = (ast, context = createEmptyContext()) =>
-  //  console.log('dupa', ast, context) || astToBridgeStateInt(ast)(context);
   translateProgram(ast)(context);
 
 const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
