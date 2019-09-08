@@ -167,7 +167,7 @@ const translateProgram = def('translateProgram')({})([
   HSContext,
   $.Either($.Unknown)(HSContext)
 ])(ast => context =>
-  map(a => translateStatement(a)(context))(ast.body) && Right(context)
+  reduce(p => c => chain(translateStatement(c))(p))(Right(context))(ast.body)
 );
 
 const translateBlockStatement = ast => context =>
