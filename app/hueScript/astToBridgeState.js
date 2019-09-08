@@ -381,7 +381,7 @@ const translateArrayExpression = ast => context => {
 };
 
 const translateExpressionStatement = ast => context =>
-  astToBridgeStateInt(ast.expression)(context);
+  translateExpression(ast.expression)(context);
 
 const translateMemberExpression = ast => context => {
   const obj = astToBridgeStateInt(ast.object)(context);
