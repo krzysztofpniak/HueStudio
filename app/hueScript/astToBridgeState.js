@@ -35,7 +35,8 @@ import {
   converge,
   tap,
   adjust,
-  assoc
+  assoc,
+  dissoc
 } from 'ramda';
 import coreLib from './coreLib/index';
 import { resolveCall, resolveType } from './resolveType';
@@ -269,17 +270,11 @@ const translateCallExpression = def('translateCallExpression')({})([
 
   const calleeType = map(v => typeToTypeResolution(v.type))(validatedCallee2);
 
-  const finalType = map(t => t.type)(
-    join(lift2(resolveCall)(argsTypes)(calleeType))
-  );
-
-  /*const zzz = mapLeft(e =>
-    e.argIdx != null ? { ...e, location: ast.arguments[e.argIdx].location } : e
-  )(
-    resolveCall(map(typeToTypeResolution)(pluck('type', args)))(
-      typeToTypeResolution(callee.type)
-    )
-  );*/
+  const finalType = mapLeft(e =>
+    e.argIdx != null
+      ? { ...dissoc('argIdx', e), location: ast.arguments[e.argIdx].location }
+      : e
+  )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
   const argValues = map(pluck('value'))(args);
 
