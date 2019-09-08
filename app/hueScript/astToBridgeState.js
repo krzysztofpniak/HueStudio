@@ -325,7 +325,11 @@ const translateLiteral = def('translateLiteral')({})([
   ])
 );
 
-const translateFunctionExpression = ast => context => {
+const translateFunctionExpression = def('translateLiteral')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context => {
   const argNames = pluck('name', ast.params);
   console.log('FunctionExpression', argNames, ast);
   const inferContext = { ...context, inferred: {} };
@@ -355,7 +359,7 @@ const translateFunctionExpression = ast => context => {
       );
     }
   };
-};
+});
 
 const translateArrayExpression = ast => context => {
   const elements = map(e => astToBridgeStateInt(e)(context), ast.elements);
