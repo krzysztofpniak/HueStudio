@@ -78,6 +78,7 @@ import {
   HSTypeResolution,
   HSValue
 } from '../sanctuary/types';
+import typeMismatchError from './typeSystem/typeMismatchError';
 
 const filterWithKey = addIndex(filter);
 
@@ -246,10 +247,7 @@ const translateCallExpression = def('translateCallExpression')({})([
   const validatedCallee = chain(c =>
     isCallable(c.type)
       ? Right(c)
-      : Left({
-          message: 'callee is not a function',
-          location: ast.callee.location
-        })
+      : Left(typeMismatchError(fn([]), c.type, ast.callee.location))
   )(callee);
 
   const validatedCallee2 = chain(x =>
