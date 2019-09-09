@@ -1,6 +1,6 @@
-import { isCallable, unwrapConstraint } from './helpers';
+import { isCallable } from './helpers';
 
 const hasNArgs = (n, type) =>
-  isCallable(type) && n === unwrapConstraint(type)[1].signature.length - 1;
+  isCallable(type) && n === type.signature.length - 1;
 
 export default hasNArgs;

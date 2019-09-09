@@ -41,8 +41,6 @@ import normalizePolyNames from './typeSystem/normalizePolyNames';
 import isPolyScalar from './typeSystem/isPolyScalar';
 import isConcreteScalar from './typeSystem/isConcreteScalar';
 import getArity from './typeSystem/getArity';
-import overConstraint from './typeSystem/overConstraint';
-import extractContraints from './typeSystem/extractConstraints';
 import isPolyArray from './typeSystem/isPolyArray';
 import substitutePolyScalars from './typeSystem/substitutePolyScalars';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
@@ -257,7 +255,7 @@ const resolveFunctionType = def('resolveFunctionType')({})([
 });
 
 const wrapMismatchErrorWithArray = e =>
-  typeMismatchError(overConstraint(array, e.expected), array(e.given));
+  typeMismatchError(array(e.expected), array(e.given));
 
 const resolveArrayType = def('resolveArrayType')({})([
   HSTypeResolution,
@@ -385,7 +383,7 @@ const resolveCall = def('resolveCall')({})([
   const applicationResult = map(x =>
     args.length === argCount
       ? {
-          type: unwrapConstraint(x.type)[1].signature[0],
+          type: x.type.signature[0],
           resolutions: x.resolutions
         }
       : x

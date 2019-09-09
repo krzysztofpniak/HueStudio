@@ -1,6 +1,5 @@
-import { isCallable, unwrapConstraint } from './helpers';
+import { isCallable } from './helpers';
 
-const getArity = type =>
-  isCallable(type) ? unwrapConstraint(type)[1].signature.length - 1 : 0;
+const getArity = type => (isCallable(type) ? type.signature.length - 1 : 0);
 
 export default getArity;
