@@ -269,7 +269,10 @@ const translateCallExpression = def('translateCallExpression')({})([
 
   const finalType = mapLeft(e =>
     e.argIdx != null
-      ? { ...dissoc('argIdx', e), location: ast.arguments[e.argIdx].location }
+      ? {
+          ...dissoc('argIdx', e),
+          location: Just(ast.arguments[e.argIdx].location)
+        }
       : e
   )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
