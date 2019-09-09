@@ -377,8 +377,11 @@ const translateArrayExpression = ast => context => {
   };
 };
 
-const translateExpressionStatement = ast => context =>
-  translateExpression(ast.expression)(context);
+const translateExpressionStatement = def('translateExpressionStatement')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context => translateExpression(ast.expression)(context));
 
 const translateMemberExpression = ast => context => {
   const obj = astToBridgeStateInt(ast.object)(context);
