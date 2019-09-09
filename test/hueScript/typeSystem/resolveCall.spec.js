@@ -5,7 +5,7 @@ import {
   fn,
   constraint
 } from '../../../app/hueScript/typeSystem';
-import { Left, Right } from '../../../app/sanctuary';
+import { Left, Nothing, Right } from '../../../app/sanctuary';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
 import typeToTypeResolution from '../../../app/hueScript/typeSystem/typeToTypeResolution';
 
@@ -88,9 +88,8 @@ describe('resolveCall', () => {
     ).toEqual(
       Left({
         ...typeMismatchError(
-          constraint({ a: ['Light', 'Group'] })(scalar('a')),
-          scalar('Number')
-        ),
+          constraint({ a: ['Light', 'Group'] })(scalar('a'))
+        )(scalar('Number'))(Nothing),
         argIdx: 1
       })
     );

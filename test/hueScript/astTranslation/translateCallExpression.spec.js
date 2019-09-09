@@ -4,7 +4,7 @@ import {
   translateCallExpression
 } from '../../../app/hueScript/astToBridgeState';
 import { scalar, fn } from '../../../app/hueScript/typeSystem';
-import { Left, Right } from '../../../app/sanctuary';
+import { Just, Left, Right } from '../../../app/sanctuary';
 import { parseHue } from '../../../app/hueScript';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
 
@@ -47,7 +47,9 @@ describe('translateCallExpression', () => {
     })(createHSContext());
     expect(translateCallExpression(callAst2)(context)).toEqual(
       Left(
-        typeMismatchError(fn([]), scalar('Number'), callAst2.callee.location)
+        typeMismatchError(fn([]))(scalar('Number'))(
+          Just(callAst2.callee.location)
+        )
       )
     );
   });
@@ -58,10 +60,8 @@ describe('translateCallExpression', () => {
     })(createHSContext());
     expect(translateCallExpression(callAst3)(context)).toEqual(
       Left(
-        typeMismatchError(
-          scalar('Number'),
-          scalar('String'),
-          callAst3.arguments[0].location
+        typeMismatchError(scalar('Number'))(scalar('String'))(
+          Just(callAst3.arguments[0].location)
         )
       )
     );

@@ -31,7 +31,8 @@ import {
   on,
   zipWith,
   renameKeys,
-  reduceIndexed
+  reduceIndexed,
+  Nothing
 } from '../sanctuary';
 import {
   getNewRenamesContext,
@@ -205,7 +206,7 @@ const resolveScalarType = def('resolveScalarType')({})([
     }
   }
 
-  return Left(typeMismatchError(bType, aType));
+  return Left(typeMismatchError(bType)(aType)(Nothing));
 });
 
 const resolveFunctionType = def('resolveFunctionType')({})([
@@ -255,7 +256,7 @@ const resolveFunctionType = def('resolveFunctionType')({})([
 });
 
 const wrapMismatchErrorWithArray = e =>
-  typeMismatchError(array(e.expected), array(e.given));
+  typeMismatchError(array(e.expected))(array(e.given))(Nothing);
 
 const resolveArrayType = def('resolveArrayType')({})([
   HSTypeResolution,
@@ -274,7 +275,7 @@ const resolveArrayType = def('resolveArrayType')({})([
       resolutions
     }))(res);
   }
-  return Left(typeMismatchError(bType, aType));
+  return Left(typeMismatchError(bType)(aType)(Nothing));
 });
 
 const newZip = def('newZip')({})([

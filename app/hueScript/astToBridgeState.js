@@ -245,7 +245,7 @@ const translateCallExpression = def('translateCallExpression')({})([
   const validatedCallee = chain(c =>
     isCallable(c.type)
       ? Right(c)
-      : Left(typeMismatchError(fn([]), c.type, ast.callee.location))
+      : Left(typeMismatchError(fn([]))(c.type)(Just(ast.callee.location)))
   )(callee);
 
   const validatedCallee2 = chain(x =>

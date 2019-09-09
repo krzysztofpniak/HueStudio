@@ -33,9 +33,25 @@ const HSContext = $.NamedRecordType('hs/HSContext')(
   'http://example.com/hs#HSContext'
 )([])({ vars: $.Array($.StrMap(HSValue)), infos: $.StrMap($.String) });
 
+const HSError = $.NamedRecordType('hs/HSError')(
+  'http://example.com/hs#HSError'
+)([])({ name: $.String, message: $.String });
+
 const AstNode = $.NamedRecordType('hs/AstNode')(
   'http://example.com/hs#AstNode'
 )([])({ type: $.String });
+
+const CodeLocationAnchor = $.NamedRecordType('hs/CodeLocation')(
+  'http://example.com/hs#CodeLocation'
+)([])({
+  offset: $.NonNegativeInteger,
+  line: $.NonNegativeInteger,
+  column: $.NonNegativeInteger
+});
+
+const CodeLocation = $.NamedRecordType('hs/CodeLocation')(
+  'http://example.com/hs#CodeLocation'
+)([])({ start: CodeLocationAnchor, end: CodeLocationAnchor });
 
 const env = $.env.concat([
   HSTypeKind,
@@ -54,6 +70,8 @@ export {
   RenamesContext,
   HSContext,
   HSValue,
+  HSError,
   AstNode,
+  CodeLocation,
   def
 };

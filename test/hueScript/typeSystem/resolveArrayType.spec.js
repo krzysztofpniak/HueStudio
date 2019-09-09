@@ -1,6 +1,6 @@
 import { resolveArrayType } from '../../../app/hueScript/resolveType';
 import { scalar, fn, array } from '../../../app/hueScript/typeSystem';
-import { Left, Right, on } from '../../../app/sanctuary';
+import { Left, Right, on, Nothing } from '../../../app/sanctuary';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
 import typeToTypeResolution from '../../../app/hueScript/typeSystem/typeToTypeResolution';
 
@@ -57,7 +57,11 @@ describe('resolveArrayType', () => {
 
   it('should throw on unmatched 1', () => {
     expect(resolveArrayType(arNumberR)(arStringR)).toEqual(
-      Left(typeMismatchError(array(scalar('String')), array(scalar('Number'))))
+      Left(
+        typeMismatchError(array(scalar('String')))(array(scalar('Number')))(
+          Nothing
+        )
+      )
     );
   });
   it('should throw on unmatched 2', () => {
@@ -66,7 +70,11 @@ describe('resolveArrayType', () => {
         array(scalar('String'))
       )
     ).toEqual(
-      Left(typeMismatchError(array(scalar('String')), fn([array(scalar('a'))])))
+      Left(
+        typeMismatchError(array(scalar('String')))(fn([array(scalar('a'))]))(
+          Nothing
+        )
+      )
     );
   });
   it('should throw on unmatched 3', () => {
@@ -75,7 +83,11 @@ describe('resolveArrayType', () => {
         array(scalar('String'))
       )
     ).toEqual(
-      Left(typeMismatchError(array(scalar('String')), array(fn([scalar('a')]))))
+      Left(
+        typeMismatchError(array(scalar('String')))(array(fn([scalar('a')])))(
+          Nothing
+        )
+      )
     );
   });
 });

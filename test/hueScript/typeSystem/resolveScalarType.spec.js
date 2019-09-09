@@ -5,7 +5,7 @@ import {
   array,
   constraint
 } from '../../../app/hueScript/typeSystem';
-import { Left, Right } from '../../../app/sanctuary';
+import { Left, Nothing, Right } from '../../../app/sanctuary';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
 import typeToTypeResolution from '../../../app/hueScript/typeSystem/typeToTypeResolution';
 
@@ -106,17 +106,16 @@ describe('resolveScalarType', () => {
       )
     ).toEqual(
       Left(
-        typeMismatchError(
-          constraint({ a: ['Light', 'Group'] })(scalar('a')),
+        typeMismatchError(constraint({ a: ['Light', 'Group'] })(scalar('a')))(
           number
-        )
+        )(Nothing)
       )
     );
   });
 
   it('should throw on unmatched', () => {
     expect(resolveScalarType(numberR)(stringR)).toEqual(
-      Left(typeMismatchError(string, number))
+      Left(typeMismatchError(string)(number)(Nothing))
     );
     /*expect(resolveScalarType(fn(scalar('a')), scalar('String'))).toEqual(
       Left(typeMismatchError(scalar('String'), fn(scalar('a'))))
