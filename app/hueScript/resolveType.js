@@ -341,7 +341,6 @@ const resolveCall = def('resolveCall')({})([
 
   const rawArgs = getFnFromArgs(args);
 
-  //const [f, renamesContext2] = ;
   const renamedArgs = map(r => normalizePolyNames(r.type)(renamesContext))(
     rawArgs
   );

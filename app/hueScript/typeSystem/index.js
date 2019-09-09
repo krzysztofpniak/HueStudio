@@ -14,7 +14,6 @@ import fn from './fn';
 import array from './array';
 import typeMismatchError from './typeMismatchError';
 import typeToString from './typeToString';
-import validateCallArgs from './validateCallArgs';
 import getPolyNames from './getPolyNames';
 import dropLastArg from './dropLastArg';
 import constraint from './constraint';
@@ -41,7 +40,6 @@ export {
   getFunctionSignature,
   typeMismatchError,
   typeToString,
-  validateCallArgs,
   getPolyNames,
   dropLastArg,
   dropNArgs,

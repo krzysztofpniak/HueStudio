@@ -1,5 +1,4 @@
 import {
-  map,
   mapAccum,
   filter,
   fromPairs,
@@ -47,8 +46,6 @@ import {
   scalar,
   dropLastArg,
   isFunction,
-  validateCallArgs,
-  unwrapConstraint,
   constraint,
   isCallable,
   canAcceptNArgs,

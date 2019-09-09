@@ -1,18 +1,17 @@
 import { evolve } from 'ramda';
-import { filterIndexed, isCallable, unwrapConstraint } from './helpers';
-import constraint from './constraint';
+import { filterIndexed, isCallable } from './helpers';
+import $ from 'sanctuary-def';
+import { HSType, def } from '../../sanctuary/types';
 
-const dropLastArg = type => {
+const dropLastArg = def('dropLastArg')({})([HSType, HSType])(type => {
   if (isCallable(type)) {
-    const [constr, func] = unwrapConstraint(type);
-    const dropped = evolve(
+    return evolve(
       { signature: s => filterIndexed((si, idx) => idx !== s.length - 2, s) },
-      func
+      type
     );
-    return constr ? constraint(constr, dropped) : dropped;
   }
 
   return type;
-};
+});
 
 export default dropLastArg;
