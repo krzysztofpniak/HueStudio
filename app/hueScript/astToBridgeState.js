@@ -426,6 +426,29 @@ const astToBridgeStateInt = def('astToBridgeStateInt')({})([
   ])
 );
 
+const translateIfStatement = def('translateIfStatement')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)(HSContext)
+])(ast => context => {
+  const a = ast;
+  const testCtx = translateExpression(ast.test)(context);
+
+  const validatedTestCtx = chain(([t, ctx]) =>
+    isScalar(t.type) && getScalarName(t.type) === 'Boolean'
+      ? Right([t, ctx])
+      : Left(
+          typeMismatchError(scalar('Boolean'))(t.type)(Just(ast.test.location))
+        )
+  )(testCtx);
+
+  const resultCtx = chain(([v, ctx]) =>
+    translateStatement(v.value ? ast.consequent : ast.alternate)(ctx)
+  )(validatedTestCtx);
+
+  return resultCtx;
+});
+
 const translateStatement = def('translateStatement')({})([
   AstNode,
   HSContext,
@@ -433,6 +456,7 @@ const translateStatement = def('translateStatement')({})([
 ])(
   cond2([
     [astType('VariableDeclaration'), translateVariableDeclaration],
+    [astType('IfStatement'), translateIfStatement],
     [a => b => true, throwMissingTranslation]
   ])
 );
@@ -482,4 +506,5 @@ export {
   translateCallExpression,
   translateLiteral,
   translateVariableDeclaration
+  translateIfStatement,
 };

@@ -69,7 +69,7 @@ Statement
   / VariableStatement
   // EmptyStatement
   / ExpressionStatement
-  // IfStatement
+  / IfStatement
   / ReturnStatement
   // WithStatement
   // LabelledStatement
@@ -125,6 +125,29 @@ ExpressionStatement
       return {
         type: "ExpressionStatement",
         expression: expression
+      };
+    }
+
+IfStatement
+  = IfToken __ "(" __ test:Expression __ ")" __
+    consequent:Statement __
+    ElseToken __
+    alternate:Statement
+    {
+      return {
+        type: "IfStatement",
+        test: test,
+        consequent: consequent,
+        alternate: alternate
+      };
+    }
+  / IfToken __ "(" __ test:Expression __ ")" __
+    consequent:Statement {
+      return {
+        type: "IfStatement",
+        test: test,
+        consequent: consequent,
+        alternate: null
       };
     }
 
@@ -437,6 +460,7 @@ Keyword
   = ConstToken
   / LetToken
   / IfToken
+  / ElseToken
   / InToken
   / ReturnToken
   / VoidToken
@@ -448,6 +472,7 @@ LetToken        = s:"let"        !IdentifierPart {return s;}
 ExportToken     = "export"     !IdentifierPart
 FalseToken      = "false"      !IdentifierPart
 IfToken         = "if"         !IdentifierPart
+ElseToken       = "else"       !IdentifierPart
 ImportToken     = "import"     !IdentifierPart
 InToken         = "in"         !IdentifierPart
 ReturnToken     = "return"     !IdentifierPart
