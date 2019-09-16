@@ -7,7 +7,7 @@ import { map, addIndex } from 'ramda';
 const mapWithKey = addIndex(map);
 
 const sqlConfig = {
-  keywords: ['IF', 'CONST', 'LET', 'RETURN'],
+  keywords: ['IF', 'ELSE', 'CONST', 'LET', 'RETURN'],
   operators: {
     '+': 'PLUS',
     '-': 'MINUS',
