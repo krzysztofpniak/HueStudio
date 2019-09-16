@@ -159,9 +159,12 @@ Expression
     }
 
 AssignmentExpression
+  = a:AssignmentExpressionNoLoc { return {...a, location: location()};}
+
+AssignmentExpressionNoLoc
   = left:LeftHandSideExpression __
     "=" !"=" __
-    right:AssignmentExpression
+    right:AssignmentExpressionNoLoc
     {
       return {
         type: "AssignmentExpression",
@@ -172,13 +175,16 @@ AssignmentExpression
     }
   / ConditionalExpression
 
+MemberExpressionLoc
+  = m: MemberExpression {return {...m, location: location()}}
+
 LeftHandSideExpression
   = c: CallExpression {return {...c, location: location()}}
-  / MemberExpression
+  / MemberExpressionLoc
 
 CallExpression
   = head:(
-      callee:MemberExpression __ args:Arguments {
+      callee:MemberExpressionLoc __ args:Arguments {
         return { type: "CallExpression", callee: callee, arguments: args };
       }
     )
