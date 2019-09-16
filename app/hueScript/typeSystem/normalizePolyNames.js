@@ -6,8 +6,7 @@ import {
   isScalar,
   scalar,
   isArray,
-  isFunction,
-  unwrapConstraint
+  isFunction
 } from './helpers';
 import {
   curry,
