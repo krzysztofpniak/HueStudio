@@ -5,11 +5,9 @@ import {
   scalar,
   array,
   dropNArgs,
-  unwrapConstraint,
   constraint,
   typeMismatchError,
   getScalarName,
-  isConstraint,
   getArrayType
 } from './typeSystem';
 import {
@@ -32,7 +30,8 @@ import {
   zipWith,
   renameKeys,
   reduceIndexed,
-  Nothing
+  Nothing,
+  mapIndexed
 } from '../sanctuary';
 import {
   getNewRenamesContext,
@@ -47,6 +46,7 @@ import substitutePolyScalars from './typeSystem/substitutePolyScalars';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
 import $ from 'sanctuary-def';
 import { def, HSType, HSTypeResolution } from '../sanctuary/types';
+import dropLastArg from './typeSystem/dropLastArg';
 const mapWithKey = addIndex(map);
 const mapAccumIndexed = addIndex(mapAccum);
 
@@ -247,9 +247,6 @@ const resolveFunctionType = def('resolveFunctionType')({})([
         tryUpdateResolved(getScalarName(aType))(bType)
       )
     )(safeResolutionsMerge(a.resolutions)(b.resolutions));
-  } else if (isConstraint(a)) {
-    const [constr, e] = unwrapConstraint(a);
-    return resolveType(e, b);
   }
 
   return Left(typeMismatchError(bType, aType));
@@ -303,14 +300,6 @@ const resolveType = def('resolveType')({})([
     return resolveArrayType(a)(b);
   } else if (b.type.kind === 'Function') {
     return resolveFunctionType(a)(b);
-  } else if (b.type.kind === 'Constraint') {
-    const [constr, e] = unwrapConstraint(b);
-    const resolvedInner = resolveType(a, e, resolved, {
-      ...constraints,
-      ...constr
-    });
-
-    return map(x => (constr ? constraint(constr, x) : x), resolvedInner);
   }
   return Left('not implemented yet');
 });
@@ -392,6 +381,55 @@ const resolveCall = def('resolveCall')({})([
   return applicationResult;
 });
 
+const resolveMember = def('resolveMember')({})([
+  HSTypeResolution,
+  HSTypeResolution,
+  $.Either($.Unknown)(HSTypeResolution)
+])(obj => type => {
+  let renamesContext = getNewRenamesContext();
+
+  const [normalizedObj, renamesContext2] = normalizePolyNames(obj.type)(
+    renamesContext
+  );
+
+  const renamesContext3 = resetRenamesScope(renamesContext2);
+
+  const [normalizedType] = normalizePolyNames(type.type)(renamesContext3);
+
+  const argCount = type.type.signature.length - 1;
+  if (argCount === 0) {
+    return Left('Too many arguments');
+  }
+
+  const memberArgIdx = type.type.signature.length - 2;
+
+  const normalizedLeft = fn(
+    mapIndexed(e => idx => (idx === memberArgIdx ? normalizedObj : e))(
+      normalizedType.signature
+    )
+  );
+
+  const resolvedFunction = on(resolveType)(typeToTypeResolution)(
+    normalizedLeft
+  )(normalizedType);
+
+  const appliedFunction = map(rf => ({
+    type: dropLastArg(rf.type),
+    resolutions: rf.resolutions
+  }))(resolvedFunction);
+
+  const applicationResult = map(x =>
+    x.type.signature.length === 1
+      ? {
+          type: x.type.signature[0],
+          resolutions: x.resolutions
+        }
+      : x
+  )(appliedFunction);
+
+  return applicationResult;
+});
+
 export {
   tryUpdateResolved,
   getResolution,
@@ -400,5 +438,6 @@ export {
   resolveFunctionType,
   resolveArrayType,
   resolveType,
-  resolveCall
+  resolveCall,
+  resolveMember
 };

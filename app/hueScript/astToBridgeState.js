@@ -1,4 +1,5 @@
 import {
+  map as Rmap,
   mapAccum,
   filter,
   fromPairs,
@@ -38,7 +39,9 @@ import {
   constraint,
   isCallable,
   canAcceptNArgs,
-  hasNArgs
+  hasNArgs,
+  getScalarName,
+  isScalar
 } from './typeSystem';
 import {
   cond2,
@@ -89,7 +92,7 @@ const allEquals = compose(
 );
 
 const findVar = (name, scopes) => {
-  const scope = find(prop(name), scopes);
+  const scope = maybeToNullable(find(hasKey(name))(scopes));
 
   return scope ? prop(name, scope) : null;
 };
@@ -122,10 +125,7 @@ const inferSignature = (ast, context) => {
       const prop = inferSignature(ast.property, context);
       if (isFunction(prop)) {
         console.log('infer MemberExpression', obj, ast.property.name, prop);
-        const appliedSignatures = applyLastArg(
-          obj,
-          unwrapConstraint(prop)[1].signature
-        );
+        const appliedSignatures = applyLastArg(obj, prop.signature);
 
         return dropLastArg(
           resolveType(fn(...appliedSignatures), prop, context.inferred)
@@ -168,21 +168,6 @@ const translateProgram = def('translateProgram')({})([
 ])(ast => context =>
   reduce(p => c => chain(translateStatement(c))(p))(Right(context))(ast.body)
 );
-
-const translateBlockStatement = ast => context =>
-  head(
-    mapAccum(
-      (result, s) => {
-        const processed = astToBridgeStateInt(s)(context);
-        if (s.type === 'ReturnStatement' && !result) {
-          result = processed;
-        }
-        return [result, processed];
-      },
-      null,
-      ast.body
-    )
-  );
 
 const translateVariableDeclaration = def('translateVariableDeclaration')({})([
   AstNode,
@@ -247,7 +232,11 @@ const translateCallExpression = def('translateCallExpression')({})([
   const validatedCallee = chain(c =>
     isCallable(c.type)
       ? Right(c)
-      : Left(typeMismatchError(fn([]))(c.type)(Just(ast.callee.location)))
+      : Left(
+          typeMismatchError(fn([]))(c.type)(
+            ast.callee.location ? Just(ast.callee.location) : Nothing
+          )
+        )
   )(callee);
 
   const validatedCallee2 = chain(x =>
@@ -278,8 +267,6 @@ const translateCallExpression = def('translateCallExpression')({})([
       : e
   )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
-  const argValues = map(pluck('value'))(args);
-
   const result = lift3(callee => args => resultType => {
     if (hasNArgs(args.length, callee.type)) {
       return { value: callee.value(...args), type: resultType };
@@ -289,7 +276,7 @@ const translateCallExpression = def('translateCallExpression')({})([
         value: (...newArgs) => callee.value(...[...args, ...newArgs])
       };
     }
-  })(validatedCallee2)(argValues)(finalType);
+  })(validatedCallee2)(args)(finalType);
 
   return lift2(result => ctx => [result, ctx])(result)(finalContext);
 });
@@ -335,11 +322,15 @@ const translateFunctionExpression = def('translateLiteral')({})([
   const argNames = pluck('name', ast.params);
   console.log('FunctionExpression', argNames, ast);
   const inferContext = { ...context, inferred: {} };
+
+  return Right([{ type: fn([scalar('Void')]), value: () => {} }, context]);
+
   const returnType = inferSignature(ast.body, inferContext);
 
-  const finalType = fn(
-    ...[...map(a => inferContext.inferred[a], argNames), returnType]
-  );
+  const finalType = fn([
+    ...map(a => inferContext.inferred[a], argNames),
+    returnType
+  ]);
 
   for (let i = 0; i < ast.params.length; i++) {
     const astParam = ast.params[i];
@@ -353,7 +344,7 @@ const translateFunctionExpression = def('translateLiteral')({})([
 
   return {
     type: finalType,
-    function: (...args) => {
+    value: (...args) => {
       const localVars = fromPairs(zip(argNames, args));
 
       return astToBridgeStateInt(ast.body)(
@@ -427,29 +418,58 @@ const translateArrayExpression = def('translateArrayExpression')({})([
 const translateExpressionStatement = def('translateExpressionStatement')({})([
   AstNode,
   HSContext,
-  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
-])(ast => context => translateExpression(ast.expression)(context));
+  $.Either($.Unknown)(HSContext)
+])(ast => context =>
+  map(([v, ctx]) => ctx)(translateExpression(ast.expression)(context))
+);
 
-const translateMemberExpression = ast => context => {
-  const obj = astToBridgeStateInt(ast.object)(context);
-  const prop = astToBridgeStateInt(ast.property)(context);
-  if (!isFunction(prop.type)) {
-    throw { message: `${ast.property.name} is not a function` };
-  }
-  console.log('MemberExpression', obj, prop);
-  return {
-    type: dropLastArg(prop.type),
-    function: (...newArgs) => prop.function(...[...newArgs, obj])
-  };
-};
+const translateBlockStatement = def('translateBlockStatement')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)(HSContext)
+])(ast => context =>
+  reduce(chain(c => s => translateStatement(s)(c)))(Right(context))(ast.body)
+);
+
+const translateMemberExpression = def('translateMemberExpression')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context => {
+  const objCtx = translateExpression(ast.object)(context);
+  const obj = map(([v]) => v)(objCtx);
+  const ctx1 = map(([v, ctx]) => ctx)(objCtx);
+  const propCtx = chain(translateExpression(ast.property))(ctx1);
+  const prop = map(([v]) => v)(propCtx);
+  const ctx2 = map(([v, ctx]) => ctx)(propCtx);
+
+  const validatedProp = chain(p =>
+    isFunction(p.type)
+      ? Right(p)
+      : Left({ message: `${ast.property.name} is not a function` })
+  )(prop);
+
+  const finalType = join(
+    lift2(on(resolveMember)(a => typeToTypeResolution(a.type)))(obj)(prop)
+  );
+
+  const finalValue = lift3(type => prop => obj => ({
+    type: type.type,
+    value: isFunction(type.type)
+      ? (...newArgs) => prop.value(...[...newArgs, obj.value])
+      : prop.value(obj.value)
+  }))(finalType)(prop)(obj);
+
+  return lift2(v => c => [v, c])(finalValue)(ctx2);
+});
+
 const translateReturnStatement = ast => context =>
   ast.argument ? astToBridgeStateInt(ast.argument)(context) : null;
 
 const translateNext = (ast, context) => {};
 
-const throwMissingTranslation = ast => context => {
-  throw `missing translation for ${ast.type}`;
-};
+const throwMissingTranslation = ast => context =>
+  Left(`missing translation for ${ast.type}`);
 
 const astToBridgeStateInt = def('astToBridgeStateInt')({})([
   AstNode,
@@ -459,16 +479,45 @@ const astToBridgeStateInt = def('astToBridgeStateInt')({})([
   cond2([
     [astType('Program'), translateProgram],
     /*[astType('BlockStatement'), translateBlockStatement],
-    [astType('VariableDeclaration'), translateVariableDeclaration],
-    [astType('VariableDeclarator'), translateVariableDeclarator],
-    [astType('FunctionExpression'), translateFunctionExpression],
-    [astType('ArrayExpression'), translateArrayExpression],
-    [astType('ExpressionStatement'), translateExpressionStatement],
-    [astType('MemberExpression'), translateMemberExpression],
     [astType('ReturnStatement'), translateReturnStatement],*/
     [a => b => true, throwMissingTranslation]
   ])
 );
+
+const translateConditionalExpression = def('translateConditionalExpression')(
+  {}
+)([AstNode, HSContext, $.Either($.Unknown)($.Array2(HSValue)(HSContext))])(
+  ast => context => {
+    const testCtx = translateExpression(ast.test)(context);
+
+    const validatedTestCtx = chain(([t, ctx]) =>
+      isScalar(t.type) && getScalarName(t.type) === 'Boolean'
+        ? Right([t, ctx])
+        : Left(
+            typeMismatchError(scalar('Boolean'))(t.type)(
+              Just(ast.test.location)
+            )
+          )
+    )(testCtx);
+
+    const resultCtx = chain(([v, ctx]) =>
+      translateExpression(v.value ? ast.consequent : ast.alternate)(ctx)
+    )(validatedTestCtx);
+
+    return resultCtx;
+  }
+);
+
+const translateBinaryExpression = def('translateBinaryExpression')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context => {
+  const leftCtx = translateExpression(ast.left)(context);
+  const rightCtx = translateExpression(ast.right)(context);
+
+  return Right([{ type: scalar('Boolean'), value: true }, context]);
+});
 
 const translateIfStatement = def('translateIfStatement')({})([
   AstNode,
@@ -501,6 +550,8 @@ const translateStatement = def('translateStatement')({})([
   cond2([
     [astType('VariableDeclaration'), translateVariableDeclaration],
     [astType('IfStatement'), translateIfStatement],
+    [astType('ExpressionStatement'), translateExpressionStatement],
+    [astType('BlockStatement'), translateBlockStatement],
     [a => b => true, throwMissingTranslation]
   ])
 );
@@ -514,7 +565,10 @@ const translateExpression = def('translateExpression')({})([
     [astType('Literal'), translateLiteral],
     [astType('Identifier'), translateIdentifier],
     [astType('CallExpression'), translateCallExpression],
+    [astType('MemberExpression'), translateMemberExpression],
     [astType('ArrayExpression'), translateArrayExpression],
+    [astType('ConditionalExpression'), translateConditionalExpression],
+    [astType('BinaryExpression'), translateBinaryExpression],
     [a => b => true, throwMissingTranslation]
   ])
 );
@@ -535,22 +589,23 @@ const putContextVar = def('putContextVar')({})([
 
 const createHSContext = createEmptyContext;
 
-const astToBridgeState = (ast, context = createEmptyContext()) =>
-  translateProgram(ast)(context);
-
 const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
   JSON.stringify(map(x => typeToString(x.type))(context.vars[0]), null, 2)
 );
 
 export {
-  astToBridgeState,
+  translateProgram,
   showHSContext,
   createEmptyContext,
   createHSContext,
   putContextVar,
   translateCallExpression,
+  translateMemberExpression,
   translateLiteral,
-  translateVariableDeclaration
+  translateVariableDeclaration,
   translateArrayExpression,
+  translateConditionalExpression,
+  translateBinaryExpression,
   translateIfStatement,
+  translateBlockStatement
 };

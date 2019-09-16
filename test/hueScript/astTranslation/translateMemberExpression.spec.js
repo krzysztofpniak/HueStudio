@@ -4,11 +4,11 @@ import {
   translateMemberExpression
 } from '../../../app/hueScript/astToBridgeState';
 import { scalar, fn } from '../../../app/hueScript/typeSystem';
-import { Left, Right, pipe } from '../../../app/sanctuary';
+import { Left, Right, pipe, fromEither } from '../../../app/sanctuary';
 import { parseHue } from '../../../app/hueScript';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
 
-const memberAst1 = parseHue('a.hello;').data.body[0].expression;
+const memberAst1 = fromEither({})(parseHue('a.hello;')).body[0].expression;
 
 const hello = {
   type: fn([scalar('String'), scalar('String')]),
@@ -27,7 +27,7 @@ describe('translateMemberExpression', () => {
       putContextVar('a')(a)
     ])(createHSContext());
     expect(translateMemberExpression(memberAst1)(context)).toEqual(
-      Right([{ type: scalar('String'), value: 'World!' }, context])
+      Right([{ type: scalar('String'), value: 'Hi John!' }, context])
     );
   });
 });
