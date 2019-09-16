@@ -7,38 +7,27 @@ import {
   drop,
   path,
   last,
-  includes,
-  nth,
   uniq,
   equals,
-  intersection,
   compose,
-  of,
   addIndex,
   pluck,
-  always,
-  tryCatch,
-  objOf,
-  cond,
   propEq,
-  T,
   type,
   either,
   length,
-  find,
   prop,
   evolve,
   append,
   lensIndex,
   set,
   converge,
-  tap,
   adjust,
   assoc,
   dissoc
 } from 'ramda';
 import coreLib from './coreLib/index';
-import { resolveCall, resolveType } from './resolveType';
+import { resolveCall, resolveMember, resolveType } from './resolveType';
 import {
   fn,
   typeToString,
@@ -63,7 +52,19 @@ import {
   lift2,
   join,
   sequence,
-  lift3
+  lift3,
+  pipeK,
+  map,
+  Just,
+  on,
+  all,
+  Nothing,
+  find,
+  maybeToNullable,
+  complement,
+  maybe,
+  hasKey,
+  findIndex
 } from '../sanctuary';
 import getArity from './typeSystem/getArity';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
@@ -72,6 +73,7 @@ import {
   AstNode,
   def,
   HSContext,
+  HSError,
   HSType,
   HSTypeResolution,
   HSValue
@@ -361,24 +363,66 @@ const translateFunctionExpression = def('translateLiteral')({})([
   };
 });
 
-const translateArrayExpression = ast => context => {
-  const elements = map(e => astToBridgeStateInt(e)(context), ast.elements);
-  console.log('ArrayExpression', elements);
+const validateArrayElements = def('validateArrayElements')({})([
+  $.Array(HSValue),
+  $.Either(HSError)($.Array(HSValue))
+])(elements => {
+  const wrongElementIdx = findIndex(
+    complement(
+      compose(
+        isScalar,
+        prop('type')
+      )
+    )
+  )(elements);
+  return maybe(Right(elements))(idx =>
+    Left({
+      name: 'TypeMismatch',
+      message: `All array elements must be Scalar values ${idx}`,
+      argIdx: idx
+    })
+  )(wrongElementIdx);
+});
 
-  const elementTypes = map(typeToString, uniq(pluck('type', elements)));
+const translateArrayExpression = def('translateArrayExpression')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context => {
+  const elementsCtx = reduceArguments(context)(ast.elements);
+  const finalCtx = map(([ctx]) => ctx)(elementsCtx);
+  const elements = map(([_, e]) => e)(elementsCtx);
 
-  const arrayType =
-    elementTypes.length === 0
+  const validatedElements = mapLeft(e =>
+    e.argIdx != null
+      ? typeMismatchError(scalar('a'))(scalar('Number'))(
+          Just(ast.elements[e.argIdx].location)
+        )
+      : e
+  )(chain(validateArrayElements)(elements));
+
+  const elementTypes = map(
+    compose(
+      map(getScalarName),
+      uniq,
+      pluck('type')
+    )
+  )(validatedElements);
+
+  const arrayType = map(e =>
+    e.length === 0
       ? array(scalar('Void'))
-      : elementTypes.length === 1
-      ? array(scalar(elementTypes[0]))
-      : constraint({ a: elementTypes }, array(scalar('a')));
+      : e.length === 1
+      ? array(scalar(e[0]))
+      : constraint({ a: e })(array(scalar('a')))
+  )(elementTypes);
 
-  return {
-    type: arrayType,
-    elements
-  };
-};
+  const expressionValue = lift2(type => value => ({ type, value }))(arrayType)(
+    validatedElements
+  );
+
+  return lift2(v => c => [v, c])(expressionValue)(finalCtx);
+});
 
 const translateExpressionStatement = def('translateExpressionStatement')({})([
   AstNode,
@@ -470,6 +514,7 @@ const translateExpression = def('translateExpression')({})([
     [astType('Literal'), translateLiteral],
     [astType('Identifier'), translateIdentifier],
     [astType('CallExpression'), translateCallExpression],
+    [astType('ArrayExpression'), translateArrayExpression],
     [a => b => true, throwMissingTranslation]
   ])
 );
@@ -506,5 +551,6 @@ export {
   translateCallExpression,
   translateLiteral,
   translateVariableDeclaration
+  translateArrayExpression,
   translateIfStatement,
 };
