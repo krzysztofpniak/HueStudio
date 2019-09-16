@@ -53,13 +53,18 @@ const CodeLocation = $.NamedRecordType('hs/CodeLocation')(
   'http://example.com/hs#CodeLocation'
 )([])({ start: CodeLocationAnchor, end: CodeLocationAnchor });
 
+const PolyArray = $.Array($.Unknown);
+
 const env = $.env.concat([
   HSTypeKind,
   HSType,
   HSTypeResolution,
   RenamesContext,
   HSContext,
-  AstNode
+  AstNode,
+  CodeLocationAnchor,
+  CodeLocation,
+  PolyArray
 ]);
 const def = $.create({ checkTypes: true, env });
 
@@ -73,5 +78,6 @@ export {
   HSError,
   AstNode,
   CodeLocation,
-  def
+  def,
+  env
 };

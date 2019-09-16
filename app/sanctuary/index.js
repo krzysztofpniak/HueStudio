@@ -1,7 +1,7 @@
-const { create, env } = require('sanctuary');
+const { create } = require('sanctuary');
 import $ from 'sanctuary-def';
 import Z from 'sanctuary-type-classes';
-import { def } from './types';
+import { def, env } from './types';
 
 const S = create({
   checkTypes: process.env.NODE_ENV !== 'production',
@@ -209,7 +209,7 @@ const renameKeys = def('renameKeys')({})([
 );
 
 const reduceIndexed = def('reduceIndexed')({ f: [Z.Foldable] })([
-  $.Fn(a)($.Fn(b)($.Fn(c)(a))),
+  $.Fn(a)($.Fn(b)($.Fn($.NonNegativeInteger)(a))),
   a,
   f(b),
   a
@@ -217,6 +217,38 @@ const reduceIndexed = def('reduceIndexed')({ f: [Z.Foldable] })([
   let idx = 0;
   return reduce(p => c => fn(p)(c)(idx++))(initial)(data);
 });
+
+const mapIndexed = def('reduceIndexed')({ f: [Z.Functor] })([
+  $.Fn(a)($.Fn($.NonNegativeInteger)(b)),
+  f(a),
+  f(b)
+])(fn => data => {
+  let idx = 0;
+  return map(e => fn(e)(idx++))(data);
+});
+
+const filterIndexed = def('filterIndexed')({ f: [Z.Filterable] })([
+  $.Fn(a)($.Fn($.NonNegativeInteger)($.Boolean)),
+  f(a),
+  f(a)
+])(fn => data => {
+  let idx = 0;
+  return filter(e => fn(e)(idx++))(data);
+});
+
+const findIndex = def('findIndex')({ f: [Z.Foldable] })([
+  $.Predicate(a),
+  f(a),
+  $.Maybe($.NonNegativeInteger)
+])(pred => data =>
+  reduceIndexed(m => x => idx =>
+    m.isJust ? m : pred(x) ? Just(idx) : Nothing
+  )(Nothing)(data)
+);
+
+const hasKey = def('hasKey')({})([$.String, $.StrMap($.Unknown), $.Boolean])(
+  key => obj => !!obj[key]
+);
 
 //const evolve = def('evolve')({})([$.StrMap($.)])();
 
@@ -226,6 +258,10 @@ export {
   cond2,
   renameKeys,
   reduceIndexed,
+  mapIndexed,
+  filterIndexed,
+  findIndex,
+  hasKey,
   is,
   Maybe,
   Nothing,
