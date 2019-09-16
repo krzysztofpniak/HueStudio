@@ -3,15 +3,16 @@ import hueParser from '../huejs.peg';
 import ruleToAst from './ruleToAst';
 import pickButtonHandlers from './pickButtonHandlers';
 import decodeEvent from './decodeEvent';
+import { Left, Right } from '../sanctuary';
 
 const { parse } = hueParser;
 
 const parseHue = tryCatch(
   compose(
-    objOf('data'),
+    Right,
     parse
   ),
-  objOf('error')
+  e => Left(e)
 );
 
 const isMethodCall = (node, style) =>
