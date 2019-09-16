@@ -3,11 +3,12 @@ import {
   putContextVar,
   translateVariableDeclaration
 } from '../../../app/hueScript/astToBridgeState';
-import { pipe, Right } from '../../../app/sanctuary';
+import { fromEither, pipe, Right } from '../../../app/sanctuary';
 import { scalar } from '../../../app/hueScript/typeSystem';
 import { parseHue } from '../../../app/hueScript';
 
-const varDeclarationAst = parseHue('const x = 1, y = 8;').data.body[0];
+const varDeclarationAst = fromEither({})(parseHue('const x = 1, y = 8;'))
+  .body[0];
 
 describe('translateVariableDeclaration', () => {
   it('should translate const', () => {
