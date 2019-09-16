@@ -41,10 +41,10 @@ import reducer from './reducer';
 import useHueData from './useHueData';
 import AstViewer from '../astViewer';
 import {
-  astToBridgeState,
-  createEmptyContext
+  createEmptyContext,
+  translateProgram
 } from '../../hueScript/astToBridgeState';
-import { either } from '../../sanctuary';
+import { either, chain, maybeToNullable } from '../../sanctuary';
 
 const get = async url => {
   const r = await fetch(url);
@@ -87,8 +87,6 @@ const baseApiUrl = `http://192.168.0.13/${baseApiPath}`;
 const RuleEditor = ({
   text,
   onTextChange,
-  parsed,
-  errors,
   defaultSize,
   onPanesChange,
   inputRef,
@@ -96,6 +94,29 @@ const RuleEditor = ({
   args,
   baseApiUrl
 }) => {
+  const debouncedText = useDebounce(text, 200);
+
+  const parsed = useMemo(() => parseHue(debouncedText), [debouncedText]);
+
+  const { state, infos } = useMemo(() => {
+    const context = createEmptyContext();
+    const state = chain(p => translateProgram(p)(context))(parsed);
+    return {
+      state,
+      infos: context.infos
+    };
+  }, [parsed]);
+
+  const errors = useMemo(() => {
+    return either(v => {
+      const location =
+        v.location && v.location.value
+          ? maybeToNullable(v.location)
+          : v.location;
+      return location && location.start ? [location] : [];
+    })(() => [])(state);
+  }, [parsed, state]);
+
   const transitions = useTransition(parsed.error, null, {
     from: { opacity: 0, color: 'red' },
     enter: { opacity: 1 },
@@ -131,7 +152,7 @@ const RuleEditor = ({
             errors={errors}
             ref={inputRef}
             metaPressed={metaPressed}
-            args={args}
+            args={{ ...args, infos }}
           />
         </div>
         {transitions.map(
@@ -143,21 +164,10 @@ const RuleEditor = ({
             )
         )}
       </div>
-      <AstViewer baseApiUrl={baseApiUrl} ast={parsed.data} />
+      <AstViewer baseApiUrl={baseApiUrl} bridgeState={state} />
     </SplitPane>
   );
 };
-
-const hasErrorLocation = path(['error', 'location']);
-
-const toErrors = ifElse(
-  hasErrorLocation,
-  compose(
-    of,
-    path(['error', 'location'])
-  ),
-  always([])
-);
 
 const withStaticScope = scope => BaseComponent => props => (
   <Scope scope={scope}>
@@ -192,27 +202,6 @@ const Home = withStaticScope('home')(() => {
     () => (codeEditorStates[activeTabId] ? codeEditorStates[activeTabId] : ''),
     [codeEditorStates, activeTabId]
   );
-
-  const debouncedText = useDebounce(text, 500);
-
-  const parsed = useMemo(() => parseHue(debouncedText), [debouncedText]);
-
-  const { state, infos } = useMemo(() => {
-    const context = createEmptyContext();
-    const state = parsed.data ? astToBridgeState(parsed.data, context) : [];
-    return {
-      state,
-      infos: context.infos
-    };
-  }, [parsed]);
-
-  const errors = useMemo(() => {
-    if (hasErrorLocation(parsed)) {
-      return toErrors(parsed);
-    } else {
-      return either(v => [v.location])(() => [])(state);
-    }
-  }, [parsed, state]);
 
   const vars = {};
 
@@ -356,8 +345,6 @@ const Home = withStaticScope('home')(() => {
     };
   }, []);
 
-  const debugText = parsed;
-
   return (
     <div>
       <AppBar
@@ -387,8 +374,6 @@ const Home = withStaticScope('home')(() => {
                 activeTab={activeTabId}
                 text={codeEditorStates[activeTabId]}
                 onTextChange={handleEditorTextChange}
-                parsed={debugText}
-                errors={errors}
                 defaultSize={panesDefaults.sp3}
                 onPanesChange={s => store.set('sp3', s)}
                 resourceId={currentResourceId}
@@ -397,7 +382,7 @@ const Home = withStaticScope('home')(() => {
                 onRunClick={runRest}
                 inputRef={editorRef}
                 metaPressed={metaPressed}
-                args={{ vars, editorRef, infos }}
+                args={{ vars, editorRef }}
                 hueData={hueData}
                 baseApiUrl={baseApiUrl}
               />

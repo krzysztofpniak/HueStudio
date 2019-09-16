@@ -39,24 +39,21 @@ const requestToFetch = request => {
     : `fetch('${request.url}', {method: '${request.method}')`;
 };
 
-const AstViewer = ({ baseApiUrl, ast }) => {
+const AstViewer = ({ baseApiUrl, bridgeState }) => {
   const [outputView, setOutputView] = useState('state');
   const handleOutputViewChange = useCallback((e, value) => {
     setOutputView(value);
   }, []);
 
   const stateOutput = useMemo(() => {
-    const state = ast ? astToBridgeState(ast) : Left('no ast');
-    return hasPath(['error', 'message'], state)
-      ? state.error.message
-      : either(a => (a.message ? a.message : JSON.stringify(a, null, 2)))(
-          showHSContext
-        )(state);
-  }, [ast]);
+    return either(a => (a.message ? a.message : JSON.stringify(a, null, 2)))(
+      showHSContext
+    )(bridgeState);
+  }, [bridgeState]);
 
   const resolvedStream = useMemo(() => {
     return 'not supported yet';
-    /*const restStream = ast ? astToRest(ast) : [];
+    /*const restStream = bridgeState ? astToRest(bridgeState) : [];
     return nth(
       1,
       mapAccum(
@@ -65,9 +62,11 @@ const AstViewer = ({ baseApiUrl, ast }) => {
         restStream || []
       )
     );*/
-  }, [ast, baseApiUrl]);
+  }, [bridgeState, baseApiUrl]);
 
-  const astOutput = useMemo(() => JSON.stringify(ast, null, 2), [ast]);
+  const astOutput = useMemo(() => JSON.stringify(bridgeState, null, 2), [
+    bridgeState
+  ]);
 
   const httpOutput = useMemo(() => {
     return 'not supported yet';
@@ -77,7 +76,7 @@ const AstViewer = ({ baseApiUrl, ast }) => {
   const jsonOutput = useMemo(() => {
     return 'not supported yet';
     return JSON.stringify(resolvedStream, null, 2);
-  }, [ast]);
+  }, [bridgeState]);
 
   const fetchOutput = useMemo(() => {
     return 'not supported yet';
@@ -99,7 +98,7 @@ const AstViewer = ({ baseApiUrl, ast }) => {
         [equals('curl'), always(curlOutput)],
         [equals('http'), always(httpOutput)]
       ])(outputView),
-    [outputView, ast]
+    [outputView, bridgeState]
   );
 
   return (
