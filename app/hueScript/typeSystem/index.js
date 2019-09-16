@@ -8,7 +8,8 @@ import {
   isCallable,
   getScalarName,
   getArrayType,
-  getFunctionSignature
+  getFunctionSignature,
+  typedValue
 } from './helpers';
 import fn from './fn';
 import array from './array';
@@ -49,5 +50,6 @@ export {
   constraint,
   isConcreteScalar,
   normalizePolyNames,
-  typeToTypeResolution
+  typeToTypeResolution,
+  typedValue
 };
