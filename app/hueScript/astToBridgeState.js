@@ -600,7 +600,14 @@ const putContextEffects = def('putContextEffects')({})([
 const createHSContext = createEmptyContext;
 
 const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
-  JSON.stringify(map(x => typeToString(x.type))(context.vars[0]), null, 2)
+  JSON.stringify(
+    {
+      vars: map(x => typeToString(x.type))(context.vars[0]),
+      effects: context.effects
+    },
+    null,
+    2
+  )
 );
 
 export {
