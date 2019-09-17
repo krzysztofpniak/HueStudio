@@ -30,7 +30,7 @@ const HSValue = $.NamedRecordType('hs/HSValue')(
 )([])({ value: $.Unknown, type: HSType });
 
 const HSEffect = $.NamedRecordType('hs/HSEffect')(
-  'http://example.com/hs#HSValue'
+  'http://example.com/hs#HSEffect'
 )([])({ name: $.String, params: $.StrMap($.Unknown) });
 
 const HSContext = $.NamedRecordType('hs/HSContext')(
