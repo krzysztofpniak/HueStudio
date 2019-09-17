@@ -69,7 +69,8 @@ import {
   hasKey,
   findIndex,
   concat,
-  flip
+  flip,
+  lift4
 } from '../sanctuary';
 import getArity from './typeSystem/getArity';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
@@ -270,18 +271,25 @@ const translateCallExpression = def('translateCallExpression')({})([
       : e
   )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
-  const result = lift3(callee => args => resultType => {
+  const result = lift4(callee => args => resultType => context => {
     if (hasNArgs(args.length, callee.type)) {
-      return { value: callee.value(...args), type: resultType };
+      const { result, effects } = callee.value(...args);
+      return [
+        { value: result.value, type: resultType },
+        putContextEffects(effects)(context)
+      ];
     } else {
-      return {
-        type: resultType,
-        value: (...newArgs) => callee.value(...[...args, ...newArgs])
-      };
+      return [
+        {
+          type: resultType,
+          value: (...newArgs) => callee.value(...[...args, ...newArgs])
+        },
+        context
+      ];
     }
-  })(validatedCallee2)(args)(finalType);
+  })(validatedCallee2)(args)(finalType)(finalContext);
 
-  return lift2(result => ctx => [result, ctx])(result)(finalContext);
+  return result;
 });
 
 const translateIdentifier = def('translateIdentifier')({})([
