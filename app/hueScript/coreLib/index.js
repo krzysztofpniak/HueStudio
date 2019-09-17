@@ -180,12 +180,19 @@ const condition = () => ({});
 const mapFn = createFunction(
   fn([fn([scalar('a'), scalar('b')]), array(scalar('a')), array(scalar('b'))]),
   (it, list) => {
-    const elements = map(it.function, list.elements);
+    const elements = reduce(
+      (p, c) => {
+        const { result, effects } = it.value(c);
+        return {
+          result: [...p.result, result],
+          effects: [...p.effects, ...effects]
+        };
+      },
+      { result: [], effects: [] },
+      list.value
+    );
 
-    return {
-      type: overConstraint(t => array(t.signature[1]), it.type),
-      elements
-    };
+    return hsResult(array(it.type))(elements.result)(elements.effects);
   }
 );
 
