@@ -67,7 +67,9 @@ import {
   complement,
   maybe,
   hasKey,
-  findIndex
+  findIndex,
+  concat,
+  flip
 } from '../sanctuary';
 import getArity from './typeSystem/getArity';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
@@ -76,6 +78,7 @@ import {
   AstNode,
   def,
   HSContext,
+  HSEffect,
   HSError,
   HSType,
   HSTypeResolution,
@@ -588,6 +591,12 @@ const putContextVar = def('putContextVar')({})([
   evolve({ vars: adjust(-1, assoc(name)(value)) })(context)
 );
 
+const putContextEffects = def('putContextEffects')({})([
+  $.Array(HSEffect),
+  HSContext,
+  HSContext
+])(effect => context => evolve({ effects: flip(concat)(effect) })(context));
+
 const createHSContext = createEmptyContext;
 
 const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
@@ -600,6 +609,7 @@ export {
   createEmptyContext,
   createHSContext,
   putContextVar,
+  putContextEffects,
   translateCallExpression,
   translateMemberExpression,
   translateLiteral,

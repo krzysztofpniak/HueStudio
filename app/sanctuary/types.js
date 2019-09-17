@@ -81,6 +81,7 @@ export {
   HSType,
   HSTypeResolution,
   RenamesContext,
+  HSEffect,
   HSContext,
   HSValue,
   HSError,
