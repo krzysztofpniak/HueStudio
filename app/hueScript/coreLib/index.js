@@ -6,10 +6,6 @@ const createFunction = (signature, fn) => ({
   value: fn
 });
 
-/**
- * @example
- *  light(1); // => {type: 'Light', ref: '/lights/1'}
- */
 const delay = createFunction(fn([scalar('Number'), scalar('Void')]), ms =>
   hsResult(scalar('Void'))(null)([{ name: 'delay', params: { ms: ms.value } }])
 );
