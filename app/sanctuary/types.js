@@ -33,6 +33,10 @@ const HSEffect = $.NamedRecordType('hs/HSEffect')(
   'http://example.com/hs#HSEffect'
 )([])({ name: $.String, params: $.StrMap($.Unknown) });
 
+const HSFnResult = $.NamedRecordType('hs/HSFnResult')(
+  'http://example.com/hs#HSFnResult'
+)([])({ result: HSValue, effects: $.Array(HSEffect) });
+
 const HSContext = $.NamedRecordType('hs/HSContext')(
   'http://example.com/hs#HSContext'
 )([])({
@@ -82,6 +86,7 @@ export {
   HSTypeResolution,
   RenamesContext,
   HSEffect,
+  HSFnResult,
   HSContext,
   HSValue,
   HSError,
