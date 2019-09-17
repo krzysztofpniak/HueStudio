@@ -29,9 +29,17 @@ const HSValue = $.NamedRecordType('hs/HSValue')(
   'http://example.com/hs#HSValue'
 )([])({ value: $.Unknown, type: HSType });
 
+const HSEffect = $.NamedRecordType('hs/HSEffect')(
+  'http://example.com/hs#HSValue'
+)([])({ name: $.String, params: $.StrMap($.Unknown) });
+
 const HSContext = $.NamedRecordType('hs/HSContext')(
   'http://example.com/hs#HSContext'
-)([])({ vars: $.Array($.StrMap(HSValue)), infos: $.StrMap($.String) });
+)([])({
+  vars: $.Array($.StrMap(HSValue)),
+  effects: $.Array(HSEffect),
+  infos: $.StrMap($.String)
+});
 
 const HSError = $.NamedRecordType('hs/HSError')(
   'http://example.com/hs#HSError'

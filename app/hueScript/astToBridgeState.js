@@ -575,7 +575,8 @@ const translateExpression = def('translateExpression')({})([
 
 const createEmptyContext = def('createEmptyContext')({})([HSContext])(() => ({
   vars: [{}],
-  infos: {}
+  infos: {},
+  effects: []
 }));
 
 const putContextVar = def('putContextVar')({})([
