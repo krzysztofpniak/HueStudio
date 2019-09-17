@@ -1,5 +1,11 @@
 // @flow
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import SplitPane from 'react-split-pane';
 import {
   always,
@@ -44,7 +50,7 @@ import {
   createEmptyContext,
   translateProgram
 } from '../../hueScript/astToBridgeState';
-import { either, chain, maybeToNullable } from '../../sanctuary';
+import { either, chain, maybeToNullable, Left } from '../../sanctuary';
 
 const get = async url => {
   const r = await fetch(url);
@@ -96,7 +102,10 @@ const RuleEditor = ({
 }) => {
   const debouncedText = useDebounce(text, 200);
 
-  const parsed = useMemo(() => parseHue(debouncedText), [debouncedText]);
+  const [parsed, setParsed] = useState(Left('asd'));
+  useEffect(() => {
+    setParsed(parseHue(debouncedText));
+  }, [debouncedText]);
 
   const { state, infos } = useMemo(() => {
     const context = createEmptyContext();
