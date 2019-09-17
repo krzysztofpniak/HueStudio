@@ -7,63 +7,98 @@ describe('astToBridgeState', () => {
   describe('light', () => {
     it('should return light', () => {
       expect(light.value({ value: 12 })).toEqual({
-        type: scalar('Light'),
-        ref: '/lights/12'
+        result: {
+          type: scalar('Light'),
+          value: '/lights/12'
+        },
+        effects: []
       });
     });
   });
   describe('group', () => {
     it('should return group', () => {
       expect(group.value({ value: 12 })).toEqual({
-        type: scalar('Group'),
-        ref: '/groups/12'
+        result: {
+          type: scalar('Group'),
+          value: '/groups/12'
+        },
+        effects: []
       });
     });
   });
   describe('on', () => {
     it('should set light state to on=true', () => {
-      expect(on.value(light.value({ value: 12 }))).toEqual({
-        type: scalar('Light'),
-        ref: '/lights/12',
-        state: { on: true }
+      expect(on.value(light.value({ value: 12 }).result)).toEqual({
+        result: {
+          type: scalar('Light'),
+          value: '/lights/12'
+        },
+        effects: [
+          {
+            name: 'on',
+            params: { target: { type: scalar('Light'), value: '/lights/12' } }
+          }
+        ]
       });
     });
   });
   describe('off', () => {
     it('should set light state to on=false', () => {
-      expect(off.value(light.value({ value: 12 }))).toEqual({
-        type: scalar('Light'),
-        ref: '/lights/12',
-        state: { on: false }
+      expect(off.value(light.value({ value: 12 }).result)).toEqual({
+        result: {
+          type: scalar('Light'),
+          value: '/lights/12'
+        },
+        effects: [
+          {
+            name: 'off',
+            params: { target: { type: scalar('Light'), value: '/lights/12' } }
+          }
+        ]
       });
     });
   });
   describe('dimmer', () => {
     it('should return dimmer', () => {
       expect(dimmer.value({ value: 12 })).toEqual({
-        type: scalar('Dimmer'),
-        ref: '/sensors/12'
+        result: {
+          type: scalar('Dimmer'),
+          value: '/sensors/12'
+        },
+        effects: []
       });
     });
   });
   describe('buttons', () => {
     it('should return dimmer button', () => {
-      expect(button1.value(dimmer.value({ value: 12 }))).toEqual({
-        type: scalar('Button'),
-        button: 'button1',
-        sensor: { type: scalar('Dimmer'), ref: '/sensors/12' }
+      expect(button1.value(dimmer.value({ value: 12 }).result)).toEqual({
+        result: {
+          type: scalar('Button'),
+          value: {
+            button: 'button1',
+            sensor: { type: scalar('Dimmer'), value: '/sensors/12' }
+          }
+        },
+        effects: []
       });
     });
   });
   describe('initial_press', () => {
     it('should return initial_press event', () => {
       expect(
-        initial_press.value(button1.value(dimmer.value({ value: 12 })))
+        initial_press.value(
+          button1.value(dimmer.value({ value: 12 }).result).result
+        )
       ).toEqual({
-        type: scalar('ButtonEvent'),
-        button: 'button1',
-        eventCode: 1000,
-        sensor: { type: scalar('Dimmer'), ref: '/sensors/12' }
+        result: {
+          type: scalar('ButtonEvent'),
+          value: {
+            button: 'button1',
+            eventCode: 1000,
+            sensor: { type: scalar('Dimmer'), value: '/sensors/12' }
+          }
+        },
+        effects: []
       });
     });
   });

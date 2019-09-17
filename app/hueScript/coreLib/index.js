@@ -11,8 +11,11 @@ const createFunction = (signature, fn) => ({
  *  light(1); // => {type: 'Light', ref: '/lights/1'}
  */
 const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
-  type: scalar('Light'),
-  ref: `/lights/${id.value}`
+  result: {
+    type: scalar('Light'),
+    value: `/lights/${id.value}`
+  },
+  effects: []
 }));
 
 /**
@@ -20,8 +23,11 @@ const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
  *  group(1); // => {type: 'Group', ref: '/groups/1'}
  */
 const group = createFunction(fn([scalar('Number'), scalar('Group')]), id => ({
-  type: scalar('Group'),
-  ref: `/groups/${id.value}`
+  result: {
+    type: scalar('Group'),
+    value: `/groups/${id.value}`
+  },
+  effects: []
 }));
 
 //constraint({a: ['Group', 'Light']}, fn(scalar('a'), scalar('a'))
@@ -36,8 +42,8 @@ const group = createFunction(fn([scalar('Number'), scalar('Group')]), id => ({
 const on = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
   target => ({
-    ...target,
-    state: { ...target.state, on: true }
+    result: target,
+    effects: [{ name: 'on', params: { target } }]
   })
 );
 
@@ -76,7 +82,10 @@ const setScene = createFunction(
  */
 const off = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
-  target => ({ ...target, state: { ...target.state, on: false } })
+  target => ({
+    result: target,
+    effects: [{ name: 'off', params: { target } }]
+  })
 );
 
 /**
@@ -86,8 +95,11 @@ const off = createFunction(
 const dimmer = createFunction(
   fn([scalar('Number'), scalar('Dimmer')]),
   dimmerId => ({
-    type: scalar('Dimmer'),
-    ref: `/sensors/${dimmerId.value}`
+    result: {
+      type: scalar('Dimmer'),
+      value: `/sensors/${dimmerId.value}`
+    },
+    effects: []
   })
 );
 
@@ -99,9 +111,11 @@ const dimmer = createFunction(
 const button1 = createFunction(
   fn([scalar('Number'), scalar('Button')]),
   sensor => ({
-    type: scalar('Button'),
-    button: 'button1',
-    sensor
+    result: {
+      type: scalar('Button'),
+      value: { button: 'button1', sensor }
+    },
+    effects: []
   })
 );
 
@@ -113,10 +127,15 @@ const button1 = createFunction(
 const initial_press = createFunction(
   fn([scalar('Button'), scalar('ButtonEvent')]),
   button => ({
-    type: scalar('ButtonEvent'),
-    button: button.button,
-    eventCode: 1000,
-    sensor: button.sensor
+    result: {
+      type: scalar('ButtonEvent'),
+      value: {
+        button: button.value.button,
+        eventCode: 1000,
+        sensor: button.value.sensor
+      }
+    },
+    effects: []
   })
 );
 
