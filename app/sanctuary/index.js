@@ -176,6 +176,8 @@ const {
 const a = $.TypeVariable('a');
 const b = $.TypeVariable('b');
 const c = $.TypeVariable('c');
+const d = $.TypeVariable('d');
+const e = $.TypeVariable('e');
 
 const f = $.UnaryTypeVariable('f');
 
@@ -250,6 +252,15 @@ const hasKey = def('hasKey')({})([$.String, $.StrMap($.Unknown), $.Boolean])(
   key => obj => !!obj[key]
 );
 
+const lift4 = def('lift4')({ f: [Z.Apply] })([
+  $.Fn(a)($.Fn(b)($.Fn(c)($.Fn(d)(e)))),
+  f(a),
+  f(b),
+  f(c),
+  f(d),
+  f(e)
+])(f => a => b => c => d => ap(ap(ap(map(f)(a))(b))(c))(d));
+
 //const evolve = def('evolve')({})([$.StrMap($.)])();
 
 export {
@@ -262,6 +273,7 @@ export {
   filterIndexed,
   findIndex,
   hasKey,
+  lift4,
   is,
   Maybe,
   Nothing,
