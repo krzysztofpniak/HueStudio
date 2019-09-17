@@ -3,10 +3,7 @@ import AppBar from '@material-ui/core/AppBar/AppBar';
 import Tabs from '@material-ui/core/Tabs/Tabs';
 import Tab from '@material-ui/core/Tab/Tab';
 import styles from '../Home.css';
-import {
-  astToBridgeState,
-  showHSContext
-} from '../../hueScript/astToBridgeState';
+import { showHSContext } from '../../hueScript/astToBridgeState';
 import { always, cond, equals, hasPath, join, map } from 'ramda';
 import { either, Left } from '../../sanctuary';
 
