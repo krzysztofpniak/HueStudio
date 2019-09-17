@@ -428,7 +428,7 @@ const translateBlockStatement = def('translateBlockStatement')({})([
   HSContext,
   $.Either($.Unknown)(HSContext)
 ])(ast => context =>
-  reduce(chain(c => s => translateStatement(s)(c)))(Right(context))(ast.body)
+  reduce(c => s => chain(translateStatement(s))(c))(Right(context))(ast.body)
 );
 
 const translateMemberExpression = def('translateMemberExpression')({})([
