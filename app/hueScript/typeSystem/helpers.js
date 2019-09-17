@@ -1,5 +1,11 @@
 import $ from 'sanctuary-def';
-import { def, HSType, HSValue } from '../../sanctuary/types';
+import {
+  def,
+  HSEffect,
+  HSFnResult,
+  HSType,
+  HSValue
+} from '../../sanctuary/types';
 import { addIndex, filter, prop, propEq, test } from 'ramda';
 
 const filterIndexed = addIndex(filter);
@@ -46,6 +52,17 @@ const typedValue = def('typedValue')({})([HSType, $.Unknown, HSValue])(
   type => value => ({ type, value })
 );
 
+const hsResult = def('hsResult')({})([
+  HSType,
+  $.Unknown,
+  $.Array(HSEffect),
+  HSFnResult
+])(type => value => effects => ({ result: typedValue(type)(value), effects }));
+
+const hsPureResult = def('hsPureResult')({})([HSType, $.Unknown, HSFnResult])(
+  type => value => ({ result: typedValue(type)(value), effects: [] })
+);
+
 export {
   filterIndexed,
   scalar,
@@ -58,5 +75,7 @@ export {
   getScalarName,
   getArrayType,
   getFunctionSignature,
-  typedValue
+  typedValue,
+  hsResult,
+  hsPureResult
 };
