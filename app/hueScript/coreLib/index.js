@@ -10,6 +10,10 @@ const createFunction = (signature, fn) => ({
  * @example
  *  light(1); // => {type: 'Light', ref: '/lights/1'}
  */
+const delay = createFunction(fn([scalar('Number'), scalar('Void')]), ms =>
+  hsResult(scalar('Void'))(null)([{ name: 'delay', params: { ms: ms.value } }])
+);
+
 const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
   result: {
     type: scalar('Light'),
@@ -198,6 +202,7 @@ const removeFn = createFunction(
 );
 
 const coreLib = {
+  delay,
   light,
   group,
   on,
