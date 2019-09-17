@@ -1,5 +1,6 @@
-import { array, scalar, fn, constraint, overConstraint } from '../typeSystem';
-import { map, pathOr, pluck } from 'ramda';
+import { array, scalar, fn, constraint } from '../typeSystem';
+import { map, pathOr, pluck, reduce } from 'ramda';
+import { hsPureResult, hsResult } from '../typeSystem/helpers';
 
 const createFunction = (signature, fn) => ({
   type: signature,
