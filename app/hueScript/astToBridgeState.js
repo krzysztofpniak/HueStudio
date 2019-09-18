@@ -41,7 +41,8 @@ import {
   canAcceptNArgs,
   hasNArgs,
   getScalarName,
-  isScalar
+  isScalar,
+  typedValue
 } from './typeSystem';
 import {
   cond2,
@@ -464,14 +465,19 @@ const translateMemberExpression = def('translateMemberExpression')({})([
     lift2(on(resolveMember)(a => typeToTypeResolution(a.type)))(obj)(prop)
   );
 
-  const finalValue = lift3(type => prop => obj => ({
-    type: type.type,
-    value: isFunction(type.type)
-      ? (...newArgs) => prop.value(...[...newArgs, obj.value])
-      : prop.value(obj.value)
-  }))(finalType)(prop)(obj);
+  const finalValue = lift4(type => prop => obj => context => {
+    if (isFunction(type.type)) {
+      return [
+        typedValue(type.type)((...newArgs) => prop.value(...[...newArgs, obj])),
+        context
+      ];
+    } else {
+      const { result, effects } = prop.value(obj);
+      return [result, putContextEffects(effects)(context)];
+    }
+  })(finalType)(prop)(obj)(ctx2);
 
-  return lift2(v => c => [v, c])(finalValue)(ctx2);
+  return finalValue;
 });
 
 const translateReturnStatement = ast => context =>
