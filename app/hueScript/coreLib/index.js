@@ -52,10 +52,13 @@ const bri = createFunction(
   constraint({ a: ['Light', 'Group'] })(
     fn([scalar('Number'), scalar('a'), scalar('a')])
   ),
-  (brightness, target) => ({
-    ...target,
-    state: { ...target.state, bri: brightness.value }
-  })
+  (brightness, target) =>
+    hsResult(target.type)(target.value)([
+      {
+        name: 'bri',
+        params: { target, bri: brightness.value }
+      }
+    ])
 );
 
 const transition = createFunction(
