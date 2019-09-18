@@ -43,13 +43,14 @@ describe('translateCallExpression', () => {
       value: (a, b) => hsPureResult(scalar('Number'))(a.value + b.value)
     })(createHSContext());
     //act
-    const [rValue, rContext] = fromEither({})(
-      translateCallExpression(callAst2)(context)
-    );
+    const [rValue, rContext] = fromEither([
+      typedValue(scalar('Void'))(null),
+      createHSContext()
+    ])(translateCallExpression(callAst2)(context));
     //assert
     expect(rValue.type).toEqual(fn([scalar('Number'), scalar('Number')]));
     expect(rValue.value(typedValue(scalar('Number'))(2))).toEqual(
-      typedValue(scalar('Number'))(3)
+      hsPureResult(scalar('Number'))(3)
     );
   });
   it('should translate side effects call', () => {

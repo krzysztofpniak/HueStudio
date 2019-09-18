@@ -7,12 +7,13 @@ import { scalar, fn } from '../../../app/hueScript/typeSystem';
 import { Left, Right, pipe, fromEither } from '../../../app/sanctuary';
 import { parseHue } from '../../../app/hueScript';
 import typeMismatchError from '../../../app/hueScript/typeSystem/typeMismatchError';
+import { hsPureResult } from '../../../app/hueScript/typeSystem/helpers';
 
 const memberAst1 = fromEither({})(parseHue('a.hello;')).body[0].expression;
 
 const hello = {
   type: fn([scalar('String'), scalar('String')]),
-  value: name => `Hi ${name}!`
+  value: name => hsPureResult(scalar('String'))(`Hi ${name.value}!`)
 };
 
 const a = {
