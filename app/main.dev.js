@@ -89,11 +89,9 @@ const init = async () => {
     height,
     webPreferences: {
       webSecurity: false,
-      nodeIntegration: true
+      nodeIntegration: true,
     }
   });
-
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -109,6 +107,10 @@ const init = async () => {
     }
   });
 
+  mainWindow.webContents.on('did-fail-load', e => {
+    console.log('did-fail-load', e);
+  });
+
   mainWindow.on('resize', () => {
     // eslint-disable-next-line no-shadow
     const { width, height } = mainWindow.getBounds();
@@ -119,6 +121,8 @@ const init = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
