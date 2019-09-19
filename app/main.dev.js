@@ -90,6 +90,7 @@ const init = async () => {
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
+      nodeIntegrationInWorker: true
     }
   });
 
