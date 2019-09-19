@@ -3,9 +3,52 @@ import AppBar from '@material-ui/core/AppBar/AppBar';
 import Tabs from '@material-ui/core/Tabs/Tabs';
 import Tab from '@material-ui/core/Tab/Tab';
 import styles from '../Home.css';
-import { showHSContext } from '../../hueScript/astToBridgeState';
-import { always, cond, equals, hasPath, join, map } from 'ramda';
-import { either, Left } from '../../sanctuary';
+import {
+  always,
+  cond,
+  equals,
+  hasPath,
+  join,
+  map,
+  propEq,
+  T,
+  compose,
+  evolve,
+  concat
+} from 'ramda';
+
+const getActionAddress = target =>
+  target.type.name === 'Light'
+    ? `${target.value}/action`
+    : `${target.value}/action`;
+
+const translateOn = ({ params: { target } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      on: true
+    }
+  };
+};
+
+const translateBri = ({ params: { target, bri } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      state: {
+        bri
+      }
+    }
+  };
+};
+
+const translateEffect = cond([
+  [propEq('name', 'on'), translateOn],
+  [propEq('name', 'bri'), translateBri],
+  [T, always({ error: 'missing translation' })]
+]);
 
 const requestToRawHttp = request => {
   const body = JSON.stringify(request.body);
@@ -36,6 +79,9 @@ const requestToFetch = request => {
     : `fetch('${request.url}', {method: '${request.method}')`;
 };
 
+const resolveUrl = baseUrl => request =>
+  evolve({ url: concat(baseUrl) })(request);
+
 const AstViewer = ({ baseApiUrl, effects }) => {
   const [outputView, setOutputView] = useState('state');
   const handleOutputViewChange = useCallback((e, value) => {
@@ -46,40 +92,56 @@ const AstViewer = ({ baseApiUrl, effects }) => {
     effects
   ]);
 
-  const resolvedStream = useMemo(() => {
-    return 'not supported yet';
-    /*const restStream = bridgeState ? astToRest(bridgeState) : [];
-    return nth(
-      1,
-      mapAccum(
-        (p, c) => [p, evolve({ url: a => baseApiUrl + a }, c.request({}))],
-        {},
-        restStream || []
-      )
-    );*/
-  }, [effects, baseApiUrl]);
-
-  const astOutput = useMemo(() => JSON.stringify(effects, null, 2), [effects]);
+  const astOutput = useMemo(
+    () => JSON.stringify(map(translateEffect, effects), null, 2),
+    [effects]
+  );
 
   const httpOutput = useMemo(() => {
-    return 'not supported yet';
-    join('\n\n', map(requestToRawHttp, resolvedStream));
-  }, [resolvedStream]);
+    return join(
+      '\n\n',
+      map(
+        compose(
+          requestToRawHttp,
+          resolveUrl(baseApiUrl),
+          translateEffect
+        ),
+        effects
+      )
+    );
+  }, [effects]);
 
   const jsonOutput = useMemo(() => {
-    return 'not supported yet';
-    return JSON.stringify(resolvedStream, null, 2);
+    return JSON.stringify(map(translateEffect, effects), null, 2);
   }, [effects]);
 
   const fetchOutput = useMemo(() => {
-    return 'not supported yet';
-    join('\n\n', map(requestToFetch, resolvedStream));
-  }, [resolvedStream]);
+    return join(
+      '\n\n',
+      map(
+        compose(
+          requestToFetch,
+          resolveUrl(baseApiUrl),
+          translateEffect
+        ),
+        effects
+      )
+    );
+  }, [effects]);
 
   const curlOutput = useMemo(() => {
-    return 'not supported yet';
-    join('\n\n', map(requestToCurl, resolvedStream));
-  }, [resolvedStream]);
+    return join(
+      '\n\n',
+      map(
+        compose(
+          requestToCurl,
+          resolveUrl(baseApiUrl),
+          translateEffect
+        ),
+        effects
+      )
+    );
+  }, [map(translateEffect, effects)]);
 
   const output = useMemo(
     () =>
