@@ -249,7 +249,8 @@ const resolveFunctionType = def('resolveFunctionType')({})([
     )(safeResolutionsMerge(a.resolutions)(b.resolutions));
   }
 
-  return Left(typeMismatchError(bType, aType));
+  //TODO: nie ma do tego testu
+  return Left(typeMismatchError(bType)(aType)(Nothing));
 });
 
 const wrapMismatchErrorWithArray = e =>
