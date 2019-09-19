@@ -60,6 +60,21 @@ export default merge.smart(baseConfig, {
   module: {
     rules: [
       {
+        test: /\.worker\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'worker-loader'
+          },
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true
+            }
+          }
+        ]
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
