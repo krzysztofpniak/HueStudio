@@ -36,17 +36,15 @@ const requestToFetch = request => {
     : `fetch('${request.url}', {method: '${request.method}')`;
 };
 
-const AstViewer = ({ baseApiUrl, bridgeState }) => {
+const AstViewer = ({ baseApiUrl, effects }) => {
   const [outputView, setOutputView] = useState('state');
   const handleOutputViewChange = useCallback((e, value) => {
     setOutputView(value);
   }, []);
 
-  const stateOutput = useMemo(() => {
-    return either(a => (a.message ? a.message : JSON.stringify(a, null, 2)))(
-      showHSContext
-    )(bridgeState);
-  }, [bridgeState]);
+  const stateOutput = useMemo(() => JSON.stringify(effects, null, 2), [
+    effects
+  ]);
 
   const resolvedStream = useMemo(() => {
     return 'not supported yet';
@@ -59,11 +57,9 @@ const AstViewer = ({ baseApiUrl, bridgeState }) => {
         restStream || []
       )
     );*/
-  }, [bridgeState, baseApiUrl]);
+  }, [effects, baseApiUrl]);
 
-  const astOutput = useMemo(() => JSON.stringify(bridgeState, null, 2), [
-    bridgeState
-  ]);
+  const astOutput = useMemo(() => JSON.stringify(effects, null, 2), [effects]);
 
   const httpOutput = useMemo(() => {
     return 'not supported yet';
@@ -73,7 +69,7 @@ const AstViewer = ({ baseApiUrl, bridgeState }) => {
   const jsonOutput = useMemo(() => {
     return 'not supported yet';
     return JSON.stringify(resolvedStream, null, 2);
-  }, [bridgeState]);
+  }, [effects]);
 
   const fetchOutput = useMemo(() => {
     return 'not supported yet';
@@ -95,7 +91,7 @@ const AstViewer = ({ baseApiUrl, bridgeState }) => {
         [equals('curl'), always(curlOutput)],
         [equals('http'), always(httpOutput)]
       ])(outputView),
-    [outputView, bridgeState]
+    [outputView, effects]
   );
 
   return (

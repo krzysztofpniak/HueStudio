@@ -46,11 +46,7 @@ import actions from './actions';
 import reducer from './reducer';
 import useHueData from './useHueData';
 import AstViewer from '../astViewer';
-import {
-  createEmptyContext,
-  translateProgram
-} from '../../hueScript/astToBridgeState';
-import { either, chain, maybeToNullable, Left } from '../../sanctuary';
+import ParseWorker from './parse.worker';
 
 const get = async url => {
   const r = await fetch(url);
@@ -101,43 +97,23 @@ const RuleEditor = ({
   baseApiUrl
 }) => {
   const debouncedText = useDebounce(text, 200);
-
-  const [parsed, setParsed] = useState(Left('asd'));
+  const workerRef = useRef(null);
+  const [{ error, errorLocations, effects, infos }, setParseResult] = useState({
+    error: null,
+    errorLocations: [],
+    effects: [],
+    infos: {}
+  });
   useEffect(() => {
-    setParsed(parseHue(debouncedText));
-  }, [debouncedText]);
-
-  const { state, infos } = useMemo(() => {
-    const context = createEmptyContext();
-    const state = chain(p => translateProgram(p)(context))(parsed);
-    return {
-      state,
-      infos: context.infos
+    workerRef.current = new ParseWorker();
+    workerRef.current.onmessage = function(event) {
+      setParseResult(event.data);
     };
-  }, [parsed]);
+  }, []);
 
-  const errors = useMemo(() => {
-    return either(v => {
-      const location =
-        v.location && v.location.value
-          ? maybeToNullable(v.location)
-          : v.location;
-      return location && location.start ? [location] : [];
-    })(() => [])(state);
-  }, [parsed, state]);
-
-  const transitions = useTransition(parsed.error, null, {
-    from: { opacity: 0, color: 'red' },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 }
-  });
-
-  const lastErrorRef = useRef(parsed.error);
   useEffect(() => {
-    if (parsed.error) {
-      lastErrorRef.current = parsed.error;
-    }
-  });
+    workerRef.current.postMessage(debouncedText);
+  }, [debouncedText]);
 
   return (
     <SplitPane
@@ -158,22 +134,18 @@ const RuleEditor = ({
             value={text}
             onValueChange={onTextChange}
             padding={10}
-            errors={errors}
+            errors={errorLocations}
             ref={inputRef}
             metaPressed={metaPressed}
             args={{ ...args, infos }}
           />
         </div>
-        {transitions.map(
-          ({ item, key, props }) =>
-            item && (
-              <animated.div key={key} style={props}>
-                {parsed.error && parsed.error.message}
-              </animated.div>
-            )
-        )}
       </div>
-      <AstViewer baseApiUrl={baseApiUrl} bridgeState={state} />
+      {error ? (
+        <div style={{ padding: 10, color: 'red' }}>{error}</div>
+      ) : (
+        <AstViewer baseApiUrl={baseApiUrl} effects={effects} />
+      )}
     </SplitPane>
   );
 };
