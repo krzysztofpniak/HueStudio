@@ -11,7 +11,7 @@ const ifAst1 = fromEither({})(parseHue('if (true) 1')).body[0];
 
 describe('translateIfStatement', () => {
   it('should use consequent statement', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateIfStatement(ifAst1)(context)).toEqual(Right(context));
   });
 });

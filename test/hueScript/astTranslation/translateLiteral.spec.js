@@ -12,19 +12,19 @@ const literalAst3 = fromEither({})(parseHue("'Hello';")).body[0].expression;
 
 describe('translateLiteral', () => {
   it('should translate boolean literal', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateLiteral(literalAst1)(context)).toEqual(
       Right([{ type: scalar('Boolean'), value: true }, context])
     );
   });
   it('should translate number literal', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateLiteral(literalAst2)(context)).toEqual(
       Right([{ type: scalar('Number'), value: 1 }, context])
     );
   });
   it('should translate string literal', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateLiteral(literalAst3)(context)).toEqual(
       Right([{ type: scalar('String'), value: 'Hello' }, context])
     );

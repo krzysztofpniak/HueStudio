@@ -20,13 +20,13 @@ const numberValue = typedValue(scalar('Number'));
 
 describe('translateArrayExpression', () => {
   it('should translate single number array', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateArrayExpression(arrayAst1)(context)).toEqual(
       Right([typedValue(array(scalar('Number')))([numberValue(1)]), context])
     );
   });
   it('should translate multi numbers array', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateArrayExpression(arrayAst2)(context)).toEqual(
       Right([
         typedValue(array(scalar('Number')))([
@@ -39,7 +39,7 @@ describe('translateArrayExpression', () => {
     );
   });
   it('should translate mixed array', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateArrayExpression(arrayAst3)(context)).toEqual(
       Right([
         typedValue(constraint({ a: ['Number', 'String'] })(array(scalar('a'))))(

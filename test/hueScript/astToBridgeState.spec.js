@@ -6,7 +6,7 @@ const { light, group, on, off, dimmer, button1, initial_press } = coreLib;
 describe('astToBridgeState', () => {
   describe('light', () => {
     it('should return light', () => {
-      expect(light.value({ value: 12 })).toEqual({
+      expect(light.value.fn({ value: 12 })).toEqual({
         result: {
           type: scalar('Light'),
           value: '/lights/12'
@@ -17,7 +17,7 @@ describe('astToBridgeState', () => {
   });
   describe('group', () => {
     it('should return group', () => {
-      expect(group.value({ value: 12 })).toEqual({
+      expect(group.value.fn({ value: 12 })).toEqual({
         result: {
           type: scalar('Group'),
           value: '/groups/12'
@@ -28,7 +28,7 @@ describe('astToBridgeState', () => {
   });
   describe('on', () => {
     it('should set light state to on=true', () => {
-      expect(on.value(light.value({ value: 12 }).result)).toEqual({
+      expect(on.value.fn(light.value.fn({ value: 12 }).result)).toEqual({
         result: {
           type: scalar('Light'),
           value: '/lights/12'
@@ -44,7 +44,7 @@ describe('astToBridgeState', () => {
   });
   describe('off', () => {
     it('should set light state to on=false', () => {
-      expect(off.value(light.value({ value: 12 }).result)).toEqual({
+      expect(off.value.fn(light.value.fn({ value: 12 }).result)).toEqual({
         result: {
           type: scalar('Light'),
           value: '/lights/12'
@@ -60,7 +60,7 @@ describe('astToBridgeState', () => {
   });
   describe('dimmer', () => {
     it('should return dimmer', () => {
-      expect(dimmer.value({ value: 12 })).toEqual({
+      expect(dimmer.value.fn({ value: 12 })).toEqual({
         result: {
           type: scalar('Dimmer'),
           value: '/sensors/12'
@@ -71,7 +71,7 @@ describe('astToBridgeState', () => {
   });
   describe('buttons', () => {
     it('should return dimmer button', () => {
-      expect(button1.value(dimmer.value({ value: 12 }).result)).toEqual({
+      expect(button1.value.fn(dimmer.value.fn({ value: 12 }).result)).toEqual({
         result: {
           type: scalar('Button'),
           value: {
@@ -86,8 +86,8 @@ describe('astToBridgeState', () => {
   describe('initial_press', () => {
     it('should return initial_press event', () => {
       expect(
-        initial_press.value(
-          button1.value(dimmer.value({ value: 12 }).result).result
+        initial_press.value.fn(
+          button1.value.fn(dimmer.value.fn({ value: 12 }).result).result
         )
       ).toEqual({
         result: {

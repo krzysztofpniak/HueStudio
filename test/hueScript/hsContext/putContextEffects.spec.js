@@ -6,7 +6,7 @@ import { pipe } from '../../../app/sanctuary';
 
 describe('putContextEffects', () => {
   it('should append effects', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     const effect1 = { name: 'delay', params: { ms: 2000 } };
     const effect2 = { name: 'print', params: { text: 'Hello World' } };
     const effect3 = { name: 'on', params: { target: '/lights/1' } };

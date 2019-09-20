@@ -11,7 +11,7 @@ const binaryAst1 = fromEither({})(parseHue('a == 2;')).body[0].expression;
 
 describe('translateBinaryExpression', () => {
   it('should use consequent value', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateBinaryExpression(binaryAst1)(context)).toEqual(
       Right([{ type: scalar('Boolean'), value: true }, context])
     );

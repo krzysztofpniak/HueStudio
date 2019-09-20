@@ -12,7 +12,7 @@ const varDeclarationAst = fromEither({})(parseHue('const x = 1, y = 8;'))
 
 describe('translateVariableDeclaration', () => {
   it('should translate const', () => {
-    const context = createHSContext();
+    const context = createHSContext({ lights: {}, groups: {} });
     expect(translateVariableDeclaration(varDeclarationAst)(context)).toEqual(
       Right(
         pipe([
