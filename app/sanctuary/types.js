@@ -49,6 +49,20 @@ const HSError = $.NamedRecordType('hs/HSError')(
   'http://example.com/hs#HSError'
 )([])({ name: $.String, message: $.String });
 
+const HSLibFnGuard = $.Fn($.Array(HSValue))($.Fn(HSContext)($.Maybe(HSError)));
+
+const HSLibFnValue = $.NamedRecordType('hs/HSLibFnValue')(
+  'http://example.com/hs#HSLibFnValue'
+)([])({ fn: $.Unknown, guard: HSLibFnGuard });
+
+const HSLibFn = $.NamedRecordType('hs/HSLibFn')(
+  'http://example.com/hs#HSLibFn'
+)([])({ type: HSType, value: HSLibFnValue });
+
+const HueBridgeState = $.NamedRecordType('hs/HueBridgeState')(
+  'http://example.com/hs#HueBridgeState'
+)([])({ lights: $.StrMap($.Unknown), groups: $.StrMap($.Unknown) });
+
 const AstNode = $.NamedRecordType('hs/AstNode')(
   'http://example.com/hs#AstNode'
 )([])({ type: $.String });
@@ -78,7 +92,7 @@ const env = $.env.concat([
   CodeLocation,
   PolyArray
 ]);
-const def = $.create({ checkTypes: true, env });
+const def = $.create({ checkTypes: process.env.NODE_ENV === 'test', env });
 
 export {
   HSTypeKind,
@@ -87,6 +101,10 @@ export {
   RenamesContext,
   HSEffect,
   HSFnResult,
+  HSLibFnGuard,
+  HSLibFn,
+  HSLibFnValue,
+  HueBridgeState,
   HSContext,
   HSValue,
   HSError,

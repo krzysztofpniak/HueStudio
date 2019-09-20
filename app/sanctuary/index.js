@@ -4,7 +4,7 @@ import Z from 'sanctuary-type-classes';
 import { def, env } from './types';
 
 const S = create({
-  checkTypes: process.env.NODE_ENV !== 'production',
+  checkTypes: process.env.NODE_ENV === 'test',
   env: env
 });
 
