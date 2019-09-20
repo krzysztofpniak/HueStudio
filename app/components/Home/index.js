@@ -12,6 +12,7 @@ import {
   assoc,
   compose,
   cond,
+  dissoc,
   fromPairs,
   head,
   ifElse,
@@ -94,7 +95,8 @@ const RuleEditor = ({
   inputRef,
   metaPressed,
   args,
-  baseApiUrl
+  baseApiUrl,
+  hueData
 }) => {
   const debouncedText = useDebounce(text, 200);
   const workerRef = useRef(null);
@@ -111,9 +113,15 @@ const RuleEditor = ({
     };
   }, []);
 
+  const debouncedHueData = useDebounce(hueData, 2000);
+
   useEffect(() => {
-    workerRef.current.postMessage(debouncedText);
-  }, [debouncedText]);
+    workerRef.current.postMessage({
+      debouncedText,
+      hueData: dissoc('getAdjacents', debouncedHueData)
+    });
+    console.log('call', debouncedHueData);
+  }, [debouncedText, debouncedHueData]);
 
   return (
     <SplitPane

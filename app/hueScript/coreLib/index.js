@@ -1,17 +1,68 @@
 import { array, scalar, fn, constraint } from '../typeSystem';
-import { map, pathOr, pluck, reduce } from 'ramda';
+import { map, pathOr, pluck, reduce, keys, toPairs } from 'ramda';
 import { hsPureResult, hsResult } from '../typeSystem/helpers';
+import $ from 'sanctuary-def';
+import {
+  AstNode,
+  def,
+  HSContext,
+  HSEffect,
+  HSError,
+  HSLibFn,
+  HSLibFnGuard,
+  HSLibFnValue,
+  HSType,
+  HSTypeResolution,
+  HSValue,
+  HueBridgeState
+} from '../../sanctuary/types';
+import { Just, Nothing } from '../../sanctuary';
 
-const createFunction = (signature, fn) => ({
+const createFunction = def('createFunction')({})([
+  HSType,
+  HSLibFnGuard,
+  $.Unknown,
+  HSLibFn
+])(signature => guard => fn => ({
   type: signature,
-  value: fn
-});
+  value: { fn, guard }
+}));
 
-const delay = createFunction(fn([scalar('Number'), scalar('Void')]), ms =>
+const pass = () => () => Nothing;
+
+const isGroupDefined = n => args => ctx => {
+  const allowedGroups = keys(ctx.bridgeState.groups);
+  return allowedGroups.includes('' + args[n].value)
+    ? Nothing
+    : Just({
+        name: 'ValueOutOfRange',
+        message: `Value is not in allowed set: ${map(
+          ([id, g]) => `${id}(${g.name})`
+        )(toPairs(ctx.bridgeState.groups)).join(', ')}`,
+        argIdx: n
+      });
+};
+
+const isLightDefined = n => args => ctx => {
+  const allowedLights = keys(ctx.bridgeState.lights);
+  return allowedLights.includes('' + args[n].value)
+    ? Nothing
+    : Just({
+        name: 'ValueOutOfRange',
+        message: `Value is not in allowed set: ${map(
+          ([id, g]) => `${id}(${g.name})`
+        )(toPairs(ctx.bridgeState.lights)).join(', ')}`,
+        argIdx: n
+      });
+};
+
+const delay = createFunction(fn([scalar('Number'), scalar('Void')]))(pass)(ms =>
   hsResult(scalar('Void'))(null)([{ name: 'delay', params: { ms: ms.value } }])
 );
 
-const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
+const light = createFunction(fn([scalar('Number'), scalar('Light')]))(
+  isLightDefined(0)
+)(id => ({
   result: {
     type: scalar('Light'),
     value: `/lights/${id.value}`
@@ -23,7 +74,9 @@ const light = createFunction(fn([scalar('Number'), scalar('Light')]), id => ({
  * @example
  *  group(1); // => {type: 'Group', ref: '/groups/1'}
  */
-const group = createFunction(fn([scalar('Number'), scalar('Group')]), id => ({
+const group = createFunction(fn([scalar('Number'), scalar('Group')]))(
+  isGroupDefined(0)
+)(id => ({
   result: {
     type: scalar('Group'),
     value: `/groups/${id.value}`
@@ -41,42 +94,44 @@ const group = createFunction(fn([scalar('Number'), scalar('Group')]), id => ({
  *  // => {type: 'Group', state: {on: true}}
  */
 const on = createFunction(
-  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
-  target => ({
-    result: target,
-    effects: [{ name: 'on', params: { target } }]
-  })
-);
+  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
+)(pass)(target => ({
+  result: target,
+  effects: [{ name: 'on', params: { target } }]
+}));
 
 const bri = createFunction(
   constraint({ a: ['Light', 'Group'] })(
     fn([scalar('Number'), scalar('a'), scalar('a')])
-  ),
-  (brightness, target) =>
-    hsResult(target.type)(target.value)([
-      {
-        name: 'bri',
-        params: { target, bri: brightness.value }
-      }
-    ])
+  )
+)(pass)((brightness, target) =>
+  hsResult(target.type)(target.value)([
+    {
+      name: 'bri',
+      params: { target, bri: brightness.value }
+    }
+  ])
 );
 
 const transition = createFunction(
   constraint({ a: ['Light', 'Group'] })(
     fn([scalar('Number'), scalar('a'), scalar('a')])
-  ),
-  (value, target) => ({
-    ...target,
-    state: { ...target.state, transition: value.value }
-  })
+  )
+)(pass)((time, target) =>
+  hsResult(target.type)(target.value)([
+    {
+      name: 'transition',
+      params: { target, time: time.value }
+    }
+  ])
 );
 
 const setScene = createFunction(
-  fn([scalar('String'), scalar('Group'), scalar('Group')]),
-  (value, target) => ({
-    ...target,
-    state: { ...target.state, scene: value }
-  })
+  fn([scalar('String'), scalar('Group'), scalar('Group')])
+)(pass)((scene, target) =>
+  hsResult(scalar('Group'))(target.value)([
+    { name: 'setScene', params: { target, scene: scene.value } }
+  ])
 );
 
 /**
@@ -85,19 +140,17 @@ const setScene = createFunction(
  *  off({type: 'Group', ref: '/groups/1'}); // => {type: 'Group', state: {on: false}}
  */
 const off = createFunction(
-  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')])),
-  target => ({
-    result: target,
-    effects: [{ name: 'off', params: { target } }]
-  })
-);
+  constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
+)(pass)(target => ({
+  result: target,
+  effects: [{ name: 'off', params: { target } }]
+}));
 
 /**
  * @example
  *  dimmer(12); // => {type: 'Dimmer', ref: '/sensors/12'}
  */
-const dimmer = createFunction(
-  fn([scalar('Number'), scalar('Dimmer')]),
+const dimmer = createFunction(fn([scalar('Number'), scalar('Dimmer')]))(pass)(
   dimmerId => ({
     result: {
       type: scalar('Dimmer'),
@@ -112,8 +165,7 @@ const dimmer = createFunction(
  *  button1({type: 'Dimmer', ref: '/sensors/12'});
  *  // => {type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const button1 = createFunction(
-  fn([scalar('Number'), scalar('Button')]),
+const button1 = createFunction(fn([scalar('Number'), scalar('Button')]))(pass)(
   sensor => ({
     result: {
       type: scalar('Button'),
@@ -129,19 +181,18 @@ const button1 = createFunction(
  *  // => {type: 'ButtonEvent', button: 'button1', eventCode: 1000, sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
 const initial_press = createFunction(
-  fn([scalar('Button'), scalar('ButtonEvent')]),
-  button => ({
-    result: {
-      type: scalar('ButtonEvent'),
-      value: {
-        button: button.value.button,
-        eventCode: 1000,
-        sensor: button.value.sensor
-      }
-    },
-    effects: []
-  })
-);
+  fn([scalar('Button'), scalar('ButtonEvent')])
+)(pass)(button => ({
+  result: {
+    type: scalar('ButtonEvent'),
+    value: {
+      button: button.value.button,
+      eventCode: 1000,
+      sensor: button.value.sensor
+    }
+  },
+  effects: []
+}));
 
 /**
  * @example
@@ -149,9 +200,8 @@ const initial_press = createFunction(
  *  // => {type: 'EventHandler', event: {type: 'ButtonEvent', ...}, actions: [...]}
  */
 const handle = createFunction(
-  fn([fn([scalar('void')]), scalar('ButtonEvent'), scalar('Rule')]),
-  (event, actions) => ({ type: scalar('Rule'), event, actions })
-);
+  fn([fn([scalar('void')]), scalar('ButtonEvent'), scalar('Rule')])
+)(pass)((event, actions) => ({ type: scalar('Rule'), event, actions }));
 
 /**
  * @example
@@ -178,35 +228,30 @@ const eq = () => ({});
 const condition = () => ({});
 
 const mapFn = createFunction(
-  fn([fn([scalar('a'), scalar('b')]), array(scalar('a')), array(scalar('b'))]),
-  (it, list) => {
-    const elements = reduce(
-      (p, c) => {
-        const { result, effects } = it.value(c);
-        return {
-          result: [...p.result, result],
-          effects: [...p.effects, ...effects]
-        };
-      },
-      { result: [], effects: [] },
-      list.value
-    );
+  fn([fn([scalar('a'), scalar('b')]), array(scalar('a')), array(scalar('b'))])
+)(pass)((it, list) => {
+  const elements = reduce(
+    (p, c) => {
+      const { result, effects } = it.value.fn(c);
+      return {
+        result: [...p.result, result],
+        effects: [...p.effects, ...effects]
+      };
+    },
+    { result: [], effects: [] },
+    list.value
+  );
 
-    return hsResult(array(it.type))(elements.result)(elements.effects);
-  }
-);
+  return hsResult(array(it.type))(elements.result)(elements.effects);
+});
 
 const removeFn = createFunction(
   constraint({ a: ['Group', 'Schedule', 'Rule'] })(
     fn([scalar('a'), scalar('Void')])
-  ),
-  (it, list) => {
-    return {
-      type: scalar('Void')
-      //effect: ''
-    };
-  }
-);
+  )
+)((it, list) => {
+  return hsResult(scalar('Void'))(null)([]);
+});
 
 const coreLib = {
   delay,

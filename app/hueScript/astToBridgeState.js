@@ -84,7 +84,8 @@ import {
   HSError,
   HSType,
   HSTypeResolution,
-  HSValue
+  HSValue,
+  HueBridgeState
 } from '../sanctuary/types';
 import typeMismatchError from './typeSystem/typeMismatchError';
 
@@ -255,7 +256,15 @@ const translateCallExpression = def('translateCallExpression')({})([
 
   const argsCtx = chain(ctx => reduceArguments(ctx)(ast.arguments))(ctx1);
   const args = map(([ctx, a]) => a)(argsCtx);
-  const finalContext = map(([ctx, a]) => ctx)(argsCtx);
+  const context3 = map(([ctx, a]) => ctx)(argsCtx);
+
+  const finalContext = join(
+    lift3(c => args => ctx =>
+      maybe(Right(ctx))(e =>
+        Left({ ...e, location: ast.arguments[e.argIdx].location })
+      )(c.value.guard(args)(ctx))
+    )(validatedCallee2)(args)(context3)
+  );
 
   const argsTypes = map(as => map(typeToTypeResolution)(pluck('type', as)))(
     args
@@ -274,7 +283,7 @@ const translateCallExpression = def('translateCallExpression')({})([
 
   const result = lift4(callee => args => resultType => context => {
     if (hasNArgs(args.length, callee.type)) {
-      const { result, effects } = callee.value(...args);
+      const { result, effects } = callee.value.fn(...args);
       return [
         { value: result.value, type: resultType },
         putContextEffects(effects)(context)
@@ -283,7 +292,10 @@ const translateCallExpression = def('translateCallExpression')({})([
       return [
         {
           type: resultType,
-          value: (...newArgs) => callee.value(...[...args, ...newArgs])
+          value: {
+            fn: (...newArgs) => callee.value.fn(...[...args, ...newArgs]),
+            guard: () => () => Nothing
+          }
         },
         context
       ];
@@ -468,11 +480,14 @@ const translateMemberExpression = def('translateMemberExpression')({})([
   const finalValue = lift4(type => prop => obj => context => {
     if (isFunction(type.type)) {
       return [
-        typedValue(type.type)((...newArgs) => prop.value(...[...newArgs, obj])),
+        typedValue(type.type)({
+          fn: (...newArgs) => prop.value.fn(...[...newArgs, obj]),
+          guard: () => () => Nothing
+        }),
         context
       ];
     } else {
-      const { result, effects } = prop.value(obj);
+      const { result, effects } = prop.value.fn(obj);
       return [result, putContextEffects(effects)(context)];
     }
   })(finalType)(prop)(obj)(ctx2);
@@ -590,10 +605,14 @@ const translateExpression = def('translateExpression')({})([
   ])
 );
 
-const createEmptyContext = def('createEmptyContext')({})([HSContext])(() => ({
+const createEmptyContext = def('createEmptyContext')({})([
+  HueBridgeState,
+  HSContext
+])(bridgeState => ({
   vars: [{}],
   infos: {},
-  effects: []
+  effects: [],
+  bridgeState
 }));
 
 const putContextVar = def('putContextVar')({})([

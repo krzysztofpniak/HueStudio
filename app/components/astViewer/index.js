@@ -32,6 +32,16 @@ const translateOn = ({ params: { target } }) => {
   };
 };
 
+const translateOff = ({ params: { target } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      on: false
+    }
+  };
+};
+
 const translateBri = ({ params: { target, bri } }) => {
   return {
     url: getActionAddress(target),
@@ -44,10 +54,37 @@ const translateBri = ({ params: { target, bri } }) => {
   };
 };
 
+const translateSetScene = ({ params: { target, scene } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      state: {
+        scene
+      }
+    }
+  };
+};
+
+const translateTransition = ({ params: { target, time } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      state: {
+        transition: time
+      }
+    }
+  };
+};
+
 const translateEffect = cond([
   [propEq('name', 'on'), translateOn],
+  [propEq('name', 'off'), translateOff],
   [propEq('name', 'bri'), translateBri],
-  [T, always({ error: 'missing translation' })]
+  [propEq('name', 'setScene'), translateSetScene],
+  [propEq('name', 'transition'), translateTransition],
+  [T, always({ url: 'http://contoso.com/wrong.path', method: 'GET', body: {} })]
 ]);
 
 const requestToRawHttp = request => {

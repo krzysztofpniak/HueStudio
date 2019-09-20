@@ -16,7 +16,8 @@ const errorToErrorLocation = error => {
 self.addEventListener(
   'message',
   function(e) {
-    const parsed = parseHue(e.data);
+    const { debouncedText, hueData } = e.data;
+    const parsed = parseHue(debouncedText);
     const processed = either(e => ({
       error: e.message,
       errorLocations: errorToErrorLocation(e),
@@ -27,7 +28,7 @@ self.addEventListener(
       errorLocations: [],
       effects: r.effects,
       infos: []
-    }))(chain(p => translateProgram(p)(createHSContext()))(parsed));
+    }))(chain(p => translateProgram(p)(createHSContext(hueData)))(parsed));
     self.postMessage(processed);
   },
   false
