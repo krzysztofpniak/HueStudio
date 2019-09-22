@@ -354,8 +354,14 @@ const translateFunctionExpression = def('translateLiteral')({})([
   console.log('FunctionExpression', argNames, ast);
   const inferContext = { ...context, inferred: {} };
 
-  return Right([{ type: fn([scalar('Void')]), value: () => {} }, context]);
-
+  return Right([
+    {
+      type: fn([scalar('Void')]),
+      value: { fn: () => {}, guard: () => () => Nothing }
+    },
+    context
+  ]);
+  /*
   const returnType = inferSignature(ast.body, inferContext);
 
   const finalType = fn([
@@ -382,7 +388,7 @@ const translateFunctionExpression = def('translateLiteral')({})([
         evolve({ vars: append(localVars) }, context)
       );
     }
-  };
+  };*/
 });
 
 const validateArrayElements = def('validateArrayElements')({})([
@@ -608,6 +614,7 @@ const translateExpression = def('translateExpression')({})([
     [astType('ArrayExpression'), translateArrayExpression],
     [astType('ConditionalExpression'), translateConditionalExpression],
     [astType('BinaryExpression'), translateBinaryExpression],
+    [astType('FunctionExpression'), translateFunctionExpression],
     [a => b => true, throwMissingTranslation]
   ])
 );
