@@ -263,15 +263,7 @@ const translateCallExpression = def('translateCallExpression')({})([
 
   const argsCtx = chain(ctx => reduceArguments(ctx)(ast.arguments))(ctx1);
   const args = map(([ctx, a]) => a)(argsCtx);
-  const context3 = map(([ctx, a]) => ctx)(argsCtx);
-
-  const finalContext = join(
-    lift3(c => args => ctx =>
-      maybe(Right(ctx))(e =>
-        Left({ ...e, location: ast.arguments[e.argIdx].location })
-      )(c.value.guard(args)(ctx))
-    )(validatedCallee2)(args)(context3)
-  );
+  const finalContext = map(([ctx, a]) => ctx)(argsCtx);
 
   const argsTypes = map(as => map(typeToTypeResolution)(pluck('type', as)))(
     args
@@ -288,26 +280,34 @@ const translateCallExpression = def('translateCallExpression')({})([
       : e
   )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
-  const result = lift4(callee => args => resultType => context => {
-    if (hasNArgs(args.length, callee.type)) {
-      const { result, effects } = callee.value.fn(...args);
-      return [
-        { value: result.value, type: resultType },
-        putContextEffects(effects)(context)
-      ];
-    } else {
-      return [
-        {
-          type: resultType,
-          value: {
-            fn: (...newArgs) => callee.value.fn(...[...args, ...newArgs]),
-            guard: () => () => Nothing
-          }
-        },
-        context
-      ];
-    }
-  })(validatedCallee2)(args)(finalType)(finalContext);
+  const result = join(
+    lift4(callee => args => resultType => context => {
+      if (hasNArgs(args.length, callee.type)) {
+        const { result, effects } = callee.value.fn(...args);
+
+        return maybe(
+          Right([
+            { value: result.value, type: resultType },
+            putContextEffects(effects)(context)
+          ])
+        )(e => Left({ ...e, location: ast.arguments[e.argIdx].location }))(
+          callee.value.guard(args)(context)
+        );
+      } else {
+        return Right([
+          {
+            type: resultType,
+            value: {
+              fn: (...newArgs) => callee.value.fn(...[...args, ...newArgs]),
+              guard: newArgs => ctx =>
+                callee.value.guard([...args, ...newArgs])(ctx)
+            }
+          },
+          context
+        ]);
+      }
+    })(validatedCallee2)(args)(finalType)(finalContext)
+  );
 
   return result;
 });
