@@ -97,11 +97,11 @@ const allEquals = compose(
   uniq
 );
 
-const findVar = (name, scopes) => {
-  const scope = maybeToNullable(find(hasKey(name))(scopes));
-
-  return scope ? prop(name, scope) : null;
-};
+const findVar = def('findVar')({})([$.String, HSContext, $.Maybe($.Unknown)])(
+  name => context => {
+    return map(prop(name))(find(hasKey(name))(context.vars));
+  }
+);
 
 const astToLocIndex = ast =>
   `${ast.location.start.line}:${ast.location.start.column}`;
@@ -192,11 +192,18 @@ const translateVariableDeclarator = def('translateVariableDeclarator')({})([
 ])(ast => context => {
   const id = ast.id.name;
   const value = translateExpression(ast.init)(context);
+  const validatedValue = maybe(value)(() =>
+    Left({
+      name: 'AlreadyDeclared',
+      message: 'Variable has been already declared',
+      location: Just(ast.id.location)
+    })
+  )(findVar(id)(context));
   //context.vars[context.vars.length - 1][id] = value;
   //context.infos[`${ast.id.loc.start.line}:${ast.id.loc.start.column}`] = {
   //  signature: typeToString(value.type.type)
   //};
-  return map(([v, c]) => putContextVar(id)(v)(c))(value);
+  return map(([v, c]) => putContextVar(id)(v)(c))(validatedValue);
 });
 
 const span = converge((start, end) => ({ start, end }), [
@@ -313,7 +320,7 @@ const translateIdentifier = def('translateIdentifier')({})([
   if (coreLib[ast.name]) {
     return Right([coreLib[ast.name], context]);
   } else {
-    const varValue = findVar(ast.name, context.vars);
+    const varValue = maybeToNullable(findVar(ast.name)(context));
     if (varValue) {
       return Right([varValue, context]);
     }
