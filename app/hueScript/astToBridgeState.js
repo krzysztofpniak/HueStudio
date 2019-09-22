@@ -71,7 +71,8 @@ import {
   findIndex,
   concat,
   flip,
-  lift4
+  lift4,
+  pipe
 } from '../sanctuary';
 import getArity from './typeSystem/getArity';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
@@ -199,11 +200,15 @@ const translateVariableDeclarator = def('translateVariableDeclarator')({})([
       location: Just(ast.id.location)
     })
   )(findVar(id)(context));
-  //context.vars[context.vars.length - 1][id] = value;
-  //context.infos[`${ast.id.loc.start.line}:${ast.id.loc.start.column}`] = {
-  //  signature: typeToString(value.type.type)
-  //};
-  return map(([v, c]) => putContextVar(id)(v)(c))(validatedValue);
+
+  return map(([v, c]) =>
+    pipe([
+      putContextInfo(astToLocIndex(ast.id))({
+        signature: typeToString(v.type)
+      }),
+      putContextVar(id)(v)
+    ])(c)
+  )(validatedValue);
 });
 
 const span = converge((start, end) => ({ start, end }), [
