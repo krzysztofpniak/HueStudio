@@ -169,7 +169,7 @@ const dimmer = createFunction(fn([scalar('Number'), scalar('Dimmer')]))(pass)(
  *  button1({type: 'Dimmer', ref: '/sensors/12'});
  *  // => {type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const button1 = createFunction(fn([scalar('Number'), scalar('Button')]))(pass)(
+const button1 = createFunction(fn([scalar('Dimmer'), scalar('Button')]))(pass)(
   sensor => ({
     result: {
       type: scalar('Button'),
