@@ -639,6 +639,13 @@ const putContextVar = def('putContextVar')({})([
   evolve({ vars: adjust(-1, assoc(name)(value)) })(context)
 );
 
+const putContextInfo = def('putContextInfo')({})([
+  $.String,
+  $.Unknown,
+  HSContext,
+  HSContext
+])(loc => value => context => evolve({ infos: assoc(loc)(value) })(context));
+
 const putContextEffects = def('putContextEffects')({})([
   $.Array(HSEffect),
   HSContext,
