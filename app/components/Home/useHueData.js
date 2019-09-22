@@ -124,7 +124,14 @@ const useHueData = data => {
       schedules: normalize('schedules', schedules.result, transformSchedule),
       sensors: normalize('sensors', sensors.result)
     }),
-    [rules, groups, scenes, lights, schedules, sensors]
+    [
+      rules.result,
+      groups.result,
+      scenes.result,
+      lights.result,
+      schedules.result,
+      sensors.result
+    ]
   );
 
   const edges = useMemo(() => getEdges(hueData), [hueData]);
@@ -152,9 +159,12 @@ const useHueData = data => {
     [hueData]
   );
 
-  //console.log('zz', filter(z => z.errors.length > 0, z));
+  const result = useMemo(
+    () => ({ ...hueDataWithErrors, edges, getAdjacents }),
+    [hueDataWithErrors, edges, getAdjacents]
+  );
 
-  return { ...hueDataWithErrors, edges, getAdjacents };
+  return result;
 };
 
 export default useHueData;
