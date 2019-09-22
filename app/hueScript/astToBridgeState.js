@@ -472,29 +472,30 @@ const translateMemberExpression = def('translateMemberExpression')({})([
   AstNode,
   HSContext,
   $.Either($.Unknown)($.Array2(HSValue)(HSContext))
-])(ast => context => {
-  const objCtx = translateExpression(ast.object)(context);
-  const obj = map(([v]) => v)(objCtx);
-  const ctx1 = map(([v, ctx]) => ctx)(objCtx);
-  const propCtx = chain(translateExpression(ast.property))(ctx1);
-  const prop = map(([v]) => v)(propCtx);
-  const ctx2 = map(([v, ctx]) => ctx)(propCtx);
-
-  const validatedProp = chain(p =>
-    isFunction(p.type)
-      ? Right(p)
-      : Left({ message: `${ast.property.name} is not a function` })
-  )(prop);
-
-  const finalType = join(
-    lift2(on(resolveMember)(a => typeToTypeResolution(a.type)))(obj)(prop)
-  );
-
-  const finalValue = join(
-    lift4(type => prop => obj => context => {
-      if (isFunction(type.type)) {
+])(ast => context =>
+  pipeK([
+    ({ ast, context }) =>
+      map(([obj, context]) => ({ ast, context, obj }))(
+        translateExpression(ast.object)(context)
+      ),
+    ({ ast, context, obj }) =>
+      map(([prop, context]) => ({ ast, context, obj, prop }))(
+        translateExpression(ast.property)(context)
+      ),
+    ({ ast, context, obj, prop }) =>
+      map(finalType => ({ ast, context, obj, prop, finalType }))(
+        on(resolveMember)(a => typeToTypeResolution(a.type))(obj)(prop)
+      ),
+    ({ ast, context, obj, prop, finalType }) =>
+      isFunction(finalType.type)
+        ? Right({ ast, context, obj, prop, finalType })
+        : maybe(Right({ ast, context, obj, prop, finalType }))(e =>
+            Left({ ...e, location: ast.arguments[e.argIdx].location })
+          )(prop.value.guard([obj])(context)),
+    ({ ast, context, obj, prop, finalType }) => {
+      if (isFunction(finalType.type)) {
         return Right([
-          typedValue(type.type)({
+          typedValue(finalType.type)({
             fn: (...newArgs) => prop.value.fn(...[...newArgs, obj]),
             guard: newArgs => ctx => prop.value.guard([...newArgs, obj])(ctx)
           }),
@@ -502,16 +503,11 @@ const translateMemberExpression = def('translateMemberExpression')({})([
         ]);
       } else {
         const { result, effects } = prop.value.fn(obj);
-        return maybe(Right([result, putContextEffects(effects)(context)]))(e =>
-          Left({ ...e, location: ast.arguments[e.argIdx].location })
-        )(prop.value.guard([obj])(context));
-        return [result, putContextEffects(effects)(context)];
+        return Right([result, putContextEffects(effects)(context)]);
       }
-    })(finalType)(prop)(obj)(ctx2)
-  );
-
-  return finalValue;
-});
+    }
+  ])(Right({ ast, context }))
+);
 
 const translateReturnStatement = ast => context =>
   ast.argument ? astToBridgeStateInt(ast.argument)(context) : null;
