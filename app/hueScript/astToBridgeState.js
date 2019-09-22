@@ -490,20 +490,25 @@ const translateMemberExpression = def('translateMemberExpression')({})([
     lift2(on(resolveMember)(a => typeToTypeResolution(a.type)))(obj)(prop)
   );
 
-  const finalValue = lift4(type => prop => obj => context => {
-    if (isFunction(type.type)) {
-      return [
-        typedValue(type.type)({
-          fn: (...newArgs) => prop.value.fn(...[...newArgs, obj]),
-          guard: () => () => Nothing
-        }),
-        context
-      ];
-    } else {
-      const { result, effects } = prop.value.fn(obj);
-      return [result, putContextEffects(effects)(context)];
-    }
-  })(finalType)(prop)(obj)(ctx2);
+  const finalValue = join(
+    lift4(type => prop => obj => context => {
+      if (isFunction(type.type)) {
+        return Right([
+          typedValue(type.type)({
+            fn: (...newArgs) => prop.value.fn(...[...newArgs, obj]),
+            guard: newArgs => ctx => prop.value.guard([...newArgs, obj])(ctx)
+          }),
+          context
+        ]);
+      } else {
+        const { result, effects } = prop.value.fn(obj);
+        return maybe(Right([result, putContextEffects(effects)(context)]))(e =>
+          Left({ ...e, location: ast.arguments[e.argIdx].location })
+        )(prop.value.guard([obj])(context));
+        return [result, putContextEffects(effects)(context)];
+      }
+    })(finalType)(prop)(obj)(ctx2)
+  );
 
   return finalValue;
 });
