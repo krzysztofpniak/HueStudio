@@ -249,8 +249,10 @@ const removeFn = createFunction(
   constraint({ a: ['Group', 'Schedule', 'Rule'] })(
     fn([scalar('a'), scalar('Void')])
   )
-)((it, list) => {
-  return hsResult(scalar('Void'))(null)([]);
+)(pass)(target => {
+  return hsResult(scalar('Void'))(null)([
+    { name: 'remove', params: { target } }
+  ]);
 });
 
 const coreLib = {
