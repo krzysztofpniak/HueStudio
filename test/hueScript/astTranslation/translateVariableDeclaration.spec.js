@@ -3,7 +3,7 @@ import {
   putContextVar,
   translateVariableDeclaration
 } from '../../../app/hueScript/astToBridgeState';
-import { fromEither, pipe, Right } from '../../../app/sanctuary';
+import { fromEither, Left, pipe, Right } from '../../../app/sanctuary';
 import { scalar } from '../../../app/hueScript/typeSystem';
 import { parseHue } from '../../../app/hueScript';
 
@@ -20,6 +20,17 @@ describe('translateVariableDeclaration', () => {
           putContextVar('x')({ type: scalar('Number'), value: 1 })
         ])(context)
       )
+    );
+  });
+  it('should not translate when variable already declared', () => {
+    const context = putContextVar('x')({ type: scalar('Number'), value: 1 })(
+      createHSContext({ lights: {}, groups: {} })
+    );
+    expect(translateVariableDeclaration(varDeclarationAst)(context)).toEqual(
+      Left({
+        name: 'AlreadyDeclared',
+        message: 'Variable has been already declared'
+      })
     );
   });
 });
