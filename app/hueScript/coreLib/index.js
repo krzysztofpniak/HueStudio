@@ -16,7 +16,7 @@ import {
   HSValue,
   HueBridgeState
 } from '../../sanctuary/types';
-import { Just, Nothing } from '../../sanctuary';
+import { Just, justs, Nothing } from '../../sanctuary';
 
 const createFunction = def('createFunction')({})([
   HSType,
@@ -31,28 +31,32 @@ const createFunction = def('createFunction')({})([
 const pass = () => () => Nothing;
 
 const isGroupDefined = n => args => ctx => {
-  const allowedGroups = keys(ctx.bridgeState.groups);
-  return allowedGroups.includes('' + args[n].value)
+  const allowed = keys(ctx.bridgeState.groups);
+  return allowed.includes('' + args[n].value)
     ? Nothing
     : Just({
         name: 'ValueOutOfRange',
         message: `Value is not in allowed set: ${map(
           ([id, g]) => `${id}(${g.name})`
         )(toPairs(ctx.bridgeState.groups)).join(', ')}`,
-        argIdx: n
+        argIdx: n,
+        allowed,
+        current: args[n].value
       });
 };
 
 const isLightDefined = n => args => ctx => {
-  const allowedLights = keys(ctx.bridgeState.lights);
-  return allowedLights.includes('' + args[n].value)
+  const allowed = keys(ctx.bridgeState.lights);
+  return allowed.includes('' + args[n].value)
     ? Nothing
     : Just({
         name: 'ValueOutOfRange',
         message: `Value is not in allowed set: ${map(
           ([id, g]) => `${id}(${g.name})`
         )(toPairs(ctx.bridgeState.lights)).join(', ')}`,
-        argIdx: n
+        argIdx: n,
+        allowed,
+        current: args[n].value
       });
 };
 
