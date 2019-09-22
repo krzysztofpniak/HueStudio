@@ -233,7 +233,20 @@ const condition = () => ({});
 
 const mapFn = createFunction(
   fn([fn([scalar('a'), scalar('b')]), array(scalar('a')), array(scalar('b'))])
-)(pass)((it, list) => {
+)(([it, list]) => ctx => {
+  const wrongEntries = justs(map(a => it.value.guard([a])(ctx))(list.value));
+  return wrongEntries.length > 0
+    ? Just({
+        name: 'ValueNotInRange',
+        message: `Values passed (${map(e => e.current)(wrongEntries).join(
+          ', '
+        )}) to function are not in valid range(${wrongEntries[0].allowed.join(
+          ', '
+        )})`,
+        argIdx: 0
+      })
+    : Nothing;
+})((it, list) => {
   const elements = reduce(
     (p, c) => {
       const { result, effects } = it.value.fn(c);
