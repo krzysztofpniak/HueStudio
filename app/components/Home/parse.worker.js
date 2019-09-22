@@ -27,7 +27,7 @@ self.addEventListener(
       error: null,
       errorLocations: [],
       effects: r.effects,
-      infos: []
+      infos: r.infos
     }))(chain(p => translateProgram(p)(createHSContext(hueData)))(parsed));
     self.postMessage(processed);
   },
