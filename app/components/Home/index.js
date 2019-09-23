@@ -98,6 +98,7 @@ const RuleEditor = ({
   baseApiUrl,
   hueData
 }) => {
+  const [view, setView] = useState('state');
   const debouncedText = useDebounce(text, 200);
   const workerRef = useRef(null);
   const [{ error, errorLocations, effects, infos }, setParseResult] = useState({
@@ -152,7 +153,12 @@ const RuleEditor = ({
       {error ? (
         <div style={{ padding: 10, color: 'red' }}>{error}</div>
       ) : (
-        <AstViewer baseApiUrl={baseApiUrl} effects={effects} />
+        <AstViewer
+          baseApiUrl={baseApiUrl}
+          effects={effects}
+          view={view}
+          onViewChange={setView}
+        />
       )}
     </SplitPane>
   );

@@ -119,10 +119,9 @@ const requestToFetch = request => {
 const resolveUrl = baseUrl => request =>
   evolve({ url: concat(baseUrl) })(request);
 
-const AstViewer = ({ baseApiUrl, effects }) => {
-  const [outputView, setOutputView] = useState('state');
+const AstViewer = ({ baseApiUrl, effects, view, onViewChange }) => {
   const handleOutputViewChange = useCallback((e, value) => {
-    setOutputView(value);
+    onViewChange(value);
   }, []);
 
   const stateOutput = useMemo(() => JSON.stringify(effects, null, 2), [
@@ -189,15 +188,15 @@ const AstViewer = ({ baseApiUrl, effects }) => {
         [equals('fetch'), always(fetchOutput)],
         [equals('curl'), always(curlOutput)],
         [equals('http'), always(httpOutput)]
-      ])(outputView),
-    [outputView, effects]
+      ])(view),
+    [view, effects]
   );
 
   return (
     <div style={{ height: '100%' }}>
       <AppBar position="static">
         <Tabs
-          value={outputView}
+          value={view}
           onChange={handleOutputViewChange}
           variant="fullWidth"
         >
