@@ -47,9 +47,7 @@ const translateBri = ({ params: { target, bri } }) => {
     url: getActionAddress(target),
     method: 'PUT',
     body: {
-      state: {
-        bri
-      }
+      bri
     }
   };
 };
@@ -59,9 +57,7 @@ const translateSetScene = ({ params: { target, scene } }) => {
     url: getActionAddress(target),
     method: 'PUT',
     body: {
-      state: {
-        scene
-      }
+      scene
     }
   };
 };
@@ -71,9 +67,7 @@ const translateTransition = ({ params: { target, time } }) => {
     url: getActionAddress(target),
     method: 'PUT',
     body: {
-      state: {
-        transition: time
-      }
+      transition: time
     }
   };
 };
