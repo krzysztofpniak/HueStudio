@@ -25,7 +25,8 @@ import {
   converge,
   adjust,
   assoc,
-  dissoc
+  dissoc,
+  init
 } from 'ramda';
 import coreLib from './coreLib/index';
 import { resolveCall, resolveMember, resolveType } from './resolveType';
@@ -277,12 +278,16 @@ const translateCallExpression = def('translateCallExpression')({})([
   const calleeType = map(v => typeToTypeResolution(v.type))(validatedCallee2);
 
   const finalType = mapLeft(e =>
-    e.argIdx != null
+    e.argIdx != null && e.argIdx < ast.arguments.length
       ? {
           ...dissoc('argIdx', e),
           location: Just(ast.arguments[e.argIdx].location)
         }
-      : e
+      : {
+          name: 'TypeMismatchError',
+          message: 'żle',
+          location: Just(ast.callee.location)
+        }
   )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
 
   const result = join(
@@ -495,7 +500,7 @@ const translateMemberExpression = def('translateMemberExpression')({})([
       isFunction(finalType.type)
         ? Right({ ast, context, obj, prop, finalType })
         : maybe(Right({ ast, context, obj, prop, finalType }))(e =>
-            Left({ ...e, location: ast.arguments[e.argIdx].location })
+            Left({ ...e, location: ast.object.location })
           )(prop.value.guard([obj])(context)),
     ({ ast, context, obj, prop, finalType }) => {
       if (isFunction(finalType.type)) {
@@ -559,16 +564,162 @@ const translateConditionalExpression = def('translateConditionalExpression')(
   }
 );
 
+const translatePipeExpression = def('translatePipeExpression')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context =>
+  pipeK([
+    ({ ast, context }) =>
+      map(([left, context]) => ({ ast, context, left }))(
+        translateExpression(ast.left)(context)
+      ),
+    ({ ast, context, left }) =>
+      map(([right, context]) => ({ ast, context, left, right }))(
+        translateExpression(ast.right)(context)
+      ),
+    ({ ast, context, left, right }) => {
+      console.log(ast, left, right, getArity(left.type));
+      if (left.type.kind !== 'Function') {
+        return Left({
+          name: 'WrongType',
+          message: 'Left hand operand is not a function',
+          location: Just(ast.left.location)
+        });
+      } else if (right.type.kind !== 'Function') {
+        return Left({
+          name: 'WrongType',
+          message: 'Right hand operand is not a function',
+          location: Just(ast.right.location)
+        });
+      } else if (getArity(right.type) !== 1) {
+        return Left({
+          name: 'WrongArity',
+          message: 'Arity must be 1',
+          location: Just(ast.right.location)
+        });
+      } /*else if (last(left.type.signature) !== head(right.type.signature)) {
+        return Left({
+          name: 'FunctionNotMatch',
+          message: "Right function signature doesn't match",
+          location: Just(ast.right.location)
+        });
+      }*/
+      const finalType = constraint({
+        ...left.type.constraints,
+        ...right.type.constraints
+      })(fn([...init(left.type.signature), last(right.type.signature)]));
+      return Right([
+        {
+          type: finalType,
+          value: {
+            fn: (...args) => {
+              const firstResult = left.value.fn(...args);
+              const secondResult = right.value.fn(firstResult.result);
+              return {
+                result: secondResult.result,
+                effects: [...firstResult.effects, ...secondResult.effects]
+              };
+            },
+            guard: () => () => Nothing
+          }
+        },
+        context
+      ]);
+    }
+  ])(Right({ ast, context }))
+);
+
+const translateComposeExpression = def('translateComposeExpression')({})([
+  AstNode,
+  HSContext,
+  $.Either($.Unknown)($.Array2(HSValue)(HSContext))
+])(ast => context =>
+  pipeK([
+    ({ ast, context }) =>
+      map(([left, context]) => ({ ast, context, left }))(
+        translateExpression(ast.left)(context)
+      ),
+    ({ ast, context, left }) =>
+      map(([right, context]) => ({ ast, context, left, right }))(
+        translateExpression(ast.right)(context)
+      ),
+    ({ ast, context, left, right }) => {
+      if (left.type.kind !== 'Function') {
+        return Left({
+          name: 'WrongType',
+          message: 'Left hand operand is not a function',
+          location: Just(ast.left.location)
+        });
+      } else if (right.type.kind !== 'Function') {
+        return Left({
+          name: 'WrongType',
+          message: 'Right hand operand is not a function',
+          location: Just(ast.right.location)
+        });
+      } else if (getArity(left.type) !== 1) {
+        return Left({
+          name: 'WrongArity',
+          message: 'Arity must be 1',
+          location: Just(ast.left.location)
+        });
+      } /*else if (last(left.type.signature) !== head(right.type.signature)) {
+        return Left({
+          name: 'FunctionNotMatch',
+          message: "Right function signature doesn't match",
+          location: Just(ast.right.location)
+        });
+      }*/
+      const finalType = constraint({
+        ...left.type.constraints,
+        ...right.type.constraints
+      })(fn([...init(right.type.signature), last(left.type.signature)]));
+      return Right([
+        {
+          type: finalType,
+          value: {
+            fn: (...args) => {
+              const firstResult = right.value.fn(...args);
+              const secondResult = left.value.fn(firstResult.result);
+              return {
+                result: secondResult.result,
+                effects: [...firstResult.effects, ...secondResult.effects]
+              };
+            },
+            guard: () => () => Nothing
+          }
+        },
+        context
+      ]);
+    }
+  ])(Right({ ast, context }))
+);
+
 const translateBinaryExpression = def('translateBinaryExpression')({})([
   AstNode,
   HSContext,
   $.Either($.Unknown)($.Array2(HSValue)(HSContext))
 ])(ast => context => {
-  const leftCtx = translateExpression(ast.left)(context);
+  if (ast.operator === '>>') {
+    return translatePipeExpression(ast)(context);
+  } else if (ast.operator === '<<') {
+    return translateComposeExpression(ast)(context);
+  } else {
+    return Left({
+      name: 'NotImplemented',
+      message: 'Not implemented yet',
+      location: ast.location
+    });
+  }
+});
+/*const leftCtx = translateExpression(ast.left)(context);
   const rightCtx = translateExpression(ast.right)(context);
 
+  console.log(leftCtx, rightCtx);
+
+
   return Right([{ type: scalar('Boolean'), value: true }, context]);
-});
+});*/
 
 const translateIfStatement = def('translateIfStatement')({})([
   AstNode,
@@ -676,6 +827,8 @@ export {
   createEmptyContext,
   createHSContext,
   putContextVar,
+  putContextInfo,
+  astToLocIndex,
   putContextEffects,
   translateCallExpression,
   translateMemberExpression,
