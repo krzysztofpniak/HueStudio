@@ -37,12 +37,18 @@ const HSFnResult = $.NamedRecordType('hs/HSFnResult')(
   'http://example.com/hs#HSFnResult'
 )([])({ result: HSValue, effects: $.Array(HSEffect) });
 
+const HSInfo = $.NamedRecordType('hs/HSInfo')('http://example.com/hs#HSInfo')(
+  []
+)({
+  signature: $.String
+});
+
 const HSContext = $.NamedRecordType('hs/HSContext')(
   'http://example.com/hs#HSContext'
 )([])({
   vars: $.Array($.StrMap(HSValue)),
   effects: $.Array(HSEffect),
-  infos: $.StrMap($.String)
+  infos: $.StrMap(HSInfo)
 });
 
 const HSError = $.NamedRecordType('hs/HSError')(
