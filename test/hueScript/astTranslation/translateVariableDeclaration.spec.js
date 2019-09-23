@@ -17,7 +17,13 @@ describe('translateVariableDeclaration', () => {
       Right(
         pipe([
           putContextVar('y')({ type: scalar('Number'), value: 8 }),
-          putContextVar('x')({ type: scalar('Number'), value: 1 })
+          putContextVar('x')({ type: scalar('Number'), value: 1 }),
+          putContextInfo(astToLocIndex(varDeclarationAst.declarations[0].id))({
+            signature: typeToString(scalar('Number'))
+          }),
+          putContextInfo(astToLocIndex(varDeclarationAst.declarations[1].id))({
+            signature: typeToString(scalar('Number'))
+          })
         ])(context)
       )
     );
