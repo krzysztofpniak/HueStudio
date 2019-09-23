@@ -1,11 +1,14 @@
 import {
+  astToLocIndex,
   createHSContext,
+  putContextInfo,
   putContextVar,
   translateVariableDeclaration
 } from '../../../app/hueScript/astToBridgeState';
-import { fromEither, Left, pipe, Right } from '../../../app/sanctuary';
+import { fromEither, Just, Left, pipe, Right } from '../../../app/sanctuary';
 import { scalar } from '../../../app/hueScript/typeSystem';
 import { parseHue } from '../../../app/hueScript';
+import typeToString from '../../../app/hueScript/typeSystem/typeToString';
 
 const varDeclarationAst = fromEither({})(parseHue('const x = 1, y = 8;'))
   .body[0];
@@ -35,7 +38,8 @@ describe('translateVariableDeclaration', () => {
     expect(translateVariableDeclaration(varDeclarationAst)(context)).toEqual(
       Left({
         name: 'AlreadyDeclared',
-        message: 'Variable has been already declared'
+        message: 'Variable has been already declared',
+        location: Just(varDeclarationAst.declarations[0].id.location)
       })
     );
   });
