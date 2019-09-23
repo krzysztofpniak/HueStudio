@@ -203,6 +203,20 @@ const initial_press = createFunction(
   effects: []
 }));
 
+const long_release = createFunction(
+  fn([scalar('Button'), scalar('ButtonEvent')])
+)(pass)(button => ({
+  result: {
+    type: scalar('ButtonEvent'),
+    value: {
+      button: button.value.button,
+      eventCode: 4000,
+      sensor: button.value.sensor
+    }
+  },
+  effects: []
+}));
+
 /**
  * @example
  *  handle({type: 'ButtonEvent', ...}, {type: 'FunctionExpression', argsNames: [], fn});
@@ -292,6 +306,7 @@ const coreLib = {
   button3,
   button4,
   initial_press,
+  long_release,
   handle,
   schedule,
   eq,
