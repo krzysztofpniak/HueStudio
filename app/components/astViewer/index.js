@@ -78,13 +78,22 @@ const translateTransition = ({ params: { target, time } }) => {
   };
 };
 
+const translateRemove = ({ params: { target } }) => {
+  return {
+    url: target.value,
+    method: 'DELETE',
+    body: {}
+  };
+};
+
 const translateEffect = cond([
   [propEq('name', 'on'), translateOn],
   [propEq('name', 'off'), translateOff],
   [propEq('name', 'bri'), translateBri],
   [propEq('name', 'setScene'), translateSetScene],
   [propEq('name', 'transition'), translateTransition],
-  [T, always({ url: 'http://contoso.com/wrong.path', method: 'GET', body: {} })]
+  [propEq('name', 'remove'), translateRemove],
+  [T, always({ url: 'http://contoso.com/wrong/path', method: 'GET', body: {} })]
 ]);
 
 const requestToRawHttp = request => {
