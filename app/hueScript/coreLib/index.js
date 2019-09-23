@@ -169,15 +169,20 @@ const dimmer = createFunction(fn([scalar('Number'), scalar('Dimmer')]))(pass)(
  *  button1({type: 'Dimmer', ref: '/sensors/12'});
  *  // => {type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const button1 = createFunction(fn([scalar('Dimmer'), scalar('Button')]))(pass)(
-  sensor => ({
+
+const createButtonFn = name =>
+  createFunction(fn([scalar('Dimmer'), scalar('Button')]))(pass)(sensor => ({
     result: {
       type: scalar('Button'),
-      value: { button: 'button1', sensor }
+      value: { button: name, sensor }
     },
     effects: []
-  })
-);
+  }));
+
+const button1 = createButtonFn('button1');
+const button2 = createButtonFn('button2');
+const button3 = createButtonFn('button3');
+const button4 = createButtonFn('button4');
 
 /**
  * @example
@@ -283,6 +288,9 @@ const coreLib = {
   off,
   dimmer,
   button1,
+  button2,
+  button3,
+  button4,
   initial_press,
   handle,
   schedule,
