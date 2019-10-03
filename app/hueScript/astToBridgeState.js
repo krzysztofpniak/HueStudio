@@ -808,6 +808,12 @@ const putContextEffects = def('putContextEffects')({})([
   HSContext
 ])(effect => context => evolve({ effects: flip(concat)(effect) })(context));
 
+const putContextBridgeState = def('putContextBridgeState')({})([
+  HueBridgeState,
+  HSContext,
+  HSContext
+])(bridgeState => context => assoc('bridgeState')(bridgeState)(context));
+
 const createHSContext = createEmptyContext;
 
 const showHSContext = def('showHSContext')({})([HSContext, $.String])(context =>
@@ -830,6 +836,7 @@ export {
   putContextInfo,
   astToLocIndex,
   putContextEffects,
+  putContextBridgeState,
   translateCallExpression,
   translateMemberExpression,
   translateLiteral,
