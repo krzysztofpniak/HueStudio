@@ -83,6 +83,20 @@ const getTemplate = store => {
         { role: 'delete' },
         { role: 'selectall' }
       ]
+    },
+    {
+      label: 'Run',
+      submenu: [
+        {
+          label: 'Run Selection',
+          accelerator: 'CmdOrCtrl+Shift+E',
+          click() {
+            store.dispatch({
+              type: 'home.runSelection'
+            });
+          }
+        }
+      ]
     }
   ];
   if (process.platform === 'darwin') {

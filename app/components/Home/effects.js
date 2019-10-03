@@ -21,7 +21,8 @@ import {
   dissoc,
   prop,
   indexBy,
-  assoc
+  assoc,
+  pick
 } from 'ramda';
 import { format, formatWithCursor } from 'prettier';
 import { readFile, writeFile, existsSync } from 'fs';
@@ -38,10 +39,28 @@ import ruleToAst from '../../hueScript/ruleToAst';
 import { useEffect } from 'react';
 import scheduleToAst from '../../hueScript/scheduleToAst';
 import { toSource } from '../../hueScript';
+import parseHueAsync from './parseHueAsync';
+import { cond } from '../../sanctuary';
+import {
+  createHSContext,
+  putContextBridgeState
+} from '../../hueScript/astToBridgeState';
+import processHueScriptSync from './processHueScriptSync';
 
 const { remote } = require('electron');
 
 const { app, Menu, dialog, getCurrentWindow } = remote;
+
+const httpPut = async (url, data) => {
+  const r = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return r.json();
+};
 
 function* newFile({ payload }) {
   const fileName = join(getHuePreferencesPath(), `${new Date().valueOf()}.hue`);
@@ -241,12 +260,121 @@ function* loadResources() {
   yield* asyncAction('sensors', getSensors);
 }
 
+const terminalAddLine = text =>
+  put({ type: 'terminal.addLine', payload: text });
+const terminalClear = () => put({ type: 'terminal.clear' });
+
+function* runSource(source, hsContext) {
+  const baseApiUrl = (yield getContext('baseApiUrlRef')).current;
+  yield terminalAddLine('running ...');
+  const result = processHueScriptSync(true)(hsContext)(source);
+  console.log(result);
+  if (result.error) {
+    yield terminalAddLine(result.error);
+  } else {
+    for (let effect of result.effects) {
+      console.log('effect', effect);
+      switch (effect.name) {
+        case 'clear':
+          yield terminalClear();
+          break;
+        case 'print':
+          yield terminalAddLine(effect.params.data.value);
+          break;
+        case 'delay':
+          yield delay(effect.params.ms);
+          break;
+        case 'on':
+          if (effect.params.target.type.name === 'Light') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+              on: true
+            });
+          } else if (effect.params.target.type.name === 'Group') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+              on: true
+            });
+          }
+          break;
+        case 'off':
+          if (effect.params.target.type.name === 'Light') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+              on: false
+            });
+          } else if (effect.params.target.type.name === 'Group') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+              on: false
+            });
+          }
+          break;
+        case 'bri':
+          if (effect.params.target.type.name === 'Light') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+              bri: effect.params.bri
+            });
+          } else if (effect.params.target.type.name === 'Group') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+              bri: effect.params.bri
+            });
+          }
+          break;
+        case 'ct':
+          if (effect.params.target.type.name === 'Light') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+              ct: effect.params.ct
+            });
+          } else if (effect.params.target.type.name === 'Group') {
+            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+              ct: effect.params.ct
+            });
+          }
+          break;
+        default:
+          console.error('not implemented effect: ', effect);
+      }
+    }
+  }
+  yield terminalAddLine('done.');
+  return result;
+}
+
+function* runSelection() {
+  const selectedText = (yield getContext('selectedTextRef')).current;
+  const hueData = (yield getContext('hueDataRef')).current;
+  const hsContext = createHSContext(hueData);
+
+  yield runSource(selectedText, hsContext);
+}
+
+let terminalContext = null;
+
+function* runTerminal(action) {
+  const selectedText = action.payload;
+  const hueData = (yield getContext('hueDataRef')).current;
+  if (!terminalContext) {
+    terminalContext = createHSContext(hueData);
+  } else {
+    terminalContext = putContextBridgeState(hueData)(terminalContext);
+  }
+
+  console.log('runTerminal', selectedText);
+  const state = yield runSource(selectedText, terminalContext);
+  if (!state.error) {
+    terminalContext = {
+      ...pick(['vars', 'infos'], state),
+      effects: [],
+      bridgeState: hueData
+    };
+  }
+}
+
 function* saga(editorRef) {
   yield takeEvery('newFile', newFile);
   yield takeEvery('openFile', openFile);
   yield takeEvery('importBridgeState', importBridgeState);
   yield takeEvery('saveFile', saveFile, editorRef);
   yield takeEvery('saveFileAs', saveFileAs);
+  yield takeEvery('runSelection', runSelection);
+  yield takeEvery('terminal.exec', runTerminal);
   yield fork(persistence);
   yield loadResources();
 }

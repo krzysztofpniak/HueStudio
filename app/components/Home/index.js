@@ -71,17 +71,6 @@ const post = async (url, data) => {
   return r.json();
 };
 
-const put = async (url, data) => {
-  const r = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-  return r.json();
-};
-
 const baseApiPath = 'api/YOUR_BRIDGE_USERNAME';
 
 const baseApiUrl = `http://192.168.0.13/${baseApiPath}`;
@@ -95,7 +84,8 @@ const RuleEditor = ({
   metaPressed,
   args,
   baseApiUrl,
-  hueData
+  hueData,
+  onSelect
 }) => {
   const [view, setView] = useState('state');
   const debouncedText = useDebounce(text, 200);
@@ -138,6 +128,7 @@ const RuleEditor = ({
             ref={inputRef}
             metaPressed={metaPressed}
             args={{ ...args, infos }}
+            onSelect={onSelect}
           />
         </div>
       </div>
@@ -189,17 +180,37 @@ const Home = withStaticScope('home')(() => {
     [codeEditorStates, activeTabId]
   );
 
+  const [selection, setSelection] = useState({
+    start: 0,
+    end: 0
+  });
+
+  const selectedText = useMemo(
+    () => text.substring(selection.start, selection.end),
+    [text, selection]
+  );
+
+  console.log('selectedText', selectedText);
+
   const vars = {};
 
   const hueData = useHueData(data);
 
   const hueDataRef = useRef(hueData);
+  const selectedTextRef = useRef(selectedText);
+  const baseApiUrlRef = useRef(baseApiUrl);
 
   useEffect(() => {
     hueDataRef.current = hueData;
+    selectedTextRef.current = selectedText;
+    baseApiUrlRef.current = baseApiUrl;
   });
 
-  const { fork } = useSagaRunner({ hueDataRef });
+  const { fork } = useSagaRunner({
+    hueDataRef,
+    selectedTextRef,
+    baseApiUrlRef
+  });
 
   useEffect(() => {
     fork(saga, editorRef);
@@ -371,6 +382,7 @@ const Home = withStaticScope('home')(() => {
                 args={{ vars, editorRef }}
                 hueData={hueData}
                 baseApiUrl={baseApiUrl}
+                onSelect={setSelection}
               />
             )}
           </SplitPane>
