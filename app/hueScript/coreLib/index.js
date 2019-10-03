@@ -117,6 +117,19 @@ const bri = createFunction(
   ])
 );
 
+const ct = createFunction(
+  constraint({ a: ['Light', 'Group'] })(
+    fn([scalar('Number'), scalar('a'), scalar('a')])
+  )
+)(pass)((ct, target) =>
+  hsResult(target.type)(target.value)([
+    {
+      name: 'ct',
+      params: { target, ct: ct.value }
+    }
+  ])
+);
+
 const transition = createFunction(
   constraint({ a: ['Light', 'Group'] })(
     fn([scalar('Number'), scalar('a'), scalar('a')])
@@ -281,6 +294,25 @@ const mapFn = createFunction(
   return hsResult(array(it.type))(elements.result)(elements.effects);
 });
 
+const tap = createFunction(
+  fn([fn([scalar('a'), scalar('b')]), scalar('a'), scalar('a')])
+)(pass)((f, target) => {
+  const result = f.value.fn(target);
+
+  return hsResult(target.type)(target.value)(result.effects);
+});
+
+const always = createFunction(
+  fn([scalar('a'), fn([scalar('b'), scalar('a')])])
+)(pass)(data => {
+  const result = {
+    fn: () => hsResult(data.type)(data.value)([]),
+    guard: () => () => Nothing
+  };
+
+  return hsResult(fn([scalar('b'), scalar('a')]))(result)([]);
+});
+
 const removeFn = createFunction(
   constraint({ a: ['Group', 'Schedule', 'Rule'] })(
     fn([scalar('a'), scalar('Void')])
@@ -291,12 +323,23 @@ const removeFn = createFunction(
   ]);
 });
 
+const print = createFunction(
+  constraint({ a: ['String', 'Number'] })(fn([scalar('a'), scalar('Void')]))
+)(pass)(data => {
+  return hsResult(scalar('Void'))(null)([{ name: 'print', params: { data } }]);
+});
+
+const clear = createFunction(fn([scalar('Void')]))(pass)(() => {
+  return hsResult(scalar('Void'))(null)([{ name: 'clear', params: {} }]);
+});
+
 const coreLib = {
   delay,
   light,
   group,
   on,
   bri,
+  ct,
   transition,
   setScene,
   off,
@@ -312,7 +355,11 @@ const coreLib = {
   eq,
   condition,
   map: mapFn,
-  remove: removeFn
+  tap,
+  always,
+  remove: removeFn,
+  print,
+  clear
 };
 
 export default coreLib;
