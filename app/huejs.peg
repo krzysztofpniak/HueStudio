@@ -243,7 +243,7 @@ PrimaryExpression
 
 FunctionExpression
   = "(" __ params:(FormalParameterList __)? ")" __ "=>" __
-    "{" __ body:FunctionBody __ "}"
+     body:FunctionBody
     {
       return {
         type: "FunctionExpression",
@@ -258,12 +258,13 @@ FormalParameterList
     }
 
 FunctionBody
-  = body:SourceElements? {
+  = Block
+  / e:ExpressionStatement {
       return {
         type: "BlockStatement",
-        body: optionalList(body)
+        body: [e]
       };
-    }
+  }
 
 Literal
   = BooleanLiteral
