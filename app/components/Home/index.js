@@ -32,11 +32,9 @@ import NestedList from '../NestedList';
 import AppBar from '../AppBar';
 import styles from '../Home.css';
 import '../splitter.global.css';
-import { parseHue, toSource } from '../../hueScript';
 import store from '../../appSettings';
 import Terminal, { addLine } from '../terminal';
 import ResourceViewer from '../resourceViewer';
-import { useTransition, animated } from 'react-spring';
 import { Scope, useKReducer } from '@k-frame/core';
 import { useSagaRunner } from '@k-frame/sagas';
 import HSEditor from '../hueScriptEditor';
@@ -47,7 +45,8 @@ import actions from './actions';
 import reducer from './reducer';
 import useHueData from './useHueData';
 import AstViewer from '../astViewer';
-import ParseWorker from './parse.worker';
+import parseHueAsync from './parseHueAsync';
+import { createHSContext } from '../../hueScript/astToBridgeState';
 
 const get = async url => {
   const r = await fetch(url);
@@ -100,28 +99,20 @@ const RuleEditor = ({
 }) => {
   const [view, setView] = useState('state');
   const debouncedText = useDebounce(text, 200);
-  const workerRef = useRef(null);
   const [{ error, errorLocations, effects, infos }, setParseResult] = useState({
     error: null,
     errorLocations: [],
     effects: [],
     infos: {}
   });
-  useEffect(() => {
-    workerRef.current = new ParseWorker();
-    workerRef.current.onmessage = function(event) {
-      setParseResult(event.data);
-    };
-  }, []);
 
   const debouncedHueData = useDebounce(hueData, 2000);
 
   useEffect(() => {
-    workerRef.current.postMessage({
-      debouncedText,
-      hueData: dissoc('getAdjacents', debouncedHueData)
-    });
-    console.log('call', debouncedHueData);
+    parseHueAsync({
+      source: debouncedText,
+      hsContext: createHSContext(debouncedHueData)
+    }).then(setParseResult);
   }, [debouncedText, debouncedHueData]);
 
   return (
