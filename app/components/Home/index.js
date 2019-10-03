@@ -374,8 +374,14 @@ const Home = withStaticScope('home')(() => {
               />
             )}
           </SplitPane>
-          <div style={{ height: `calc(100vh - ${panesDefaults.sp1}px)` }}>
-            {true && <Terminal scope="terminal" />}
+          <div
+            style={{
+              height: '100%',
+              width: '100%',
+              position: 'absolute'
+            }}
+          >
+            <Terminal scope="terminal" />
           </div>
         </SplitPane>
       </div>
