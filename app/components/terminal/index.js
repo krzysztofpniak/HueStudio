@@ -1,42 +1,107 @@
-import React, { useRef, useMemo, useCallback } from 'react';
-import { append, evolve, map, addIndex, assoc } from 'ramda';
+import React, {
+  useRef,
+  useMemo,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
+import {
+  append,
+  evolve,
+  map,
+  addIndex,
+  assoc,
+  propEq,
+  filter,
+  uniq,
+  prop,
+  reverse
+} from 'ramda';
 import {
   createReducer,
   createPayloadReducer,
   withScope,
   createAction,
-  useKReducer
+  useKReducer,
+  createStateReducer
 } from '@k-frame/core';
 
 const mapWithKey = addIndex(map);
 
 const actions = {
+  clear: createAction('clear'),
   setText: createAction('setText'),
-  addLine: createAction('addLine')
+  addLine: createAction('addLine'),
+  exec: createAction('exec')
 };
 
 const reducer = createReducer({ text: '', lines: [] }, [
+  createStateReducer(actions.clear, assoc('lines', [])),
   createPayloadReducer(actions.setText, assoc('text')),
-  createPayloadReducer(actions.addLine, p => evolve({ lines: append(p) }))
+  createPayloadReducer(actions.addLine, p =>
+    evolve({ lines: append({ text: p, dir: 'out' }) })
+  ),
+  createPayloadReducer(actions.exec, p =>
+    evolve({ lines: append({ text: p, dir: 'in' }) })
+  )
 ]);
 
+const UP = 38;
+const DOWN = 40;
+
 const Terminal = withScope(() => {
-  const { text, setText, lines, addLine } = useKReducer(reducer, actions);
+  const { text, setText, lines, addLine, exec } = useKReducer(reducer, actions);
   const typer = useRef();
+  const rootRef = useRef();
   const blur = useCallback(() => {}, []);
+  const [currentLine, setCurrentLine] = useState(null);
+
+  const uniqInputLines = useMemo(() =>
+    reverse(
+      uniq(map(prop('text'), filter(propEq('dir', 'in'), lines), [lines]))
+    )
+  );
+
+  useEffect(() => {
+    rootRef.current.scrollTop = rootRef.current.scrollHeight;
+  }, [lines]);
 
   const acceptLine = useCallback(() => {
-    addLine(typer.current.value);
+    exec(typer.current.value);
     setText('');
   }, []);
 
-  const keyDown = useCallback(e => {
-    // console.log(e.keyCode);
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      acceptLine();
-    }
-  }, []);
+  const keyDown = useCallback(
+    e => {
+      // console.log(e.keyCode);
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        acceptLine();
+      } else if (e.keyCode === UP) {
+        const newCurrentLine =
+          currentLine !== null ? (currentLine + 1) % uniqInputLines.length : 0;
+        setCurrentLine(newCurrentLine);
+        setText(uniqInputLines[newCurrentLine]);
+        setTimeout(() => {
+          typer.current.selectionStart = typer.current.selectionEnd =
+            typer.current.value.length;
+        });
+      } else if (e.keyCode === DOWN) {
+        const newCurrentLine =
+          currentLine !== null
+            ? (currentLine + uniqInputLines.length - 1) % uniqInputLines.length
+            : uniqInputLines.length - 1;
+        setCurrentLine(newCurrentLine);
+        setText(uniqInputLines[newCurrentLine]);
+        setTimeout(() => {
+          typer.current.selectionStart = typer.current.selectionEnd =
+            typer.current.value.length;
+        });
+      }
+    },
+    [currentLine, uniqInputLines]
+  );
+
   const change = useCallback(e => {
     setText(e.target.value);
   }, []);
@@ -50,6 +115,7 @@ const Terminal = withScope(() => {
 
   return (
     <div
+      ref={rootRef}
       role="button"
       onClick={focus}
       tabIndex="0"
@@ -65,15 +131,15 @@ const Terminal = withScope(() => {
         {mapWithKey(
           (l, idx) => (
             <div key={idx}>
-              {'$>'}
-              <span>{l}</span>
+              {l.dir === 'in' ? '$<' : '$>'}
+              <span>{l.text}</span>
             </div>
           ),
           lines
         )}
       </div>
       <div>
-        {'$>'}
+        {'$<'}
         {text}
       </div>
       <div style={{ overflow: 'hidden', height: 1, width: 1 }}>
