@@ -226,6 +226,7 @@ const Editor = forwardRef(
       /* eslint-disable no-unused-vars */
       onKeyDown,
       onValueChange,
+      onSelect,
       tabSize,
       insertSpaces,
       ignoreTabKey,
@@ -687,6 +688,18 @@ const Editor = forwardRef(
       [formattedLines, args]
     );
 
+    const handleSelectionChange = useCallback(
+      e => {
+        if (onSelect) {
+          onSelect({
+            start: e.target.selectionStart,
+            end: e.target.selectionEnd
+          });
+        }
+      },
+      [onSelect]
+    );
+
     return (
       <div {...rest} style={{ ...styles.container, ...style }}>
         <textarea
@@ -705,6 +718,7 @@ const Editor = forwardRef(
           onKeyUp={onKeyUp}
           onFocus={onFocus}
           onBlur={onBlur}
+          onSelect={handleSelectionChange}
           disabled={disabled}
           form={form}
           maxLength={maxLength}
