@@ -159,10 +159,10 @@ const useHueData = data => {
     [hueData]
   );
 
-  const result = useMemo(
-    () => ({ ...hueDataWithErrors, edges, getAdjacents }),
-    [hueDataWithErrors, edges, getAdjacents]
-  );
+  const result = useMemo(() => ({ ...hueDataWithErrors, edges }), [
+    hueDataWithErrors,
+    edges
+  ]);
 
   return result;
 };
