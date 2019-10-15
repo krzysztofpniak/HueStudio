@@ -289,7 +289,15 @@ const handle = createFunction(
  * @example
  *  schedule({type: 'Schedule'}, ); // => {type: 'Schedule', state: {on: false}}
  */
-const schedule = () => ({});
+const schedule = createFunction(fn([scalar('Number'), scalar('Light')]))(pass)(
+  id => ({
+    result: {
+      type: scalar('Schedule'),
+      value: `/schedules/${id.value}`
+    },
+    effects: []
+  })
+);
 
 /**
  * @example
