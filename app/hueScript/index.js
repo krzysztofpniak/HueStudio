@@ -1,4 +1,4 @@
-import { compose, objOf, tryCatch, map, join } from 'ramda';
+import { compose, objOf, tryCatch, map, join, init, last } from 'ramda';
 import hueParser from '../huejs.peg';
 import ruleToAst from './ruleToAst';
 import pickButtonHandlers from './pickButtonHandlers';
@@ -31,7 +31,7 @@ const defaultToSourceOptions = {
 const toSource = (node, options = defaultToSourceOptions) => {
   if (node.type === 'call') {
     const [member, ...rest] = isMethodCall(node, options.style)
-      ? node.args
+      ? [last(node.args), ...init(node.args)]
       : [null, ...node.args];
 
     const argsPart =
