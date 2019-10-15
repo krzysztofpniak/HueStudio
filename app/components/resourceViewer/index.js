@@ -24,7 +24,8 @@ import {
   pathOr,
   nth,
   mapAccum,
-  join
+  join,
+  curry
 } from 'ramda';
 import SplitPane from 'react-split-pane';
 import Select from '@material-ui/core/Select/Select';
@@ -42,6 +43,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { callNode, numberNode } from '../../hueScript/astBuilders';
 import { toSource } from '../../hueScript/index';
 import AstViewer from '../astViewer';
+import getAdjacents from './getAdjacents';
+import processHueScriptSync from '../Home/processHueScriptSync';
+import { createHSContext } from '../../hueScript/astToBridgeState';
 
 const ELK = require('elkjs');
 
@@ -127,7 +131,7 @@ const actions = {
       id: 'alert',
       name: 'Alert',
       codeCreator: resourceId =>
-        callNode('alert', callNode('group', +resourceId), 'select')
+        callNode('alert', 'select', callNode('group', +resourceId))
     },
     {
       id: 'setScene',
@@ -140,7 +144,7 @@ const actions = {
           filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
         ),
       codeCreator: (resourceId, { editorValue }) =>
-        callNode('setScene', callNode('group', +resourceId), editorValue)
+        callNode('setScene', editorValue, callNode('group', +resourceId))
     },
     {
       id: 'delete',
@@ -226,8 +230,8 @@ function TabContainer({ children }) {
     <Typography
       component="div"
       style={{
-        padding: 8 * 3,
-        height: 'calc(100% - 24px)',
+        padding: '0',
+        height: 'calc(100% - 48px)',
         boxSizing: 'border-box'
       }}
     >
@@ -248,34 +252,9 @@ const tileSize = {
   height: 30
 };
 
-const dfs = (hueData, v, onVisitNode, onVisitEdge) => {
-  const { edges, getAdjacents } = hueData;
-  const s = [];
-  const discovered = {};
-  s.push(v);
-  while (s.length > 0) {
-    v = s.pop();
-    if (!discovered[v.ref]) {
-      discovered[v.ref] = true;
-      onVisitNode(v);
-      const adjacentEdges = getAdjacents(v);
-      for (let i = 0; i < adjacentEdges.length; i++) {
-        const e = adjacentEdges[i];
-        if (e.node) {
-          onVisitEdge(v, e.node);
-          s.push(e.node);
-        } else {
-          console.error('not found', e.ref);
-        }
-      }
-    }
-  }
-};
-
 const dfs2 = (hueData, v, onVisitNode, onVisitEdge) => {
-  const { getAdjacents } = hueData;
   onVisitNode(v);
-  const adjacentEdges = getAdjacents(v);
+  const adjacentEdges = getAdjacents(hueData, v);
   for (let i = 0; i < adjacentEdges.length; i++) {
     const e = adjacentEdges[i];
     if (e.node) {
@@ -431,6 +410,7 @@ const ResourceViewer = ({
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [view, setView] = useState('state');
   const [editorValue, setEditorValue] = useState('');
 
   const [graph, setGraph] = useState(getEmptyGraph());
@@ -508,16 +488,28 @@ const ResourceViewer = ({
     const a = currentResourceActionInt;
 
     if (a) {
-      const ast = a.codeCreator(resourceId, {
-        resourceType,
-        hueData,
-        editorValue
-      });
+      try {
+        const ast = a.codeCreator(resourceId, {
+          resourceType,
+          hueData,
+          editorValue
+        });
 
-      return {
-        ast,
-        hs: toSource(ast, { style: 'object' })
-      };
+        const hs = toSource(ast, { style: 'object' });
+
+        const { effects } = processHueScriptSync(true)(
+          createHSContext(hueData)
+        )(hs);
+
+        return {
+          ast,
+          hs,
+          effects
+        };
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
     }
 
     return null;
@@ -558,45 +550,46 @@ const ResourceViewer = ({
       {value === 1 && (
         <TabContainer>
           {currentResourceAction && (
-            <div style={{ padding: '5px' }}>
-              <h4>Choose action:</h4>
-              <Select
-                value={actionIdx}
-                onChange={e => setActionIdx(e.target.value)}
-              >
-                {mapWithKey(
-                  (a, idx) => (
-                    <MenuItem key={a.id} value={idx}>
-                      {a.name}
-                    </MenuItem>
-                  ),
-                  actions[resourceType]
-                )}
-              </Select>
-              {actionParamEditor}
-              <div style={{ display: 'flex', marginTop: '20px' }}>
-                <div style={{ width: '50%' }}>
+            <div>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '50%', padding: 5 }}>
+                  <h4>Choose action:</h4>
+                  <Select
+                    value={actionIdx}
+                    onChange={e => setActionIdx(e.target.value)}
+                  >
+                    {mapWithKey(
+                      (a, idx) => (
+                        <MenuItem key={a.id} value={idx}>
+                          {a.name}
+                        </MenuItem>
+                      ),
+                      actions[resourceType]
+                    )}
+                  </Select>
+                  {actionParamEditor}
                   <h4>Hue Script</h4>
                   <pre className={styles.codeSimple}>
                     {currentResourceAction.hs}
                   </pre>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => onRunClick(currentResourceAction.ast)}
+                  >
+                    Run
+                  </Button>
                 </div>
                 <div style={{ width: '50%' }}>
                   <AstViewer
                     baseApiUrl={baseApiUrl}
-                    ast={currentResourceAction.ast}
+                    effects={currentResourceAction.effects}
+                    view={view}
+                    onViewChange={setView}
                   />
                 </div>
               </div>
-
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={() => onRunClick(currentResourceAction.ast)}
-              >
-                Run
-              </Button>
             </div>
           )}
         </TabContainer>
