@@ -1,5 +1,18 @@
 import { array, scalar, fn, constraint } from '../typeSystem';
-import { map, pathOr, pluck, reduce, keys, toPairs } from 'ramda';
+import {
+  map,
+  pathOr,
+  pluck,
+  reduce,
+  keys,
+  toPairs,
+  filter,
+  startsWith,
+  uniq,
+  endsWith,
+  any,
+  chain
+} from 'ramda';
 import { hsPureResult, hsResult } from '../typeSystem/helpers';
 import $ from 'sanctuary-def';
 import {
@@ -17,6 +30,8 @@ import {
   HueBridgeState
 } from '../../sanctuary/types';
 import { Just, justs, Nothing } from '../../sanctuary';
+import eventCodes from '../../eventCodes';
+import getResourceByRef from '../../components/resourceViewer/getResourceByRef';
 
 const createFunction = def('createFunction')({})([
   HSType,
@@ -202,33 +217,26 @@ const button4 = createButtonFn('button4');
  *  initial_press({type: 'Button', button: 'button1', sensor: {type: 'Dimmer', ref: '/sensors/12'}});
  *  // => {type: 'ButtonEvent', button: 'button1', eventCode: 1000, sensor: {type: 'Dimmer', ref: '/sensors/12'}}
  */
-const initial_press = createFunction(
-  fn([scalar('Button'), scalar('ButtonEvent')])
-)(pass)(button => ({
-  result: {
-    type: scalar('ButtonEvent'),
-    value: {
-      button: button.value.button,
-      eventCode: 1000,
-      sensor: button.value.sensor
-    }
-  },
-  effects: []
-}));
 
-const long_release = createFunction(
-  fn([scalar('Button'), scalar('ButtonEvent')])
-)(pass)(button => ({
-  result: {
-    type: scalar('ButtonEvent'),
-    value: {
-      button: button.value.button,
-      eventCode: 4000,
-      sensor: button.value.sensor
-    }
-  },
-  effects: []
-}));
+const createButtonEvent = eventName =>
+  createFunction(fn([scalar('Button'), scalar('ButtonEvent')]))(pass)(
+    button => ({
+      result: {
+        type: scalar('ButtonEvent'),
+        value: {
+          button: button.value.button,
+          eventCode: eventCodes['dimmer'][button.value.button][eventName],
+          sensor: button.value.sensor
+        }
+      },
+      effects: []
+    })
+  );
+
+const initial_press = createButtonEvent('initial_press');
+const repeat = createButtonEvent('repeat');
+const short_release = createButtonEvent('short_release');
+const long_release = createButtonEvent('long_release');
 
 /**
  * @example
@@ -387,6 +395,8 @@ const coreLib = {
   button3,
   button4,
   initial_press,
+  repeat,
+  short_release,
   long_release,
   handle,
   schedule,
