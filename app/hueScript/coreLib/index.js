@@ -237,7 +237,45 @@ const long_release = createFunction(
  */
 const handle = createFunction(
   fn([fn([scalar('void')]), scalar('ButtonEvent'), scalar('Rule')])
-)(pass)((event, actions) => ({ type: scalar('Rule'), event, actions }));
+)(args => context => {
+  console.log(
+    args[1].value.eventCode,
+    JSON.stringify(args[1].value.sensor.value),
+    JSON.stringify(
+      map(
+        r => [r.conditions, r.actions],
+        filter(
+          r =>
+            !r.conditions ||
+            any(
+              c =>
+                endsWith('buttonevent', c.address) &&
+                c.value === '' + args[1].value.eventCode,
+              r.conditions
+            ),
+          map(
+            ref => getResourceByRef(context.bridgeState, ref),
+            uniq(
+              map(
+                a => a[1],
+                filter(
+                  a => a[0] === args[1].value.sensor.value,
+                  context.bridgeState.edges
+                )
+              )
+            )
+          )
+        )
+      ),
+      null,
+      2
+    )
+  );
+  return Nothing;
+})(
+  (event, actions) =>
+    console.log(event, actions) || hsResult(scalar('Rule'))({})([])
+);
 
 /**
  * @example
