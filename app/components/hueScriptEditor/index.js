@@ -38,8 +38,8 @@ const sqlConfig = {
     },
     {
       type: 'QUOTE2',
-      terminator: '"',
-      terminatorEnd: '"'
+      terminator: "'",
+      terminatorEnd: "'"
     },
     {
       type: 'COMMENT',
