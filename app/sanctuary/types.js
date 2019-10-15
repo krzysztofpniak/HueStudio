@@ -13,11 +13,13 @@ const HSType = $.NamedRecordType('hs/HSType')('http://example.com/hs#HSType')(
   constraints: $.StrMap($.Array($.String))
 });
 
+const HSResolutions = $.StrMap(HSType);
+
 const HSTypeResolution = $.NamedRecordType('hs/HSTypeResolution')(
   'http://example.com/hs#HSTypeResolution'
 )([])({
   type: HSType,
-  resolutions: $.StrMap(HSType)
+  resolutions: HSResolutions
 });
 
 // RenamesContext :: Type
@@ -103,6 +105,7 @@ const def = $.create({ checkTypes: process.env.NODE_ENV === 'test', env });
 export {
   HSTypeKind,
   HSType,
+  HSResolutions,
   HSTypeResolution,
   RenamesContext,
   HSEffect,
