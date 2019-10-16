@@ -207,7 +207,13 @@ function* persistence() {
       type: 'setOpenedResources',
       payload: map(
         r =>
-          assoc('savedContent', currentOpenedResources[r.ref].savedContent, r),
+          r.type === 'file'
+            ? assoc(
+                'savedContent',
+                currentOpenedResources[r.ref].savedContent,
+                r
+              )
+            : r,
         openedResources
       )
     });
