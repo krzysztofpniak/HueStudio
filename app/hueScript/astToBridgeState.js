@@ -244,55 +244,53 @@ const translateCallExpression = def('translateCallExpression')({})([
   AstNode,
   HSContext,
   $.Either($.Unknown)($.Array2(HSValue)(HSContext))
-])(ast => context => {
-  const calleeCtx = translateExpression(ast.callee)(context);
-  const callee = map(([v]) => v)(calleeCtx);
-  const ctx1 = map(([v, ctx]) => ctx)(calleeCtx);
-
-  const validatedCallee = chain(c =>
-    isCallable(c.type)
-      ? Right(c)
-      : Left(
-          typeMismatchError(fn([]))(c.type)(
-            ast.callee.location ? Just(ast.callee.location) : Nothing
-          )
-        )
-  )(callee);
-
-  const validatedCallee2 = chain(x =>
-    canAcceptNArgs(ast.arguments.length, x.type)
-      ? Right(x)
-      : Left({
-          message: 'Too many arguments',
-          location: span(drop(getArity(x.type), ast.arguments))
-        })
-  )(validatedCallee);
-
-  const argsCtx = chain(ctx => reduceArguments(ctx)(ast.arguments))(ctx1);
-  const args = map(([ctx, a]) => a)(argsCtx);
-  const finalContext = map(([ctx, a]) => ctx)(argsCtx);
-
-  const argsTypes = map(as => map(typeToTypeResolution)(pluck('type', as)))(
-    args
-  );
-
-  const calleeType = map(v => typeToTypeResolution(v.type))(validatedCallee2);
-
-  const finalType = mapLeft(e =>
-    e.argIdx != null && e.argIdx < ast.arguments.length
-      ? {
-          ...dissoc('argIdx', e),
-          location: Just(ast.arguments[e.argIdx].location)
-        }
-      : {
-          name: 'TypeMismatchError',
-          message: 'żle',
-          location: Just(ast.callee.location)
-        }
-  )(map(t => t.type)(join(lift2(resolveCall)(argsTypes)(calleeType))));
-
-  const result = join(
-    lift4(callee => args => resultType => context => {
+])(ast => context =>
+  pipeK([
+    ({ ast, context }) =>
+      map(([callee, context]) => ({ ast, context, callee }))(
+        translateExpression(ast.callee)(context)
+      ),
+    ({ ast, context, callee }) =>
+      isCallable(callee.type)
+        ? Right({ ast, context, callee })
+        : Left(
+            typeMismatchError(fn([]))(callee.type)(
+              ast.callee.location ? Just(ast.callee.location) : Nothing
+            )
+          ),
+    ({ ast, context, callee }) =>
+      canAcceptNArgs(ast.arguments.length, callee.type)
+        ? Right({ ast, context, callee })
+        : Left({
+            message: 'Too many arguments',
+            location: span(drop(getArity(callee.type), ast.arguments))
+          }),
+    ({ ast, context, callee }) =>
+      map(([context, args]) => ({ ast, context, callee, args }))(
+        reduceArguments(context)(ast.arguments)
+      ),
+    ({ ast, context, callee, args }) =>
+      map(typeResolution => ({
+        ast,
+        context,
+        callee,
+        args,
+        resultType: typeResolution.type
+      }))(
+        mapLeft(e =>
+          e.argIdx != null && e.argIdx < ast.arguments.length
+            ? {
+                ...dissoc('argIdx', e),
+                location: Just(ast.arguments[e.argIdx].location)
+              }
+            : {
+                name: 'TypeMismatchError',
+                message: 'żle',
+                location: Just(ast.callee.location)
+              }
+        )(resolveCall(pluck('type', args))(callee.type))
+      ),
+    ({ ast, context, callee, args, resultType }) => {
       if (hasNArgs(args.length, callee.type)) {
         const { result, effects } = callee.value.fn(...args);
 
@@ -317,11 +315,9 @@ const translateCallExpression = def('translateCallExpression')({})([
           context
         ]);
       }
-    })(validatedCallee2)(args)(finalType)(finalContext)
-  );
-
-  return result;
-});
+    }
+  ])(Right({ ast, context }))
+);
 
 const translateIdentifier = def('translateIdentifier')({})([
   AstNode,
