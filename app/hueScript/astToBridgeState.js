@@ -521,25 +521,16 @@ const translateMemberExpression = def('translateMemberExpression')({})([
 );
 
 const translateReturnStatement = ast => context =>
-  ast.argument ? astToBridgeStateInt(ast.argument)(context) : null;
+  ast.argument
+    ? map(([v, context]) => putContextVar('return')(v)(context))(
+        translateExpression(ast.argument)(context)
+      )
+    : Right(context);
 
 const translateNext = (ast, context) => {};
 
 const throwMissingTranslation = ast => context =>
   Left(`missing translation for ${ast.type}`);
-
-const astToBridgeStateInt = def('astToBridgeStateInt')({})([
-  AstNode,
-  HSContext,
-  $.Either($.Unknown)(HSContext)
-])(
-  cond2([
-    [astType('Program'), translateProgram],
-    /*[astType('BlockStatement'), translateBlockStatement],
-    [astType('ReturnStatement'), translateReturnStatement],*/
-    [a => b => true, throwMissingTranslation]
-  ])
-);
 
 const translateConditionalExpression = def('translateConditionalExpression')(
   {}
@@ -755,6 +746,7 @@ const translateStatement = def('translateStatement')({})([
     [astType('IfStatement'), translateIfStatement],
     [astType('ExpressionStatement'), translateExpressionStatement],
     [astType('BlockStatement'), translateBlockStatement],
+    [astType('ReturnStatement'), translateReturnStatement],
     [a => b => true, throwMissingTranslation]
   ])
 );
