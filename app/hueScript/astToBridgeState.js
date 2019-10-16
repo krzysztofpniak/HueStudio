@@ -90,6 +90,7 @@ import {
   HueBridgeState
 } from '../sanctuary/types';
 import typeMismatchError from './typeSystem/typeMismatchError';
+import { hsResult } from './typeSystem/helpers';
 
 const filterWithKey = addIndex(filter);
 
@@ -808,6 +809,11 @@ const putContextEffects = def('putContextEffects')({})([
   HSContext
 ])(effect => context => evolve({ effects: flip(concat)(effect) })(context));
 
+const clearContextEffects = def('clearContextEffects')({})([
+  HSContext,
+  HSContext
+])(context => assoc('effects')([])(context));
+
 const putContextBridgeState = def('putContextBridgeState')({})([
   HueBridgeState,
   HSContext,
@@ -836,6 +842,7 @@ export {
   putContextInfo,
   astToLocIndex,
   putContextEffects,
+  clearContextEffects,
   putContextBridgeState,
   translateCallExpression,
   translateMemberExpression,
