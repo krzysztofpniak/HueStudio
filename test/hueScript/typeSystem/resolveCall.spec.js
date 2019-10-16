@@ -20,23 +20,21 @@ const fnNumberGroupR = typeToTypeResolution(fnNumberGroup);
 
 describe('resolveCall', () => {
   it('should resolve (), (() -> Number) into Number', () => {
-    expect(resolveCall([])(fnNumberR)).toEqual(
+    expect(resolveCall([])(fnNumber)).toEqual(
       Right({ type: number, resolutions: {} })
     );
   });
 
   it('should resolve (Number), (Number -> Group) into Group', () => {
-    expect(resolveCall([numberR])(fnNumberGroupR)).toEqual(
+    expect(resolveCall([number])(fnNumberGroup)).toEqual(
       Right({ type: group, resolutions: {} })
     );
   });
 
   it('should resolve (Number), (Number -> Group -> Group) into (Group -> Group)', () => {
     expect(
-      resolveCall([numberR])(
-        typeToTypeResolution(
-          fn([scalar('Number'), scalar('Group'), scalar('Group')])
-        )
+      resolveCall([number])(
+        fn([scalar('Number'), scalar('Group'), scalar('Group')])
       )
     ).toEqual(
       Right({ type: fn([scalar('Group'), scalar('Group')]), resolutions: {} })
@@ -45,11 +43,9 @@ describe('resolveCall', () => {
 
   it('should resolve (Number), (Number -> a -> a) into (a -> a)', () => {
     expect(
-      resolveCall([numberR])(
-        typeToTypeResolution(
-          constraint({ a: ['Light', 'Group'] })(
-            fn([scalar('Number'), scalar('a'), scalar('a')])
-          )
+      resolveCall([number])(
+        constraint({ a: ['Light', 'Group'] })(
+          fn([scalar('Number'), scalar('a'), scalar('a')])
         )
       )
     ).toEqual(
@@ -66,11 +62,9 @@ describe('resolveCall', () => {
 
   it('should resolve (Number, Group), (Number -> a -> a) into Group', () => {
     expect(
-      resolveCall([numberR, groupR])(
-        typeToTypeResolution(
-          constraint({ a: ['Light', 'Group'] })(
-            fn([scalar('Number'), scalar('a'), scalar('a')])
-          )
+      resolveCall([number, group])(
+        constraint({ a: ['Light', 'Group'] })(
+          fn([scalar('Number'), scalar('a'), scalar('a')])
         )
       )
     ).toEqual(Right({ type: scalar('Group'), resolutions: { a: group } }));
@@ -78,11 +72,9 @@ describe('resolveCall', () => {
 
   it('should not resolve (Number, Number), (Number -> a -> a) with constraint', () => {
     expect(
-      resolveCall([numberR, numberR])(
-        typeToTypeResolution(
-          constraint({ a: ['Light', 'Group'] })(
-            fn([scalar('Number'), scalar('a'), scalar('a')])
-          )
+      resolveCall([number, number])(
+        constraint({ a: ['Light', 'Group'] })(
+          fn([scalar('Number'), scalar('a'), scalar('a')])
         )
       )
     ).toEqual(
@@ -97,16 +89,12 @@ describe('resolveCall', () => {
 
   it('should resolve (Number -> Group), ((a -> b) -> [a] -> [b]) into ([Number] -> [Group])', () => {
     expect(
-      resolveCall([
-        typeToTypeResolution(fn([scalar('Number'), scalar('Group')]))
-      ])(
-        typeToTypeResolution(
-          fn([
-            fn([scalar('a'), scalar('b')]),
-            array(scalar('a')),
-            array(scalar('b'))
-          ])
-        )
+      resolveCall([fn([scalar('Number'), scalar('Group')])])(
+        fn([
+          fn([scalar('a'), scalar('b')]),
+          array(scalar('a')),
+          array(scalar('b'))
+        ])
       )
     ).toEqual(
       Right({

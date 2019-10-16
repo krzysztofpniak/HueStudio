@@ -45,7 +45,12 @@ import isPolyArray from './typeSystem/isPolyArray';
 import substitutePolyScalars from './typeSystem/substitutePolyScalars';
 import typeToTypeResolution from './typeSystem/typeToTypeResolution';
 import $ from 'sanctuary-def';
-import { def, HSType, HSTypeResolution } from '../sanctuary/types';
+import {
+  def,
+  HSResolutions,
+  HSType,
+  HSTypeResolution
+} from '../sanctuary/types';
 import dropLastArg from './typeSystem/dropLastArg';
 const mapWithKey = addIndex(map);
 const mapAccumIndexed = addIndex(mapAccum);
@@ -324,46 +329,40 @@ const getFnFromArgs = def('getFnFromArgs')({})([
 });
 
 const resolveCall = def('resolveCall')({})([
-  $.Array(HSTypeResolution),
-  HSTypeResolution,
+  $.Array(HSType),
+  HSType,
   $.Either($.Unknown)(HSTypeResolution)
 ])(args => type => {
   let renamesContext = getNewRenamesContext();
 
-  const rawArgs = getFnFromArgs(args);
+  const rawArgs = fn(args);
 
-  const renamedArgs = map(r => normalizePolyNames(r.type)(renamesContext))(
-    rawArgs
+  const [normalizedF, renamesContext2] = normalizePolyNames(rawArgs)(
+    renamesContext
   );
 
-  const normalizedF = map(r => r[0])(renamedArgs);
-  const renamesContext2 = map(r => r[1])(renamedArgs);
+  const renamesContext3 = resetRenamesScope(renamesContext2);
 
-  const renamesContext3 = map(resetRenamesScope)(renamesContext2);
-
-  const normalizedType = map(
-    compose(
-      a => a[0],
-      normalizePolyNames(type.type)
-    )
+  const normalizedType = compose(
+    a => a[0],
+    normalizePolyNames(type)
   )(renamesContext3);
 
-  const argCount = type.type.signature.length - 1;
+  const argCount = type.signature.length - 1;
   if (args.length > argCount) {
     return Left('Too many arguments');
   }
 
-  const signaturesDiff = getArity(type.type) + 1 - args.length;
+  const signaturesDiff = getArity(type) + 1 - args.length;
 
-  const normalizedLeft = lift2(f => t =>
+  const normalizedLeft = (f => t =>
     fn(
       concat(f.signature)(fromMaybe([])(takeLast(signaturesDiff)(t.signature)))
-    )
-  )(normalizedF)(normalizedType);
+    ))(normalizedF)(normalizedType);
 
-  const resolvedFunction = join(
-    lift2(on(resolveType)(typeToTypeResolution))(normalizedLeft)(normalizedType)
-  );
+  const resolvedFunction = on(resolveType)(typeToTypeResolution)(
+    normalizedLeft
+  )(normalizedType);
 
   const appliedFunction = map(rf => ({
     type: dropNArgs(args.length)(rf.type),
