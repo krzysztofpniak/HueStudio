@@ -95,7 +95,11 @@ function* importBridgeState() {
         toSource(
           { type: 'program', statements: [...schedulesAst, ...rulesAst] },
           { style: 'object' }
-        )
+        ),
+        {
+          singleQuote: true,
+          arrowParens: 'always'
+        }
       );
       const fileName = join(
         getHuePreferencesPath(),
