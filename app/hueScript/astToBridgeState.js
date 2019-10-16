@@ -357,17 +357,51 @@ const translateFunctionExpression = def('translateLiteral')({})([
   HSContext,
   $.Either($.Unknown)($.Array2(HSValue)(HSContext))
 ])(ast => context => {
+  return pipeK([
+    state =>
+      state.ast.body.length !== 1 ||
+      state.ast.body[0].type !== 'ReturnStatement'
+        ? Left({
+            type: 'NotImplementedYet',
+            message: 'not supported',
+            location: Just(state.ast.location)
+          })
+        : Right(state),
+    ({ ast, context }) =>
+      Right([
+        {
+          type: fn([scalar('Void')]),
+          value: {
+            fn: (...args) => {
+              const localVars = fromPairs(zip(pluck('name', ast.params), args));
+
+              const xx = translateBlockStatement(ast)(
+                evolve(
+                  { vars: append(localVars) },
+                  clearContextEffects(context)
+                )
+              );
+
+              const zz = fromEither({
+                effects: [],
+                vars: [{ result: { type: 'Void', value: null } }]
+              })(xx);
+
+              //last(zz.vars).return.type;
+              //last(zz.vars).return.value
+              return hsResult(scalar('Void'))(null)(zz.effects);
+            },
+            guard: () => () => Nothing
+          }
+        },
+        context
+      ])
+  ])(Right({ ast, context }));
+
   const argNames = pluck('name', ast.params);
   console.log('FunctionExpression', argNames, ast);
   const inferContext = { ...context, inferred: {} };
 
-  return Right([
-    {
-      type: fn([scalar('Void')]),
-      value: { fn: () => {}, guard: () => () => Nothing }
-    },
-    context
-  ]);
   /*
   const returnType = inferSignature(ast.body, inferContext);
 
@@ -839,6 +873,7 @@ export {
   translateArrayExpression,
   translateConditionalExpression,
   translateBinaryExpression,
+  translateFunctionExpression,
   translateIfStatement,
   translateBlockStatement
 };
