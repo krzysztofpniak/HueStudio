@@ -71,6 +71,14 @@ const HueBridgeState = $.NamedRecordType('hs/HueBridgeState')(
   'http://example.com/hs#HueBridgeState'
 )([])({ lights: $.StrMap($.Unknown), groups: $.StrMap($.Unknown) });
 
+const BridgeAction = $.NamedRecordType('hs/BridgeAction')(
+  'http://example.com/hs#BridgeAction'
+)([])({
+  address: $.String,
+  method: $.String,
+  body: $.StrMap($.Unknown)
+});
+
 const AstNode = $.NamedRecordType('hs/AstNode')(
   'http://example.com/hs#AstNode'
 )([])({ type: $.String });
@@ -114,6 +122,7 @@ export {
   HSLibFn,
   HSLibFnValue,
   HueBridgeState,
+  BridgeAction,
   HSContext,
   HSValue,
   HSError,
