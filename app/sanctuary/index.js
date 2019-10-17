@@ -183,9 +183,12 @@ const f = $.UnaryTypeVariable('f');
 
 const cond = def('cond')({})([
   $.Array($.Array2($.Function([a, $.Boolean]))($.Function([a, b]))),
+  $.Function([a, b]),
   a,
-  $.Maybe(b)
-])(conds => a => map(x => x[1](a))(find(x => x[0](a))(conds)));
+  b
+])(conds => alter => a =>
+  fromMaybe_(() => alter(a))(map(x => x[1](a))(find(x => x[0](a))(conds)))
+);
 
 const cond2 = def('cond2')({})([
   $.Array($.Array2($.Function([a, b, $.Boolean]))($.Function([a, b, c]))),
