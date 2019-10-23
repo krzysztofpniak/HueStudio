@@ -46,176 +46,12 @@ import AstViewer from '../astViewer';
 import getAdjacents from './getAdjacents';
 import processHueScriptSync from '../Home/processHueScriptSync';
 import { createHSContext } from '../../hueScript/astToBridgeState';
+import Playground from './playground';
 
 const ELK = require('elkjs');
 
 const elk = new ELK();
 const mapWithKey = addIndex(map);
-
-const createSelectEditor = optionsMapper => ({
-  value,
-  onChange,
-  hueData,
-  resourceId,
-  resourceType
-}) => {
-  const options = useMemo(
-    () => optionsMapper({ hueData, resourceId, resourceType }),
-    [hueData, resourceId, resourceType]
-  );
-  return (
-    <Select value={value} onChange={e => onChange(e.target.value)}>
-      {mapWithKey(
-        o => (
-          <MenuItem key={o.id} value={o.id}>
-            {o.name}
-          </MenuItem>
-        ),
-        options
-      )}
-    </Select>
-  );
-};
-
-const SceneSelector = createSelectEditor(({ hueData, resourceId }) =>
-  map(
-    ([key, s]) => ({ id: key, name: s.name }),
-    filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
-  )
-);
-
-const EffectSelector = createSelectEditor(() => [
-  { id: 'none', name: 'None' },
-  { id: 'colorloop', name: 'Color Loop' }
-]);
-
-const actions = {
-  lights: [
-    {
-      id: 'on',
-      name: 'On',
-      codeCreator: resourceId => callNode('on', callNode('light', +resourceId))
-    },
-    {
-      id: 'off',
-      name: 'Off',
-      codeCreator: resourceId => callNode('off', callNode('light', +resourceId))
-    },
-    {
-      id: 'alert',
-      name: 'Alert',
-      codeCreator: resourceId =>
-        callNode('alert', callNode('light', +resourceId), 'select')
-    },
-    {
-      id: 'effect',
-      name: 'Effect',
-      editor: EffectSelector,
-      editorDefault: () => 'colorloop',
-      codeCreator: (resourceId, { editorValue }) =>
-        callNode('effect', callNode('light', +resourceId), editorValue)
-    }
-  ],
-  groups: [
-    {
-      id: 'on',
-      name: 'On',
-      codeCreator: resourceId => callNode('on', callNode('group', +resourceId))
-    },
-    {
-      id: 'off',
-      name: 'Off',
-      codeCreator: resourceId => callNode('off', callNode('group', +resourceId))
-    },
-    {
-      id: 'alert',
-      name: 'Alert',
-      codeCreator: resourceId =>
-        callNode('alert', 'select', callNode('group', +resourceId))
-    },
-    {
-      id: 'setScene',
-      name: 'Set Scene',
-      editor: SceneSelector,
-      editorDefault: ({ hueData, resourceId }) =>
-        pathOr(
-          '',
-          [0, 0],
-          filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
-        ),
-      codeCreator: (resourceId, { editorValue }) =>
-        callNode('setScene', editorValue, callNode('group', +resourceId))
-    },
-    {
-      id: 'delete',
-      name: 'Delete',
-      codeCreator: resourceId =>
-        callNode('delete', callNode('group', +resourceId))
-    }
-  ],
-  schedules: [
-    {
-      id: 'enable',
-      name: 'Enable',
-      codeCreator: resourceId =>
-        callNode('enable', callNode('schedule', +resourceId))
-    },
-    {
-      id: 'disable',
-      name: 'Disable',
-      codeCreator: resourceId =>
-        callNode('disable', callNode('schedule', +resourceId))
-    },
-    {
-      id: 'delete',
-      name: 'Delete',
-      requestCreator: (resourceId, data) => ({
-        url: `/schedules/${resourceId}`,
-        method: 'DELETE'
-      }),
-      codeCreator: resourceId =>
-        callNode('delete', callNode('schedule', +resourceId))
-    }
-  ],
-  rules: [
-    {
-      id: 'enable',
-      name: 'Enable',
-      requestCreator: (resourceId, data) => ({
-        url: `/rules/${resourceId}`,
-        method: 'PUT',
-        body: {
-          status: 'enabled'
-        }
-      }),
-      codeCreator: resourceId =>
-        callNode('enable', callNode('rule', +resourceId))
-    },
-    {
-      id: 'disable',
-      name: 'Disable',
-      requestCreator: (resourceId, data) => ({
-        url: `/rules/${resourceId}`,
-        method: 'PUT',
-        body: {
-          status: 'disabled'
-        }
-      }),
-      codeCreator: resourceId =>
-        callNode('disable', callNode('schedule', +resourceId))
-    },
-    {
-      id: 'delete',
-      name: 'Delete',
-      requestCreator: (resourceId, data) => ({
-        url: `/rules/${resourceId}`,
-        method: 'DELETE'
-      }),
-      codeCreator: resourceId =>
-        callNode('delete', callNode('schedule', +resourceId))
-    }
-  ]
-};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -410,12 +246,8 @@ const ResourceViewer = ({
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [view, setView] = useState('state');
-  const [editorValue, setEditorValue] = useState('');
 
   const [graph, setGraph] = useState(getEmptyGraph());
-
-  const [actionIdx, setActionIdx] = useState(0);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -450,77 +282,6 @@ const ResourceViewer = ({
     }
   }, [hueData]);
 
-  const currentResourceActionInt = useMemo(() => {
-    const a = nth(actionIdx, actions[resourceType] || []);
-    return a;
-  }, [resourceType, actionIdx]);
-
-  useEffect(() => {
-    if (currentResourceActionInt && currentResourceActionInt.editorDefault) {
-      const defaultValue = currentResourceActionInt.editorDefault({
-        hueData,
-        resourceType,
-        resourceId
-      });
-      setEditorValue(defaultValue);
-    }
-  }, [currentResourceActionInt, resourceId]);
-
-  const actionParamEditor = useMemo(() => {
-    return currentResourceActionInt && currentResourceActionInt.editor
-      ? createElement(currentResourceActionInt.editor, {
-          hueData,
-          resourceType,
-          resourceId,
-          value: editorValue,
-          onChange: setEditorValue
-        })
-      : null;
-  }, [
-    resourceType,
-    resourceId,
-    hueData,
-    currentResourceActionInt,
-    editorValue
-  ]);
-
-  const currentResourceAction = useMemo(() => {
-    const a = currentResourceActionInt;
-
-    if (a) {
-      try {
-        const ast = a.codeCreator(resourceId, {
-          resourceType,
-          hueData,
-          editorValue
-        });
-
-        const hs = toSource(ast, { style: 'object' });
-
-        const { effects } = processHueScriptSync(true)(
-          createHSContext(hueData)
-        )(hs);
-
-        return {
-          ast,
-          hs,
-          effects
-        };
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    }
-
-    return null;
-  }, [
-    resourceId,
-    resourceType,
-    currentResourceActionInt,
-    hueData,
-    editorValue
-  ]);
-
   return (
     <div className={classes.root}>
       {resource && resource.errors.length > 0 && (
@@ -530,12 +291,24 @@ const ResourceViewer = ({
       )}
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange}>
-          <Tab label="Relations" />
           <Tab label="Playground" />
+          <Tab label="Relations" />
+
           <Tab label="Raw data" />
         </Tabs>
       </AppBar>
       {value === 0 && (
+        <TabContainer>
+          <Playground
+            hueData={hueData}
+            resourceType={resourceType}
+            resourceId={resourceId}
+            baseApiUrl={baseApiUrl}
+            onRunClick={onRunClick}
+          />
+        </TabContainer>
+      )}
+      {value === 1 && (
         <TabContainer>
           <ScalableGraph
             rescaleFn={rescale}
@@ -545,53 +318,6 @@ const ResourceViewer = ({
             data={graph}
             previewWidth={200}
           />
-        </TabContainer>
-      )}
-      {value === 1 && (
-        <TabContainer>
-          {currentResourceAction && (
-            <div>
-              <div style={{ display: 'flex' }}>
-                <div style={{ width: '50%', padding: 5 }}>
-                  <h4>Choose action:</h4>
-                  <Select
-                    value={actionIdx}
-                    onChange={e => setActionIdx(e.target.value)}
-                  >
-                    {mapWithKey(
-                      (a, idx) => (
-                        <MenuItem key={a.id} value={idx}>
-                          {a.name}
-                        </MenuItem>
-                      ),
-                      actions[resourceType]
-                    )}
-                  </Select>
-                  {actionParamEditor}
-                  <h4>Hue Script</h4>
-                  <pre className={styles.codeSimple}>
-                    {currentResourceAction.hs}
-                  </pre>
-                  <Button
-                    type="button"
-                    variant="contained"
-                    color="primary"
-                    onClick={() => onRunClick(currentResourceAction.ast)}
-                  >
-                    Run
-                  </Button>
-                </div>
-                <div style={{ width: '50%' }}>
-                  <AstViewer
-                    baseApiUrl={baseApiUrl}
-                    effects={currentResourceAction.effects}
-                    view={view}
-                    onViewChange={setView}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
         </TabContainer>
       )}
       {value === 2 && (
