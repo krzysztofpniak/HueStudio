@@ -79,6 +79,15 @@ const BridgeAction = $.NamedRecordType('hs/BridgeAction')(
   body: $.StrMap($.Unknown)
 });
 
+const HSAction = $.NamedRecordType('hs/HSAction')(
+  'http://example.com/hs#HSAction'
+)([])({
+  address: $.String,
+  method: $.String,
+  key: $.String,
+  value: $.Unknown
+});
+
 const AstNode = $.NamedRecordType('hs/AstNode')(
   'http://example.com/hs#AstNode'
 )([])({ type: $.String });
@@ -123,6 +132,7 @@ export {
   HSLibFnValue,
   HueBridgeState,
   BridgeAction,
+  HSAction,
   HSContext,
   HSValue,
   HSError,
