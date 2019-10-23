@@ -47,6 +47,9 @@ import useHueData from './useHueData';
 import AstViewer from '../astViewer';
 import parseHueAsync from './parseHueAsync';
 import { createHSContext } from '../../hueScript/astToBridgeState';
+import ReactMarkdown from 'react-markdown';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Markdown from '../markdown';
 
 const get = async url => {
   const r = await fetch(url);
@@ -133,7 +136,7 @@ const RuleEditor = ({
         </div>
       </div>
       {error ? (
-        <div style={{ padding: 10, color: 'red' }}>{error}</div>
+        <Markdown source={error} />
       ) : (
         <AstViewer
           baseApiUrl={baseApiUrl}
