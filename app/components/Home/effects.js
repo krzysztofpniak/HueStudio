@@ -297,22 +297,11 @@ function* runSource(source, hsContext) {
         case 'on':
           if (effect.params.target.type.name === 'Light') {
             yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
-              on: true
+              on: effect.params.on
             });
           } else if (effect.params.target.type.name === 'Group') {
             yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
-              on: true
-            });
-          }
-          break;
-        case 'off':
-          if (effect.params.target.type.name === 'Light') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
-              on: false
-            });
-          } else if (effect.params.target.type.name === 'Group') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
-              on: false
+              on: effect.params.on
             });
           }
           break;
