@@ -32,6 +32,7 @@ import {
 import { Just, justs, Nothing } from '../../sanctuary';
 import eventCodes from '../../eventCodes';
 import getResourceByRef from '../../components/resourceViewer/getResourceByRef';
+import { GamutA, GamutC, rgbToXY } from '../../color-conv';
 
 const createFunction = def('createFunction')({})([
   HSType,
@@ -174,6 +175,33 @@ const off = createFunction(
   result: target,
   effects: [{ name: 'on', params: { on: false, target } }]
 }));
+
+const xy = createFunction(
+  constraint({ a: ['Light', 'Group'] })(
+    fn([scalar('Number'), scalar('Number'), scalar('a'), scalar('a')])
+  )
+)(pass)((x, y, target) => ({
+  result: target,
+  effects: [{ name: 'xy', params: { xy: [x.value, y.value], target } }]
+}));
+
+const rgb = createFunction(
+  constraint({ a: ['Light', 'Group'] })(
+    fn([
+      scalar('Number'),
+      scalar('Number'),
+      scalar('Number'),
+      scalar('a'),
+      scalar('a')
+    ])
+  )
+)(pass)((r, g, b, target) => {
+  const xy = rgbToXY(GamutC)(r.value, g.value, b.value);
+  return {
+    result: target,
+    effects: [{ name: 'xy', params: { xy, target } }]
+  };
+});
 
 /**
  * @example
@@ -394,6 +422,8 @@ const coreLib = {
   transition,
   setScene,
   off,
+  xy,
+  rgb,
   dimmer,
   button1,
   button2,
