@@ -41,14 +41,6 @@ const DenseAppBar = ({
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Typography variant="h5">Hue Studio</Typography>
-          <IconButton
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={onSendClick}
-          >
-            <MenuIcon />
-          </IconButton>
           <Tabs
             value={activeTab}
             onChange={(e, value) => onTabClick(value)}
@@ -65,16 +57,16 @@ const DenseAppBar = ({
                   label={
                     <div style={{ color: t.modified ? 'aqua' : 'white' }}>
                       {t.name.substring(0, 10)}
-                      <Button
-                        style={{ minWidth: '30px' }}
+                      <IconButton
+                        style={{ minWidth: '22px' }}
                         size="small"
                         onClick={e => {
                           e.stopPropagation();
                           onTabCloseClick(t.ref);
                         }}
                       >
-                        <CloseIcon />
-                      </Button>
+                        <CloseIcon style={{ height: 22 }} />
+                      </IconButton>
                     </div>
                   }
                 />
@@ -82,10 +74,6 @@ const DenseAppBar = ({
               tabs
             )}
           </Tabs>
-          <div style={{ flex: '1' }} />
-          <IconButton to={routes.SETTINGS} component={Link} color="inherit">
-            <SettingsIcon />
-          </IconButton>
         </Toolbar>
       </AppBar>
     </div>
