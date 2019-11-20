@@ -52,6 +52,16 @@ const translateBri = ({ params: { target, bri } }) => {
   };
 };
 
+const translateCt = ({ params: { target, ct } }) => {
+  return {
+    url: getActionAddress(target),
+    method: 'PUT',
+    body: {
+      ct
+    }
+  };
+};
+
 const translateSetScene = ({ params: { target, scene } }) => {
   return {
     url: getActionAddress(target),
@@ -87,6 +97,7 @@ const translateEffect = cond([
   [propEq('name', 'setScene'), translateSetScene],
   [propEq('name', 'transition'), translateTransition],
   [propEq('name', 'remove'), translateRemove],
+  [propEq('name', 'ct'), translateCt],
   [T, always({ url: 'http://contoso.com/wrong/path', method: 'GET', body: {} })]
 ]);
 
