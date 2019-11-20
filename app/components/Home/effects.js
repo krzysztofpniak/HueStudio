@@ -125,52 +125,59 @@ function* saveFileAs() {
     find(propEq('ref', activeTabId), openedResources)
   );
 
-  const fileName = dialog.showSaveDialog(getCurrentWindow(), {
-    defaultPath,
-    filters: [{ name: 'Hue Script', extensions: ['hue'] }]
-  });
+  const { cancelled, filePath } = yield dialog.showSaveDialog(
+    getCurrentWindow(),
+    {
+      defaultPath,
+      filters: [{ name: 'Hue Script', extensions: ['hue'] }]
+    }
+  );
 
-  if (fileName) {
+  if (!cancelled) {
     const { codeEditorStates, activeTabId } = yield select(s => s);
     const content = codeEditorStates[activeTabId];
-    yield cps(writeFile, fileName, content);
+    yield cps(writeFile, filePath, content);
     yield put({
       type: 'fileSaved',
-      payload: { fileName, prevFileName: activeTabId }
+      payload: { fileName: filePath, prevFileName: activeTabId }
     });
   }
 }
 
 function* saveFile(editorRef) {
-  const [selectionStart] = editorRef.current.getSelection();
-  const { codeEditorStates, activeTabId, openedResources } = yield select(
-    s => s
-  );
-  const temp = propOr(
-    false,
-    'temp',
-    find(propEq('ref', activeTabId), openedResources)
-  );
-  if (!temp && existsSync(activeTabId)) {
-    const content = codeEditorStates[activeTabId];
-    const { formatted, cursorOffset } = formatWithCursor(content, {
-      cursorOffset: selectionStart,
-      singleQuote: true,
-      arrowParens: 'always'
-    });
-    yield put({
-      type: 'setCodeEditorState',
-      payload: { tabId: activeTabId, state: formatted }
-    });
-    yield delay(100);
-    editorRef.current.focus(cursorOffset);
-    yield cps(writeFile, activeTabId, formatted);
-    yield put({
-      type: 'fileSaved',
-      payload: { fileName: activeTabId, prevFileName: activeTabId }
-    });
-  } else {
-    yield saveFileAs();
+  try {
+    const [selectionStart] = editorRef.current.getSelection();
+    const { codeEditorStates, activeTabId, openedResources } = yield select(
+      s => s
+    );
+    const temp = propOr(
+      false,
+      'temp',
+      find(propEq('ref', activeTabId), openedResources)
+    );
+    if (!temp && existsSync(activeTabId)) {
+      const content = codeEditorStates[activeTabId];
+      const { formatted, cursorOffset } = formatWithCursor(content, {
+        cursorOffset: selectionStart,
+        singleQuote: true,
+        arrowParens: 'always'
+      });
+      yield put({
+        type: 'setCodeEditorState',
+        payload: { tabId: activeTabId, state: formatted }
+      });
+      yield delay(100);
+      editorRef.current.focus(cursorOffset);
+      yield cps(writeFile, activeTabId, formatted);
+      yield put({
+        type: 'fileSaved',
+        payload: { fileName: activeTabId, prevFileName: activeTabId }
+      });
+    } else {
+      yield saveFileAs();
+    }
+  } catch (e) {
+    console.error(e);
   }
 }
 
