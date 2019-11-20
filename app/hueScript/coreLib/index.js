@@ -175,7 +175,7 @@ const off = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
 )(pass)(target => ({
   result: target,
-  effects: [{ name: 'off', params: { target } }]
+  effects: [{ name: 'on', params: { on: false, target } }]
 }));
 
 /**
