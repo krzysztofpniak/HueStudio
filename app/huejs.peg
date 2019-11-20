@@ -295,8 +295,8 @@ Elision
   = "," commas:(__ ",")* { return filledArray(commas.length + 1, null); }
 
 BooleanLiteral
-  = TrueToken  { return { type: "Literal", value: true  }; }
-  / FalseToken { return { type: "Literal", value: false }; }
+  = TrueToken  { return { type: "Literal", value: true, kind: "Bool" }; }
+  / FalseToken { return { type: "Literal", value: false, kind: "Bool" }; }
 
 // The "!(IdentifierStart / DecimalDigit)" predicate is not part of the official
 // grammar, it comes from text in section 7.8.3.
@@ -306,8 +306,11 @@ NumericLiteral "number"
     }
 
 DecimalLiteral
-  = DecimalIntegerLiteral {
-      return { type: "Literal", value: parseFloat(text()) };
+  = DecimalIntegerLiteral "." DecimalDigit* {
+      return { type: "Literal", value: parseFloat(text()), kind: "Float" };
+    }
+  / DecimalIntegerLiteral {
+      return { type: "Literal", value: parseFloat(text()), kind: "Int" };
     }
 
 DecimalIntegerLiteral
@@ -322,7 +325,7 @@ NonZeroDigit
 
 StringLiteral "string"
   =  "'" chars:SingleStringCharacter* "'" {
-      return { type: "Literal", value: chars.join("") };
+      return { type: "Literal", value: chars.join(""), kind: "String" };
     }
 
 SingleStringCharacter
