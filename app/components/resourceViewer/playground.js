@@ -367,13 +367,6 @@ const SwitchSensorPlayground = ({ hueData, resourceId, resourceType }) => {
     [currentRules]
   );
 
-  console.log(
-    currentButtonEvent,
-    sequence(Either)(
-      chain(r => values(map(actionToEffects)(r.actions)))(values(currentRules))
-    )
-  );
-
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static">
