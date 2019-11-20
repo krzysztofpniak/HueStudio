@@ -93,7 +93,7 @@ const actions = {
       editor: EffectSelector,
       editorDefault: () => 'colorloop',
       codeCreator: (resourceId, { editorValue }) =>
-        callNode('effect', callNode('light', +resourceId), editorValue)
+        callNode('effect', editorValue, callNode('light', +resourceId))
     }
   ],
   groups: [
