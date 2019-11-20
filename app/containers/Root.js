@@ -3,8 +3,9 @@ import React, { useEffect } from 'react';
 import { MemoryRouter as Router } from 'react-router';
 import { KProvider } from '@k-frame/core';
 import { scopedSagaMiddleware } from '@k-frame/sagas';
-import type { Store } from '../reducers/types';
 import Routes from '../Routes';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core';
 
 const { remote } = require('electron');
 
@@ -127,6 +128,50 @@ const getTemplate = store => {
   return template;
 };
 
+const theme = createMuiTheme({
+  overrides: {
+    MuiToolbar: {
+      root: {
+        minHeight: '36px'
+      },
+      dense: {
+        minHeight: '36px'
+      },
+      gutters: {
+        paddingLeft: 0
+      }
+    },
+    MuiTabs: {
+      root: {
+        minHeight: '36px'
+      }
+    },
+    MuiTab: {
+      root: {
+        minHeight: '36px'
+      }
+    },
+    MuiIconButton: {
+      sizeSmall: {
+        padding: 0
+      }
+    },
+    PrivateTabIndicator: {
+      root: {
+        mixBlendMode: 'color',
+        height: '36px',
+        pointerEvents: 'none'
+      }
+    },
+    MuiSlider: {
+      markLabel: {
+        transform: 'translate(1px, -40px) rotate(-40deg)',
+        transformOrigin: 'left'
+      }
+    }
+  }
+});
+
 const Root = ({ store }) => {
   useEffect(() => {
     const menu = Menu.buildFromTemplate(getTemplate(store));
@@ -134,9 +179,11 @@ const Root = ({ store }) => {
   }, []);
   return (
     <KProvider store={store} runSaga={scopedSagaMiddleware.run}>
-      <Router>
-        <Routes />
-      </Router>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Routes />
+        </Router>
+      </ThemeProvider>
     </KProvider>
   );
 };
