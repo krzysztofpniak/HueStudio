@@ -179,15 +179,15 @@ const off = createFunction(
  * @example
  *  dimmer(12); // => {type: 'Dimmer', ref: '/sensors/12'}
  */
-const dimmer = createFunction(fn([scalar('Number'), scalar('Dimmer')]))(pass)(
-  dimmerId => ({
-    result: {
-      type: scalar('Dimmer'),
-      value: `/sensors/${dimmerId.value}`
-    },
-    effects: []
-  })
-);
+const dimmer = createFunction(fn([scalar('Number'), scalar('Dimmer')]))(
+  isDimmerDefined(0)
+)(dimmerId => ({
+  result: {
+    type: scalar('Dimmer'),
+    value: `/sensors/${dimmerId.value}`
+  },
+  effects: []
+}));
 
 /**
  * @example
