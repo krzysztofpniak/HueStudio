@@ -6,7 +6,6 @@ import React, {
   useState
 } from 'react';
 import {
-  addIndex,
   both,
   cond,
   filter,
@@ -16,9 +15,11 @@ import {
   T,
   toPairs,
   any,
-  propOr,
-  values
+  values,
+  path,
+  compose
 } from 'ramda';
+import { ChromePicker } from 'react-color';
 import Select from '@material-ui/core/Select/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import styles from '../Home.css';
@@ -33,6 +34,11 @@ import Tab from '@material-ui/core/Tab/Tab';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import actionToEffects from '../../hueScript/effects/actionToEffects';
 import { chain, Either, map, mapIndexed, sequence } from '../../sanctuary';
+import LabPicker from '../labPicker';
+import Slider from '@material-ui/core/Slider';
+import getLinearScale from '../../helpers/getLinearScale';
+import useDebounce from '../../helpers/useDebounce';
+import useThrottle from '../../helpers/useThrottle';
 
 const render = Component => props => <Component {...props} />;
 
@@ -69,6 +75,118 @@ const EffectSelector = createSelectEditor(() => [
   { id: 'colorloop', name: 'Color Loop' }
 ]);
 
+const RgbColorPicker = ({ value, onChange }) => {
+  const [rgb, setState] = useState([255, 255, 255]);
+  return (
+    <ChromePicker
+      color={rgb}
+      onChange={x => {
+        setState(x.rgb);
+      }}
+      onChangeComplete={x => {
+        onChange([x.rgb.r, x.rgb.g, x.rgb.b]);
+      }}
+      disableAlpha
+    />
+  );
+};
+
+const XYColorPicker = ({
+  hueData,
+  resourceId,
+  resourceType,
+  value,
+  onChange
+}) => {
+  const gamut = path(
+    [resourceType, resourceId, 'capabilities', 'control', 'colorgamut'],
+    hueData
+  );
+  return gamut ? (
+    <LabPicker gamut={gamut} value={value} onChange={onChange} />
+  ) : (
+    <div>Not available</div>
+  );
+};
+
+const formatCTPickerValue = value => `${value}K`;
+
+const getMarks = (min, max) => [
+  {
+    value: 2200,
+    label: '2200K (Flame)'
+  },
+  {
+    value: 2700,
+    label: '2700K (Warm light)'
+  },
+  {
+    value: 3000,
+    label: '3000K (White)'
+  },
+  {
+    value: 5000,
+    label: '5000K (Cool White)'
+  },
+  {
+    value: 6500,
+    label: '6500K (Daylight)'
+  }
+];
+
+const miredToKelvin = compose(
+  v => Math.round(v),
+  getLinearScale([2000, 6500], [500, 153])
+);
+
+const kelvinToMired = compose(
+  v => Math.floor(v),
+  getLinearScale([500, 153], [2000, 6500])
+);
+
+const CTPicker = ({ hueData, resourceType, resourceId, value, onChange }) => {
+  const { min, max } = map(miredToKelvin)(
+    pathOr(
+      { min: 0, max: 0 },
+      [resourceType, resourceId, 'capabilities', 'control', 'ct'],
+      hueData
+    )
+  );
+
+  const marks = useMemo(() => getMarks(min, max), [min, max]);
+
+  return (
+    <div style={{ padding: '105px 155px 0 20px' }}>
+      <Slider
+        value={miredToKelvin(value)}
+        onChange={(e, v) => onChange(kelvinToMired(v))}
+        getAriaValueText={formatCTPickerValue}
+        aria-labelledby="discrete-slider-custom"
+        valueLabelDisplay="auto"
+        marks={marks}
+        min={max}
+        max={min}
+      />
+    </div>
+  );
+};
+
+const BriPicker = ({ hueData, resourceType, resourceId, value, onChange }) => {
+  return (
+    <div style={{ padding: '105px 155px 0 20px' }}>
+      <Slider
+        value={value}
+        onChange={(e, v) => onChange(v)}
+        aria-labelledby="discrete-slider-custom"
+        valueLabelDisplay="auto"
+        marks
+        min={1}
+        max={254}
+      />
+    </div>
+  );
+};
+
 const actions = {
   lights: [
     {
@@ -94,6 +212,52 @@ const actions = {
       editorDefault: () => 'colorloop',
       codeCreator: (resourceId, { editorValue }) =>
         callNode('effect', editorValue, callNode('light', +resourceId))
+    },
+    {
+      id: 'ct',
+      name: 'Temperature',
+      editor: CTPicker,
+      editorDefault: ({ hueData, resourceType, resourceId }) =>
+        pathOr(3000, [resourceType, resourceId, 'state', 'ct'], hueData),
+      codeCreator: (resourceId, { editorValue }) =>
+        callNode('ct', editorValue, callNode('light', +resourceId))
+    },
+    {
+      id: 'bri',
+      name: 'Brightness',
+      editor: BriPicker,
+      editorDefault: ({ hueData, resourceType, resourceId }) =>
+        pathOr(254, [resourceType, resourceId, 'state', 'bri'], hueData),
+      codeCreator: (resourceId, { editorValue }) =>
+        callNode('bri', editorValue, callNode('light', +resourceId))
+    },
+    {
+      id: 'xy',
+      name: 'XY Color',
+      editor: XYColorPicker,
+      editorDefault: ({ hueData, resourceType, resourceId }) =>
+        pathOr([0.3, 0.3], [resourceType, resourceId, 'state', 'xy'], hueData),
+      codeCreator: (resourceId, { editorValue }) =>
+        callNode(
+          'xy',
+          editorValue[0],
+          editorValue[1],
+          callNode('light', +resourceId)
+        )
+    },
+    {
+      id: 'rgb',
+      name: 'RGB',
+      editor: RgbColorPicker,
+      editorDefault: () => [255, 255, 255],
+      codeCreator: (resourceId, { editorValue }) =>
+        callNode(
+          'rgb',
+          editorValue[0],
+          editorValue[1],
+          editorValue[2],
+          callNode('light', +resourceId)
+        )
     }
   ],
   groups: [
@@ -197,6 +361,8 @@ const actions = {
   ]
 };
 
+const emptyArray = [];
+
 const LightPlayground = ({
   hueData,
   resourceType,
@@ -241,6 +407,8 @@ const LightPlayground = ({
     editorValue
   ]);
 
+  const throttledEditorValue = useThrottle(editorValue, 400);
+
   const currentResourceAction = useMemo(() => {
     const a = currentResourceActionInt;
 
@@ -275,8 +443,19 @@ const LightPlayground = ({
     resourceType,
     currentResourceActionInt,
     hueData,
-    editorValue
+    throttledEditorValue
   ]);
+
+  const debouncedEffects = useDebounce(
+    currentResourceAction && currentResourceAction.hs
+      ? currentResourceAction.effects
+      : emptyArray,
+    400
+  );
+
+  useEffect(() => {
+    onRunClick(debouncedEffects);
+  }, [debouncedEffects]);
 
   return (
     currentResourceAction && (
@@ -363,7 +542,12 @@ const SwitchSensorPlayground = ({ hueData, resourceId, resourceType }) => {
   );
 
   const currentActions = useMemo(
-    () => values(map(r => r.actions, currentRules)),
+    () =>
+      sequence(Either)(
+        chain(r => values(map(actionToEffects)(r.actions)))(
+          values(currentRules)
+        )
+      ),
     [currentRules]
   );
 
