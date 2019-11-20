@@ -375,7 +375,7 @@ const SwitchSensorPlayground = ({ hueData, resourceId, resourceType }) => {
   );
 
   return (
-    <div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static">
         <Tabs
           value={currentButton}
@@ -408,7 +408,9 @@ const SwitchSensorPlayground = ({ hueData, resourceId, resourceType }) => {
           ))(currentButtonEvents)}
         </Tabs>
       </AppBar>
-      <pre>{JSON.stringify(currentActions, null, 2)}</pre>
+      <pre style={{ overflow: 'scroll' }}>
+        {JSON.stringify(currentActions, null, 2)}
+      </pre>
     </div>
   );
 };
