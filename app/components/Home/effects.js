@@ -274,63 +274,78 @@ const terminalAddLine = text =>
   put({ type: 'terminal.addLine', payload: text });
 const terminalClear = () => put({ type: 'terminal.clear' });
 
-function* runSource(source, hsContext) {
+function* runEffects(effects) {
   const baseApiUrl = (yield getContext('baseApiUrlRef')).current;
+  for (let effect of effects) {
+    console.log('effect', effect);
+    switch (effect.name) {
+      case 'clear':
+        yield terminalClear();
+        break;
+      case 'print':
+        yield terminalAddLine(effect.params.data.value);
+        break;
+      case 'delay':
+        yield delay(effect.params.ms);
+        break;
+      case 'on':
+        if (effect.params.target.type.name === 'Light') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+            on: effect.params.on
+          });
+        } else if (effect.params.target.type.name === 'Group') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+            on: effect.params.on
+          });
+        }
+        break;
+      case 'bri':
+        if (effect.params.target.type.name === 'Light') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+            bri: effect.params.bri
+          });
+        } else if (effect.params.target.type.name === 'Group') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+            bri: effect.params.bri
+          });
+        }
+        break;
+      case 'ct':
+        if (effect.params.target.type.name === 'Light') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+            ct: effect.params.ct
+          });
+        } else if (effect.params.target.type.name === 'Group') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+            ct: effect.params.ct
+          });
+        }
+        break;
+      case 'xy':
+        if (effect.params.target.type.name === 'Light') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
+            xy: effect.params.xy
+          });
+        } else if (effect.params.target.type.name === 'Group') {
+          yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
+            xy: effect.params.xy
+          });
+        }
+        break;
+      default:
+        console.error('not implemented effect: ', effect);
+    }
+  }
+}
+
+function* runSource(source, hsContext) {
   yield terminalAddLine('running ...');
   const result = processHueScriptSync(true)(hsContext)(source);
   console.log(result);
   if (result.error) {
     yield terminalAddLine(result.error);
   } else {
-    for (let effect of result.effects) {
-      console.log('effect', effect);
-      switch (effect.name) {
-        case 'clear':
-          yield terminalClear();
-          break;
-        case 'print':
-          yield terminalAddLine(effect.params.data.value);
-          break;
-        case 'delay':
-          yield delay(effect.params.ms);
-          break;
-        case 'on':
-          if (effect.params.target.type.name === 'Light') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
-              on: effect.params.on
-            });
-          } else if (effect.params.target.type.name === 'Group') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
-              on: effect.params.on
-            });
-          }
-          break;
-        case 'bri':
-          if (effect.params.target.type.name === 'Light') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
-              bri: effect.params.bri
-            });
-          } else if (effect.params.target.type.name === 'Group') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
-              bri: effect.params.bri
-            });
-          }
-          break;
-        case 'ct':
-          if (effect.params.target.type.name === 'Light') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/state`, {
-              ct: effect.params.ct
-            });
-          } else if (effect.params.target.type.name === 'Group') {
-            yield httpPut(`${baseApiUrl}${effect.params.target.value}/action`, {
-              ct: effect.params.ct
-            });
-          }
-          break;
-        default:
-          console.error('not implemented effect: ', effect);
-      }
-    }
+    yield runEffects(result.effects);
   }
   yield terminalAddLine('done.');
   return result;
@@ -366,6 +381,10 @@ function* runTerminal(action) {
   }
 }
 
+function* runPlayground({ payload }) {
+  yield fork(runEffects, payload);
+}
+
 function* saga(editorRef) {
   yield takeEvery('newFile', newFile);
   yield takeEvery('openFile', openFile);
@@ -373,6 +392,7 @@ function* saga(editorRef) {
   yield takeEvery('saveFile', saveFile, editorRef);
   yield takeEvery('saveFileAs', saveFileAs);
   yield takeEvery('runSelection', runSelection);
+  yield takeEvery('runPlayground', runPlayground);
   yield takeEvery('terminal.exec', runTerminal);
   yield fork(persistence);
   yield loadResources();

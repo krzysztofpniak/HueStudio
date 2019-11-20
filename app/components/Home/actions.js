@@ -24,7 +24,8 @@ const actions = {
   setOpenedResources: createAction('setOpenedResources'),
   setActiveTabId: createAction('setActiveTabId'),
   toggleEditorMode: createAction('toggleEditorMode'),
-  addTerminalLine: addTerminalLine2
+  addTerminalLine: addTerminalLine2,
+  runPlayground: createAction('runPlayground')
 };
 
 export default actions;

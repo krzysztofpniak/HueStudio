@@ -174,7 +174,8 @@ const Home = withStaticScope('home')(() => {
     addTerminalLine,
     metaPressed,
     toggleEditorMode,
-    data
+    data,
+    runPlayground
   } = useKReducer(reducer, actions);
   const editorRef = useRef();
 
@@ -300,17 +301,8 @@ const Home = withStaticScope('home')(() => {
     setActiveTabId(newActiveTab ? newActiveTab.ref : null);
   };
 
-  const runRest = async ast => {
-    /*const requests = astToRest(ast);
-    for (let i = 0; i < requests.length; i++) {
-      const request = requests[i].request({});
-      const response = await fetch(`${baseApiUrl}${request.url}`, {
-        method: request.method,
-        body: request.body ? JSON.stringify(request.body) : null
-      });
-      const data = await response.json();
-      addTerminalLine(JSON.stringify(data));
-    }*/
+  const runRest = ast => {
+    runPlayground(ast);
   };
 
   const handleEditorTextChange = useCallback(
