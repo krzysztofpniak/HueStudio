@@ -49,21 +49,17 @@ const createSelectEditor = optionsMapper => ({
   );
   return (
     <Select value={value} onChange={e => onChange(e.target.value)}>
-      {map(
-        o => (
-          <MenuItem key={o.id} value={o.id}>
-            {o.name}
-          </MenuItem>
-        ),
-        options
-      )}
+      {map(o => (
+        <MenuItem key={o.id} value={o.id}>
+          {o.name}
+        </MenuItem>
+      ))(options)}
     </Select>
   );
 };
 
 const SceneSelector = createSelectEditor(({ hueData, resourceId }) =>
-  map(
-    ([key, s]) => ({ id: key, name: s.name }),
+  map(([key, s]) => ({ id: key, name: s.name }))(
     filter(([k, s]) => s.group === resourceId, toPairs(hueData.scenes))
   )
 );
@@ -292,14 +288,11 @@ const LightPlayground = ({
               value={actionIdx}
               onChange={e => setActionIdx(e.target.value)}
             >
-              {mapIndexed(
-                a => idx => (
-                  <MenuItem key={a.id} value={idx}>
-                    {a.name}
-                  </MenuItem>
-                ),
-                actions[resourceType]
-              )}
+              {mapIndexed(a => idx => (
+                <MenuItem key={a.id} value={idx}>
+                  {a.name}
+                </MenuItem>
+              ))(actions[resourceType])}
             </Select>
             {actionParamEditor}
             <h4>Hue Script</h4>
