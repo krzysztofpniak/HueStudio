@@ -114,7 +114,7 @@ const on = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
 )(pass)(target => ({
   result: target,
-  effects: [{ name: 'on', params: { target } }]
+  effects: [{ name: 'on', params: { on: true, target } }]
 }));
 
 const bri = createFunction(
@@ -269,45 +269,16 @@ const long_release = createButtonEvent('long_release');
  *  // => {type: 'EventHandler', event: {type: 'ButtonEvent', ...}, actions: [...]}
  */
 const handle = createFunction(
-  fn([fn([scalar('void')]), scalar('ButtonEvent'), scalar('Rule')])
+  constraint({ a: ['Button'] })(
+    fn([scalar('String'), fn([scalar('void')]), scalar('a'), scalar('Rule')])
+  )
 )(args => context => {
-  console.log(
-    args[1].value.eventCode,
-    JSON.stringify(args[1].value.sensor.value),
-    JSON.stringify(
-      map(
-        r => [r.conditions, r.actions],
-        filter(
-          r =>
-            !r.conditions ||
-            any(
-              c =>
-                endsWith('buttonevent', c.address) &&
-                c.value === '' + args[1].value.eventCode,
-              r.conditions
-            ),
-          map(
-            ref => getResourceByRef(context.bridgeState, ref),
-            uniq(
-              map(
-                a => a[1],
-                filter(
-                  a => a[0] === args[1].value.sensor.value,
-                  context.bridgeState.edges
-                )
-              )
-            )
-          )
-        )
-      ),
-      null,
-      2
-    )
-  );
+  console.log(args[1].value, JSON.stringify(args[1].value));
   return Nothing;
 })(
   (event, actions) =>
-    console.log(event, actions) || hsResult(scalar('Rule'))({})([])
+    console.log(event, actions) ||
+    hsResult(scalar('Rule'))({})([{ name: 'rule', params: {} }])
 );
 
 /**
