@@ -45,35 +45,32 @@ const createFunction = def('createFunction')({})([
 
 const pass = () => () => Nothing;
 
-const isGroupDefined = n => args => ctx => {
-  const allowed = keys(ctx.bridgeState.groups);
+const color = value => text => `<Color color="${value}" text="${text}" />`;
+const red = color('red');
+const lime = color('lime');
+
+const createIsDefined = getCollection => n => args => ctx => {
+  const allowed = keys(getCollection(ctx));
   return allowed.includes('' + args[n].value)
     ? Nothing
     : Just({
         name: 'ValueOutOfRange',
-        message: `Value is not in allowed set: ${map(
-          ([id, g]) => `${id}(${g.name})`
-        )(toPairs(ctx.bridgeState.groups)).join(', ')}`,
+        message: `Value ${red(args[n].value)} is not in allowed set: \n${map(
+          ([id, g]) => `* ${lime(id)} (${g.name}) \n\n`
+        )(toPairs(getCollection(ctx))).join('')}`,
         argIdx: n,
         allowed,
         current: args[n].value
       });
 };
 
-const isLightDefined = n => args => ctx => {
-  const allowed = keys(ctx.bridgeState.lights);
-  return allowed.includes('' + args[n].value)
-    ? Nothing
-    : Just({
-        name: 'ValueOutOfRange',
-        message: `Value is not in allowed set: ${map(
-          ([id, g]) => `${id}(${g.name})`
-        )(toPairs(ctx.bridgeState.lights)).join(', ')}`,
-        argIdx: n,
-        allowed,
-        current: args[n].value
-      });
-};
+const isGroupDefined = createIsDefined(ctx => ctx.bridgeState.groups);
+
+const isLightDefined = createIsDefined(ctx => ctx.bridgeState.lights);
+
+const isDimmerDefined = createIsDefined(ctx =>
+  filter(s => s.type === 'ZLLSwitch')(ctx.bridgeState.sensors)
+);
 
 const delay = createFunction(fn([scalar('Number'), scalar('Void')]))(pass)(ms =>
   hsResult(scalar('Void'))(null)([{ name: 'delay', params: { ms: ms.value } }])
