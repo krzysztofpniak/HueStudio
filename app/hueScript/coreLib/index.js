@@ -74,7 +74,13 @@ const isDimmerDefined = createIsDefined(ctx =>
 );
 
 const delay = createFunction(fn([scalar('Number'), scalar('Void')]))(pass)(ms =>
-  hsResult(scalar('Void'))(null)([{ name: 'delay', params: { ms: ms.value } }])
+  hsResult(scalar('Void'))(null)([
+    {
+      address: `/env/delay`,
+      method: 'POST',
+      body: { ms: ms.value }
+    }
+  ])
 );
 
 const light = createFunction(fn([scalar('Number'), scalar('Light')]))(
@@ -112,10 +118,21 @@ const group = createFunction(fn([scalar('Number'), scalar('Group')]))(
  */
 const on = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
-)(pass)(target => ({
-  result: target,
-  effects: [{ name: 'on', params: { on: true, target } }]
-}));
+)(pass)(
+  target =>
+    console.log(target) || {
+      result: target,
+      effects: [
+        {
+          address: `${target.value}/${
+            target.type.name === 'Group' ? 'action' : 'state'
+          }`,
+          method: 'PUT',
+          body: { on: true }
+        }
+      ]
+    }
+);
 
 const bri = createFunction(
   constraint({ a: ['Light', 'Group'] })(
@@ -124,8 +141,11 @@ const bri = createFunction(
 )(pass)((brightness, target) =>
   hsResult(target.type)(target.value)([
     {
-      name: 'bri',
-      params: { target, bri: brightness.value }
+      address: `${target.value}/${
+        target.type.name === 'Group' ? 'action' : 'state'
+      }`,
+      method: 'PUT',
+      body: { bri: brightness.value }
     }
   ])
 );
@@ -137,10 +157,33 @@ const ct = createFunction(
 )(pass)((ct, target) =>
   hsResult(target.type)(target.value)([
     {
-      name: 'ct',
-      params: { target, ct: ct.value }
+      address: `${target.value}/${
+        target.type.name === 'Group' ? 'action' : 'state'
+      }`,
+      method: 'PUT',
+      body: { ct: ct.value }
     }
   ])
+);
+
+const alert = createFunction(
+  constraint({ a: ['Light', 'Group'] })(
+    fn([scalar('String'), scalar('a'), scalar('a')])
+  )
+)(pass)(
+  (mode, target) =>
+    console.log(target) || {
+      result: target,
+      effects: [
+        {
+          address: `${target.value}/${
+            target.type.name === 'Group' ? 'action' : 'state'
+          }`,
+          method: 'PUT',
+          body: { alert: 'select' }
+        }
+      ]
+    }
 );
 
 const transition = createFunction(
@@ -150,8 +193,9 @@ const transition = createFunction(
 )(pass)((time, target) =>
   hsResult(target.type)(target.value)([
     {
-      name: 'transition',
-      params: { target, time: time.value }
+      address: `${target.value}/state`,
+      method: 'PUT',
+      body: { transition: transition.value }
     }
   ])
 );
@@ -160,20 +204,27 @@ const setScene = createFunction(
   fn([scalar('String'), scalar('Group'), scalar('Group')])
 )(pass)((scene, target) =>
   hsResult(scalar('Group'))(target.value)([
-    { name: 'setScene', params: { target, scene: scene.value } }
+    {
+      address: `${target.value}/state`,
+      method: 'PUT',
+      body: { scene: scene.value }
+    }
   ])
 );
 
-/**
- * @example
- *  off({type: 'Light', ref: '/lights/1'}); // => {type: 'Light', state: {on: false}}
- *  off({type: 'Group', ref: '/groups/1'}); // => {type: 'Group', state: {on: false}}
- */
 const off = createFunction(
   constraint({ a: ['Light', 'Group'] })(fn([scalar('a'), scalar('a')]))
 )(pass)(target => ({
   result: target,
-  effects: [{ name: 'on', params: { on: false, target } }]
+  effects: [
+    {
+      address: `${target.value}/${
+        target.type.name === 'Group' ? 'action' : 'state'
+      }`,
+      method: 'PUT',
+      body: { on: false }
+    }
+  ]
 }));
 
 const xy = createFunction(
@@ -182,7 +233,15 @@ const xy = createFunction(
   )
 )(pass)((x, y, target) => ({
   result: target,
-  effects: [{ name: 'xy', params: { xy: [x.value, y.value], target } }]
+  effects: [
+    {
+      address: `${target.value}/${
+        target.type.name === 'Group' ? 'action' : 'state'
+      }`,
+      method: 'PUT',
+      body: { xy: [x.value, y.value] }
+    }
+  ]
 }));
 
 const rgb = createFunction(
@@ -199,7 +258,13 @@ const rgb = createFunction(
   const xy = rgbToXY(GamutC)(r.value, g.value, b.value);
   return {
     result: target,
-    effects: [{ name: 'xy', params: { xy, target } }]
+    effects: [
+      {
+        address: `${target.value}/state`,
+        method: 'PUT',
+        body: { xy }
+      }
+    ]
   };
 });
 
@@ -369,14 +434,23 @@ const removeFn = createFunction(
   )
 )(pass)(target => {
   return hsResult(scalar('Void'))(null)([
-    { name: 'remove', params: { target } }
+    {
+      address: `${target.value}`,
+      method: 'DELETE'
+    }
   ]);
 });
 
 const print = createFunction(
   constraint({ a: ['String', 'Number'] })(fn([scalar('a'), scalar('Void')]))
 )(pass)(data => {
-  return hsResult(scalar('Void'))(null)([{ name: 'print', params: { data } }]);
+  return hsResult(scalar('Void'))(null)([
+    {
+      address: '/env/console/out',
+      method: 'POST',
+      body: { content: data.value }
+    }
+  ]);
 });
 
 const clear = createFunction(fn([scalar('Void')]))(pass)(() => {
@@ -388,6 +462,7 @@ const coreLib = {
   light,
   group,
   on,
+  alert,
   bri,
   ct,
   transition,

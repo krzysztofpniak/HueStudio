@@ -7,14 +7,14 @@ import {
   always,
   cond,
   equals,
-  hasPath,
   join,
   map,
-  propEq,
-  T,
+  filter,
   compose,
   evolve,
-  concat
+  concat,
+  identity,
+  startsWith
 } from 'ramda';
 
 const getActionAddress = target =>
@@ -22,88 +22,11 @@ const getActionAddress = target =>
     ? `${target.value}/action`
     : `${target.value}/action`;
 
-const translateOn = ({ params: { target } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      on: true
-    }
-  };
-};
-
-const translateOff = ({ params: { target } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      on: false
-    }
-  };
-};
-
-const translateBri = ({ params: { target, bri } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      bri
-    }
-  };
-};
-
-const translateCt = ({ params: { target, ct } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      ct
-    }
-  };
-};
-
-const translateSetScene = ({ params: { target, scene } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      scene
-    }
-  };
-};
-
-const translateTransition = ({ params: { target, time } }) => {
-  return {
-    url: getActionAddress(target),
-    method: 'PUT',
-    body: {
-      transition: time
-    }
-  };
-};
-
-const translateRemove = ({ params: { target } }) => {
-  return {
-    url: target.value,
-    method: 'DELETE',
-    body: {}
-  };
-};
-
-const translateEffect = cond([
-  [propEq('name', 'on'), translateOn],
-  [propEq('name', 'off'), translateOff],
-  [propEq('name', 'bri'), translateBri],
-  [propEq('name', 'setScene'), translateSetScene],
-  [propEq('name', 'transition'), translateTransition],
-  [propEq('name', 'remove'), translateRemove],
-  [propEq('name', 'ct'), translateCt],
-  [T, always({ url: 'http://contoso.com/wrong/path', method: 'GET', body: {} })]
-]);
+const translateEffect = identity;
 
 const requestToRawHttp = request => {
   const body = JSON.stringify(request.body);
-  const url = new URL(request.url);
+  const url = new URL(request.address);
   return body
     ? `${request.method} ${url.pathname} HTTP/1.1
 Host: ${url.hostname}
@@ -119,19 +42,19 @@ Content-length: 0`;
 const requestToCurl = request => {
   const body = JSON.stringify(request.body);
   return body
-    ? `curl -X ${request.method} -H "Content-Type: application/json" -d '${body}' ${request.url}`
-    : `curl -X ${request.method} ${request.url}`;
+    ? `curl -X ${request.method} -H "Content-Type: application/json" -d '${body}' ${request.address}`
+    : `curl -X ${request.method} ${request.address}`;
 };
 
 const requestToFetch = request => {
   const body = JSON.stringify(request.body);
   return body
-    ? `fetch('${request.url}', {method: '${request.method}', body: ${body})`
-    : `fetch('${request.url}', {method: '${request.method}')`;
+    ? `fetch('${request.address}', {method: '${request.method}', body: ${body})`
+    : `fetch('${request.address}', {method: '${request.method}')`;
 };
 
 const resolveUrl = baseUrl => request =>
-  evolve({ url: concat(baseUrl) })(request);
+  evolve({ address: concat(baseUrl) })(request);
 
 const AstViewer = ({ baseApiUrl, effects, view, onViewChange }) => {
   const handleOutputViewChange = useCallback((e, value) => {
@@ -153,10 +76,9 @@ const AstViewer = ({ baseApiUrl, effects, view, onViewChange }) => {
       map(
         compose(
           requestToRawHttp,
-          resolveUrl(baseApiUrl),
-          translateEffect
+          resolveUrl(baseApiUrl)
         ),
-        effects
+        filter(e => !startsWith('/env', e.address), effects)
       )
     );
   }, [effects]);
@@ -171,10 +93,9 @@ const AstViewer = ({ baseApiUrl, effects, view, onViewChange }) => {
       map(
         compose(
           requestToFetch,
-          resolveUrl(baseApiUrl),
-          translateEffect
+          resolveUrl(baseApiUrl)
         ),
-        effects
+        filter(e => !startsWith('/env', e.address), effects)
       )
     );
   }, [effects]);
@@ -185,10 +106,9 @@ const AstViewer = ({ baseApiUrl, effects, view, onViewChange }) => {
       map(
         compose(
           requestToCurl,
-          resolveUrl(baseApiUrl),
-          translateEffect
+          resolveUrl(baseApiUrl)
         ),
-        effects
+        filter(e => !startsWith('/env', e.address), effects)
       )
     );
   }, [map(translateEffect, effects)]);
