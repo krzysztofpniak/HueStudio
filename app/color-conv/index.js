@@ -238,5 +238,6 @@ export {
   xyToHex,
   xyToRgb,
   checkPointInLampsReach,
-  getClosestPointToPoint
+  getClosestPointToPoint,
+  hexToRgb
 };
