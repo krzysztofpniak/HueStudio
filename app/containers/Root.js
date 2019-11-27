@@ -98,6 +98,19 @@ const getTemplate = store => {
           }
         }
       ]
+    },
+    {
+      label: 'Auth',
+      submenu: [
+        {
+          label: 'Remote',
+          click() {
+            store.dispatch({
+              type: 'home.remoteAuth'
+            });
+          }
+        }
+      ]
     }
   ];
   if (process.platform === 'darwin') {

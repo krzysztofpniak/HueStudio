@@ -392,6 +392,17 @@ function* runPlayground({ payload }) {
   yield fork(runEffects, payload);
 }
 
+function* runRemoteAuth() {
+  try {
+    const token = yield remoteAuth();
+    if (token) {
+      yield setPassword('HueStudio', 'Token', JSON.stringify(token));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function* saga(editorRef) {
   yield takeEvery('newFile', newFile);
   yield takeEvery('openFile', openFile);
@@ -401,6 +412,7 @@ function* saga(editorRef) {
   yield takeEvery('runSelection', runSelection);
   yield takeEvery('runPlayground', runPlayground);
   yield takeEvery('terminal.exec', runTerminal);
+  yield takeEvery('remoteAuth', runRemoteAuth);
   yield fork(persistence);
   yield loadResources();
 }
