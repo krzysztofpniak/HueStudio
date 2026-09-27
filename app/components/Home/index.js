@@ -50,6 +50,7 @@ import { createHSContext } from '../../hueScript/astToBridgeState';
 import ReactMarkdown from 'react-markdown';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Markdown from '../markdown';
+import { baseApiUrl } from '../../config';
 
 const get = async url => {
   const r = await fetch(url);
@@ -73,10 +74,6 @@ const post = async (url, data) => {
   });
   return r.json();
 };
-
-const baseApiPath = 'api/YOUR_BRIDGE_USERNAME';
-
-const baseApiUrl = `http://192.168.0.13/${baseApiPath}`;
 
 const RuleEditor = ({
   text,

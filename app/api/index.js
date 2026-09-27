@@ -1,4 +1,5 @@
 import { fromPairs, map } from 'ramda';
+import { baseApiUrl } from '../config';
 
 const get = async url => {
   const r = await fetch(url);
@@ -33,10 +34,6 @@ const put = async (url, data) => {
   });
   return r.json();
 };
-
-const baseApiPath = 'api/YOUR_BRIDGE_USERNAME';
-
-const baseApiUrl = `http://192.168.0.13/${baseApiPath}`;
 
 const createRestProxy = resource => {
   const create = data => post(`${baseApiUrl}/${resource}`, data);

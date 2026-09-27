@@ -50,7 +50,10 @@ export default {
 
   plugins: [
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
+      HUE_BRIDGE_IP: null,
+      HUE_BRIDGE_USERNAME: null,
+      HUE_CLIENT_SECRET: null
     }),
 
     new webpack.NamedModulesPlugin()
