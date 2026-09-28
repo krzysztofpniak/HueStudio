@@ -62,7 +62,7 @@ yarn dev        # run with hot reload
 
 ### Configuration
 
-Set these environment variables before `yarn dev` / `yarn build` (they are inlined by webpack's `EnvironmentPlugin`):
+Set these environment variables when launching the app (`yarn dev` / `yarn start`). They are read at runtime and are never inlined into the build, so credentials don't ship inside the packaged bundle:
 
 | Variable              | Description                                                                              |
 | --------------------- | ---------------------------------------------------------------------------------------- |
